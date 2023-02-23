@@ -38,6 +38,7 @@ export default {
 .header-container {
     position: fixed;
     width: 100%;
+    top: 0;
     height: 70px;
     background-color: #ffffff;
     display: flex;
@@ -46,8 +47,12 @@ export default {
     padding: 10px 50px;
 }
 .list-action{
+    p{
+        font-size: 14px;
+    }
     display: flex;
     gap: 20px;
+    
 }
 .action-item{
     display: flex;
@@ -57,6 +62,10 @@ export default {
     font-size: 15px;
     &:hover{
         cursor: pointer;
+        p{
+            color: #0d6efd;
+        }
+    
     }
 }
 .icon-action{

@@ -14,6 +14,9 @@ button{
     margin: 0;
     padding: 10px 20px;
     border-radius: 3px;
+    &:hover{
+        cursor: pointer;
+    }
 }
 input{
     margin: 0;
@@ -28,6 +31,7 @@ input{
 .search-container{
     display: flex;
     border: 2px solid #0D6EFD;
+    align-items: center;
     border-radius: 6px;
     width: 500px;
     height: 35px;

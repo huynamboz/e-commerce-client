@@ -22,7 +22,7 @@
 
                 <span class="forgot">Forgot password?</span>
                 <div class="login-list-btn">
-                    <button class="login-btn">LOGIN</button>
+                    <button class="login-btn" @click="signin()">LOGIN</button>
                     <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button>
                 </div>
             </div>
@@ -38,6 +38,11 @@ export default {
             password: ''
         }
     },
+    methods: {
+        signin() {
+            this.$router.push('/')
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
