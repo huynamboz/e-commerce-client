@@ -1,4 +1,13 @@
 export default {
+  ssr: false,
+  server: {
+    port: 3000,
+    host: "0.0.0.0",
+    // https: {
+    //   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+    //   cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
+    // }
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'client',
@@ -15,12 +24,45 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-
+  env:{
+    ApiKey : 'AIzaSyCV4RPrPpXge5_0mINOM6IWfL7Nu043UOI'
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     //make global file css from assets/css/global.css
     "~static/global.css",
+    "~static/icons/uicons-regular-rounded.css"
   ],
+  auth: {
+    redirect: {
+      callback: "/",
+      login: "/login",
+      home: "/",
+      logout: undefined,
+    },
+    strategies: {
+      local: {
+        token: {
+          property: 'token',
+          type: 'Bearer',
+          name: 'Authorization',
+          // Sử dụng local storage để lưu token
+          storage: 'localStorage'
+        },
+        user: {
+          property: "data",
+          autoFetch: false
+        },
+        endpoints: {
+          login: {
+            url: "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCV4RPrPpXge5_0mINOM6IWfL7Nu043UOI",
+            method: "post",
+          },
+        },
+        autoFetchUser: false,
+      },
+    },
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -35,9 +77,10 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
-
+  
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     loaders: {
@@ -48,5 +91,9 @@ export default {
         implementation: require('sass'),
       },
     },
-  }
+  },
+  router:{
+    middleware: 'router-log'
+  },
+  
 }

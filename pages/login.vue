@@ -1,5 +1,6 @@
 <template>
     <div class="login-container">
+        <loading v-if="isLoading"/>
         <div class="login-content-main">
             <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
             <div class="login-fiels">
@@ -30,17 +31,39 @@
     </div>
 </template>
 <script>
+import loading from '~/components/loading/loading-style-2.vue'
 export default {
+    components: {
+        loading
+    },
     name: 'login',
     data() {
         return {
+            isLoading: false,
             email: '',
             password: ''
         }
     },
     methods: {
         signin() {
-            this.$router.push('/')
+            this.isLoading = true;
+            this.$auth.loginWith('local',
+            {
+                data: {
+						email: this.email,
+						password: this.password,
+					}
+            })
+                .then(resp => {
+                    this.isLoading = false;
+                    this.$auth.setUser(resp)
+                    
+                    console.log(this.$auth.user)
+                    this.$router.push('/')
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
     }
 }

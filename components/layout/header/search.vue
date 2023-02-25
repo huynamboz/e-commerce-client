@@ -1,19 +1,20 @@
 <template>
     <div class="search-container">
+        <div class="icon-search">
+        <i class="fi fi-rr-search"></i>
+        </div>
         <input type="text" placeholder="search" class="search-input">
-        <button class="btn-search">Search</button>
     </div>
 </template>
 <script>
 </script>
 <style lang="scss" scoped>
-button{
-    background-color: #0D6EFD;
+.btn-search{
     color: white;
     border: none;
     margin: 0;
-    padding: 10px 20px;
-    border-radius: 3px;
+    width: 20px;
+    height: 20px;
     &:hover{
         cursor: pointer;
     }
@@ -29,11 +30,17 @@ input{
     width: 100%;
 }
 .search-container{
+    padding: 0 20px;
     display: flex;
-    border: 2px solid #0D6EFD;
+    border: 1.5px solid #afb6cf;
     align-items: center;
     border-radius: 6px;
     width: 500px;
     height: 35px;
+}
+.icon-search{
+    margin-top: 5px;
+    font-size: 20px;
+    color: #afb6cf;
 }
 </style>
