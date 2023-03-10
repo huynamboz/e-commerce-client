@@ -1,7 +1,7 @@
 <template>
     <section>
-        <input type="file">
-        <img :src="fileUrl" v-if="fileUrl" />
+        <label for=""></label>
+        <input type="file" @change="uploadFile" />
     </section>
 </template>
 <script>

@@ -50,14 +50,15 @@ export default {
             this.$auth.loginWith('local',
             {
                 data: {
-						email: this.email,
+						user_name: this.email,
 						password: this.password,
 					}
             })
                 .then(resp => {
                     this.isLoading = false;
                     this.$auth.setUser(resp)
-                    
+                    this.$auth.$storage.setUniversal('user', resp, true)
+					this.$auth.setUser(resp)
                     console.log(this.$auth.user)
                     this.$router.push('/')
                 })
