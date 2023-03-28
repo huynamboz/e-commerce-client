@@ -1,4 +1,5 @@
 <template>
+	<div class="container-header">
     <div class="header-container">
         <div class="site-logo">
             <img src="~/assets/img/logo-colored.png" alt="" class="logo-site">
@@ -30,6 +31,7 @@
                                 <p class="popup-detail-user-content-header-info-email">
                                 </p>
                             </div>
+							<button class="add-product-btn" @click="$router.push('/product/add')">Đăng sản phẩm</button>
                         </div>
                         <div class="not-login" v-else>
                         <button class="signin-btn" @click="$router.push('/login')">Đăng nhập</button>
@@ -39,6 +41,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 <script>
 import search from '~/components/layout/header/search.vue'
@@ -71,17 +74,19 @@ export default {
     height: 50px;
 
 }
-
+.container-header{
+	display: flex;
+    background-color: #113366;
+	justify-content: center;
+}
 .header-container {
-    position: fixed;
     width: 100%;
     top: 0;
-    height: 70px;
-    background-color: #ffffff;
+	max-width: 1240px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 50px;
+    padding: 15px 50px;
 }
 
 .list-action {
@@ -100,7 +105,7 @@ export default {
     gap: 5px;
     align-items: center;
     font-size: 25px;
-    color: #6d6d73;
+    color: #ffffff;
 
     &:hover {
         cursor: pointer;
@@ -190,4 +195,18 @@ button{
         background-color: #1e75f8;
     }
 }
+.add-product-btn{
+	margin-top: 20px;
+	width: 100%;
+	padding: 10px;
+	border-radius: 5px;
+	color: #ffffff;
+	background-color: #5698fc;
+	transition: .2s ease-in-out;
+	&:hover{
+		cursor: pointer;
+		background-color: #1e75f8;
+	}
+}
+
 </style>

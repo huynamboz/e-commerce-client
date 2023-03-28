@@ -7,7 +7,7 @@
 						<img v-if="thumbnail" :src="currentThumbnail" alt="" class="product-thumbnail">
 					</div>
 					<div class="list-item-thumbnail">
-						<div class="item-thumbnail" v-for="(item, index) in thumbnail?.thumbnails" :key="index">
+						<div class="item-thumbnail" v-for="(item, index) in thumbnail" :key="index">
 							<img :src="item" alt="" class="thumbnail-list-item-img" @click="changeThumbnail(index,$event)">
 						</div>
 					</div>
@@ -22,7 +22,7 @@
 						<div class="product-cost">
 							<p class="product-label-cost">
 								Giá :
-								<span class="main-cost">{{ product?.cost }}</span>
+								<span class="main-cost">{{ formatPrice(product?.price) }}</span>
 								<span class="discount-cost"><del>{{ product?.discount }}</del></span>
 							</p>
 						</div>
@@ -108,6 +108,7 @@
 </template>
 <script>
 export default {
+	auth:'false',
 	layout: 'default',
 	data() {
 		return {
@@ -121,8 +122,18 @@ export default {
 	},
 	mounted() {
 		this.fetchData();
+		console.log(this.$auth.$storage.getUniversal('user'))
 	},
 	methods: {
+		formatPrice(price){
+			let formatter = new Intl.NumberFormat('vi-VN', {
+				style: 'currency',
+				currency: 'VND',
+				minimumFractionDigits: 0
+				});
+			let formatted = formatter.format(price);
+			return formatted;
+		},
 		test(){
 			this.$axios.put('https://635d4fb7cb6cf98e56b20ae8.mockapi.io/api/listpost/product/1', {
 				name: "Điện thoại samsung s20 ultra plus cực xịn và múp nhiều nước",
@@ -139,8 +150,9 @@ export default {
 			window.location.href = `tel:${this.product?.phone_number}`
 		},
 		changeThumbnail(index,ele){
-			console.log(index)
-			this.currentThumbnail = this.thumbnail.thumbnails[index]
+			console.log(ele.target)
+			ele.target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+			this.currentThumbnail = this.thumbnail[index]
 			let listEle = document.querySelectorAll(".thumbnail-list-item-img")
 			listEle.forEach((ele) => {
 				if (ele.classList.contains("active")) {
@@ -151,18 +163,24 @@ export default {
 			console.log(ele.target)
 		},
 		async fetchData() {
-			await this.$axios.get(`https://635d4fb7cb6cf98e56b20ae8.mockapi.io/api/listpost/product/${1}`)
+			await this.$axios.get(`http://localhost:5000/api/product/${this.$route.params.id}`)
 				.then((response) => {
-					this.product = response.data
-					this.product.description = JSON.parse(this.product.description)
+					this.product = response['data']['data']
 					// this.product.description = JSON.parse(this.product.description)
+					this.thumbnail = response['data']['thumbnails']
+					this.thumbnail.forEach((ele,index) => {
+						this.thumbnail[index] = "http://localhost:5000" + ele
+					})
+					this.currentThumbnail = this.thumbnail[0]
+					console.log(this.thumbnail)
+					this.product.description = JSON.parse(this.product.description)
 				})
 			console.log(this.product)
-			await this.$axios.get(`https://640b058281d8a32198d72c54.mockapi.io/images/${this.product.id}`)
-				.then((response) => {
-					this.thumbnail = response.data
-					this.currentThumbnail = this.thumbnail.thumbnails[0]
-				})
+			// await this.$axios.get(`https://640b058281d8a32198d72c54.mockapi.io/images/${this.product.id}`)
+			// 	.then((response) => {
+			// 		this.thumbnail = response.data
+			// 		this.currentThumbnail = this.thumbnail.thumbnails[0]
+			// 	})
 		}
 	}
 }
@@ -195,6 +213,8 @@ export default {
 	gap: 12px;
 	margin-top: 20px;
 	cursor: pointer;
+	max-width: 500px;
+	overflow-y: auto;
 }
 .product-thumbnail{
 	width: 500px;
@@ -233,7 +253,7 @@ export default {
 }
 .main-cost{
 	font-size: 30px;
-	font-weight: 600;
+	font-weight: 500;
 	color: #fa3434;
 	margin-right: 0px;
 }

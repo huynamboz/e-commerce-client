@@ -1,8 +1,10 @@
 <template>
     <div class="container">
-      <header-tab />
+      <!-- <header-tab /> -->
       <div class="main-content">
+		
         <top-category />
+
       </div>
     </div>
 </template>
@@ -11,10 +13,14 @@
 import headerTab from '../components/layout/header/header.vue'
 import topCategory from '~/components/layout/mainHome/topCategory.vue';
 export default {
+	layout: 'default',
   name: 'IndexPage',
   components: {
     headerTab,
     topCategory
+  },
+  mounted() {
+	console.log(this.$auth.user);
   }
 }
 </script>

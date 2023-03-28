@@ -1,0 +1,52 @@
+<template>
+<div class="container-list-cate">
+		<div class="list-cate">
+			<div class="cate-item">
+				Thiết bị điện tử
+			</div>
+			<div class="cate-item">
+				Đồ gia dụng
+			</div>
+			<div class="cate-item">
+				Quần áo
+			</div>
+			<div class="cate-item">
+				Bàn ghế
+			</div>
+			<div class="cate-item">
+				Đồ dùng
+			</div>
+		</div>
+	</div>
+</template>
+<style lang="scss" scoped>
+.container-list-cate{
+	position: sticky;
+	top: 0;
+	background-color: #ffffff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.list-cate{
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	max-width: 1240px;
+
+}
+a{
+	text-decoration: none;
+	color: #000000;
+}
+.cate-item{
+	display: flex;
+	padding: 20px;
+	align-items: center;
+	cursor: pointer;
+	&:hover{
+		background-color: #113366;
+		color: #ffffff;
+	}
+}
+</style>

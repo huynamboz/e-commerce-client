@@ -28,6 +28,23 @@
                 </div>
             </div>
         </div>
+		<div id="popup-container" class="popup-container">
+			<div class="popup">
+				<div class="popup-content">
+					<div class="popup-title">
+						Lỗi
+					</div>
+					<div class="popup-text">
+						Sai tài khoản hoặc mật khẩu. Vui lòng thử lại
+						<span>{{ email }}</span>
+					</div>
+					<div class="popup-btn">
+						<button class="btn-popup-close" @click="closePopup()">Đóng</button>
+					</div>
+				</div>
+			</div>
+			<div class="popup-blur"  @click="closePopup()"></div>
+		</div>
     </div>
 </template>
 <script>
@@ -41,35 +58,149 @@ export default {
         return {
             isLoading: false,
             email: '',
-            password: ''
+            password: '',
+			userID: '',
         }
     },
     methods: {
-        signin() {
+		closePopup(){
+			let popup = document.getElementById('popup-container');
+			popup.style.display = 'none';
+		},
+        async signin() {
             this.isLoading = true;
-            this.$auth.loginWith('local',
+            await this.$auth.loginWith('local',
             {
                 data: {
-						user_name: this.email,
+						email: this.email,
 						password: this.password,
 					}
             })
                 .then(resp => {
                     this.isLoading = false;
-                    this.$auth.setUser(resp)
-                    this.$auth.$storage.setUniversal('user', resp, true)
-					this.$auth.setUser(resp)
-                    console.log(this.$auth.user)
+					this.userID = resp.data.user_id;
                     this.$router.push('/')
                 })
                 .catch(err => {
                     console.log(err);
                 })
+				this.$axios.get(`http://localhost:5000/api/auth/user/${this.userID}`)
+				.then(resp => {
+					console.log(resp.data)
+					this.$auth.$storage.setUniversal('user', resp.data, true)
+					console.log(this.$auth.$storage.getUniversal('user'));
+				})
+				.catch(err => {
+					let popup = document.getElementById('popup-container');
+						popup.style.display = 'flex';
+						this.isLoading = false;
+				})
         }
     }
 }
 </script>
 <style lang="scss" scoped>
+.popup-container{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	display: none;
+	animation: blur 0.3s;
+	@media screen and (max-width: 768px) {
+		padding: 0 20px;
+	}
+}
+// make animation keyframe from blur 0 to 1
+@keyframes blur {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+.popup-blur{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+}
+.popup{
+	padding: 82px 105px;
+	display: flex;
+	position: relative;
+	align-items: center;
+	justify-content: center;
+	background: #FFFFFF;
+	border-radius: 40px;
+	z-index: 999;
+	@media screen and (max-width: 768px){
+		padding: 40px 20px;
+	}
+}
+.popup-title{
+	font-weight: 700;
+font-size: 38px;
+line-height: 150%;
+color: #E02D3C;
+@media screen and (max-width: 768px){
+	font-weight: 700;
+font-size: 24px;
+line-height: 150%;
+	
+}
+}
+.popup-text{
+	max-width: 400px;
+	font-weight: 400;
+font-size: 16px;
+line-height: 150%;
+color: #3E3F66;
+&> span{
+	font-weight: 500;
+}
+@media screen and (max-width: 768px){
+	font-weight: 400;
+font-size: 14px;
+line-height: 150%;
+	max-width: 100%;
+}
+}
+.popup-btn{
+	@media screen and (max-width: 768px) {
+		width: 100%;
+	}
+}
+.btn-popup-close{
+	background: #E02D3C;
+border-radius: 80px;
+padding: 9.5px 24px;
+gap: 4px;
+color: #FFFFFF;
+font-weight: 700;
+font-size: 14px;
+line-height: 150%;
+border: none;
+width: 298px;
+@media screen and (max-width: 768px){
+	width: 100%;
+	
+}
+}
+.popup-content{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
 span,p{
     margin: 0;
 }

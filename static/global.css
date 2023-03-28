@@ -68,6 +68,30 @@ body {
 }
 
 
+
+  ::-webkit-scrollbar-track {
+    background-color: none;
+    cursor: pointer;
+    width: 10px !important;
+  }
+
+  ::-webkit-scrollbar {
+    height: 6px;
+    width: 10px;
+    background-color: none;
+    cursor: pointer;
+    opacity: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #e9ecef;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 1000ms linear;
+  }
+  ::-webkit-scrollbar-thumb:hover{
+	background-color: #848485;
+  }
 *,
 ::before,
 ::after {
