@@ -31,7 +31,7 @@
                                 <p class="popup-detail-user-content-header-info-email">
                                 </p>
                             </div>
-							<button class="add-product-btn" @click="$router.push('/product/add')">Đăng sản phẩm</button>
+							<button class="add-product-btn" @click="$router.push('/product/modify')">Đăng sản phẩm</button>
                         </div>
                         <div class="not-login" v-else>
                         <button class="signin-btn" @click="$router.push('/login')">Đăng nhập</button>

@@ -198,7 +198,6 @@ export default {
 	display: flex;
 	background-color: #ffffff;
 	padding: 40px;
-	border: 1px solid #e5e5e5;
 	border-radius: 5px;
 	gap: 30px;
 }

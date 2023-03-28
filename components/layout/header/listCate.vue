@@ -27,6 +27,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	box-shadow: -1px 8px 20px 2px rgb(197 197 197 / 26%);
 }
 .list-cate{
 	display: flex;

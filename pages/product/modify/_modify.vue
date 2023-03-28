@@ -1,6 +1,9 @@
 <template>
 	<section class="page-add">
 		<section class="container">
+			<h1 class="title" v-if="$route.params.modify">Chỉnh sửa sản phẩm</h1>
+			<h1 class="title" v-else>Thêm sản phẩm</h1>
+			<div class="line"></div>
 			<div class="main">
 				<label for="">Tên sản phẩm <span style="color:red">*</span></label>
 				<input type="text" placeholder="Bàn ghế" v-model="name">
@@ -58,7 +61,8 @@ export default {
 		}
 	},
 	mounted() {
-		this.fetchAllProduct();
+		// this.fetchAllProduct();
+		console.log(this.$auth.user)
 	},
 	methods: {
 		formatPrice(price) {
@@ -152,14 +156,14 @@ export default {
 }
 
 </script>
-<style>
+<style lang="scss" scoped>
 .page-add{
 	display: flex;
 	justify-content: center;
 }
 .container {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	gap: 30px;
@@ -167,20 +171,30 @@ export default {
 	max-width: 1240px;
 	padding: 20px;
 }
-
+.line{
+	width: 100%;
+	height: 0;
+	border-bottom: 1px solid #c9c9c9;
+}
+.title{
+	font-size: 24px;
+	font-weight: 600;
+	color:#113366;
+}
 label{
 	font-weight: 500;
+	color:#091A75; 
 }
 textarea {
-	width: 100%;
 	height: 100px;
 	border-radius: 10px;
 	padding: 10px;
+	margin: 5px 20px;
 	border: 1px solid #c9c9c9;
 }
 
 input {
-	width: 100%;
+	margin: 5px 20px;
 	border-radius: 6px;
 	padding: 10px 10px;
 	border: 1px solid #c9c9c9;

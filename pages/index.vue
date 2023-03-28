@@ -34,8 +34,12 @@ body{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 .main-content{
-    width: 90vw;
+    display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 1240px;
 }
 </style>

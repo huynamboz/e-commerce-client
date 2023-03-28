@@ -59,7 +59,7 @@ export default {
 			tokenType: ''
 		},
 		redirect: {
-			login: '/login',
+			login: '/',
 			logout: '/',
 		},
 		watchLoggedIn: true,
@@ -100,6 +100,7 @@ export default {
 		},
 	},
 	router: {
-		middleware: 'router-log'
+		middleware: 'router-log',
+		middleware: ['auth']
 	},
 }
