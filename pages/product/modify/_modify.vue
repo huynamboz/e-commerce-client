@@ -41,6 +41,7 @@
 <script>
 import loading from '~/components/loading/loading-style-1.vue'
 export default {
+	auth:false,
 	components: {
 		loading
 	},
