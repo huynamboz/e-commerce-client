@@ -76,8 +76,10 @@ export default {
 }
 .container-header{
 	display: flex;
-    background-color: #113366;
+    background-color: #ffffff;
 	justify-content: center;
+	position: relative;
+	z-index: 999;
 }
 .header-container {
     width: 100%;
@@ -105,7 +107,7 @@ export default {
     gap: 5px;
     align-items: center;
     font-size: 25px;
-    color: #ffffff;
+    color: #ff7227;
 
     &:hover {
         cursor: pointer;

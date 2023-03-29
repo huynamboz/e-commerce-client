@@ -108,6 +108,7 @@ input {
 	border-radius: 10px;
 	background-color: #ffffff;
 	width: 500px;
+	border: 1px solid #ff7227;
 	position: relative;
 	justify-content: space-between;
 }
@@ -116,12 +117,12 @@ input {
 	margin-top: 5px;
 	font-size: 20px;
 	margin-right: 10px;
-	color: #113366;
+	color: #ff7227;
 }
 .custom-select-trigger{
 	padding: 15px 20px;
 	width: 150px;
-	background-color: #113366;
+	background-color: #ff7227;
 	border: none;
 	color: #ffffff;
 	border-radius: 10px;

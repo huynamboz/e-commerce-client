@@ -5,6 +5,7 @@
 				<div class="list-thumbnail">
 					<div class="main-thumbnail">
 						<img v-if="thumbnail" :src="currentThumbnail" alt="" class="product-thumbnail">
+						<img v-else src="~/assets/img/img-none.png" alt="" class="product-thumbnail">
 					</div>
 					<div class="list-item-thumbnail">
 						<div class="item-thumbnail" v-for="(item, index) in thumbnail" :key="index">
@@ -65,6 +66,26 @@
 				</div>
 				</div>
 			</section>
+			<section class="compare-container">
+				<div class="compare-container-main">
+					<h1 class="compare-title">So sánh giá ở những nơi khác</h1>
+					<div class="compare-list">
+						<div class="compare-item" v-for="(item,index) in listCompare" :key="index">
+							<div class="compare-item-thumbnail">
+								<img :src="item?.thumbs[0].image" alt="" class="compare-item-thumbnail-img">
+							</div>
+							<div class="compare-item-content">
+								<div class="cmp-item-name">
+									{{ item?.name }}
+								</div>
+								<div class="cmp-item-cost">
+									{{ item?.priceShow }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 			<section class="product-description">
 					<div class="product-description-content">
 							<div class="product-description-header">
@@ -108,7 +129,7 @@
 </template>
 <script>
 export default {
-	auth:'false',
+	auth:false,
 	layout: 'default',
 	data() {
 		return {
@@ -118,13 +139,25 @@ export default {
 			user: null,
 			thumbnail: null,
 			currentThumbnail: "",
+			listCompare: [],
 		}
 	},
-	mounted() {
-		this.fetchData();
+	async mounted() {
+		await this.fetchData();
 		console.log(this.$auth.$storage.getUniversal('user'))
+		await this.fetchCompare();
 	},
 	methods: {
+		async fetchCompare(){
+			await this.$axios.get(`https://www.lazada.vn/tag/?_keyori=ss&ajax=true&catalog_redirect_tag=true&from=input&isFirstRequest=true&page=1&q=${encodeURIComponent(this.product.name)}&spm=a2o4n.searchlist.search.go.1c21431ebkDUEK`,
+			//add header
+			)
+			.then(res=>{
+				//search items same name in array
+				this.listCompare = res["data"]["mods"]["listItems"];
+				console.log(this.listCompare);
+			})
+		},
 		formatPrice(price){
 			let formatter = new Intl.NumberFormat('vi-VN', {
 				style: 'currency',
@@ -187,7 +220,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .product-container {
-	margin-top: 80px;
+	margin-top: 60px;
 	display: flex;
 	justify-content: center;
 }
@@ -236,8 +269,6 @@ export default {
 	margin-bottom: 20px;
 }
 .product-cost{
-	background-color: #f0f0f0;
-	padding: 15px 20px;
 	border-radius: 5px;
 }
 .product-label{
@@ -405,5 +436,26 @@ export default {
 	border-radius: 5px;
 	box-shadow: 1px 7px 20px 1px #5698fc63;
 
+}
+.compare-item{
+	padding: 20px;
+	display: flex;
+	gap: 30px;
+	border: 1px solid #fa3434;
+	border-radius: 10px;
+	background-color: #ffffff;
+}
+.cmp-item-name{
+	font-size: 18px;
+	font-weight: 500;
+}
+.compare-item-thumbnail-img{
+	width: 150px;
+	height: 150px;
+}
+.compare-item-content{
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 </style>

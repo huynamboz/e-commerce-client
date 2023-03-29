@@ -6,7 +6,7 @@
 			<div class="line"></div>
 			<div class="main">
 				<label for="">Tên sản phẩm <span style="color:red">*</span></label>
-				<input type="text" placeholder="Bàn ghế" v-model="name">
+				<input type="text" placeholder="Bàn ghế" v-model="name" @change="fetchCompare()">
 				<label for="">Giá <span style="color:red">*</span></label>
 				<input type="text" placeholder="100000" v-model="price">
 				<label for="">Mô tả <span style="color:red">*</span></label>
@@ -36,6 +36,13 @@
 				</div>
 			</div> -->
 		</section>
+		<div class="listcompare">
+			<div v-for="(item,index) in listCompare" :key="index" class="item-cmp">
+				<img :src="item?.thumbs[0].image" alt="" class="img-cmp">
+				<p>{{ item?.name }}</p>
+				<p>{{ item?.priceShow }}</p>
+			</div>
+		</div>
 	</section>
 </template>
 <script>
@@ -58,7 +65,8 @@ export default {
 			listFile: [],
 			fileInput: null,
 			isLoading: false,
-			dataProduct: null
+			dataProduct: null,
+			listCompare: null
 		}
 	},
 	mounted() {
@@ -88,6 +96,17 @@ export default {
 				})
 			})
 		},
+		fetchCompare(){
+			this.$axios.get(`https://www.lazada.vn/tag/?_keyori=ss&ajax=true&catalog_redirect_tag=true&from=input&isFirstRequest=true&page=1&q=${encodeURIComponent(this.name)}&spm=a2o4n.searchlist.search.go.1c21431ebkDUEK`,
+			//add header
+			)
+			.then(res=>{
+				//search items same name in array
+				this.listCompare = res["data"]["mods"]["listItems"];
+				console.log(this.listCompare);
+			})
+		}
+		,
 		previewImage(event) {
 			try {
 				let tmp = [];
@@ -158,6 +177,10 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.img-cmp{
+	width: 200px;
+	height: 200px;
+}
 .page-add{
 	display: flex;
 	justify-content: center;
