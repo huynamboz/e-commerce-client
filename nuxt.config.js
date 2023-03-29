@@ -1,5 +1,11 @@
 export default {
-	ssr: false,
+	target: 'static',
+    ssr: true,
+    router:{
+      base: "/e-commerce-client/dist/",
+	  middleware: 'router-log',
+		middleware: ['auth']
+    },
 	server: {
 		port: 3000,
 		host: "0.0.0.0",
@@ -98,9 +104,5 @@ export default {
 				implementation: require('sass'),
 			},
 		},
-	},
-	router: {
-		middleware: 'router-log',
-		middleware: ['auth']
 	},
 }
