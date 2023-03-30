@@ -79,7 +79,7 @@ export default {
                 .then(resp => {
                     this.isLoading = false;
 					this.userID = resp.data.user_id;
-                    this.$router.push('/')
+                    this.$router.push('/uploadfile?abc=123')
                 })
                 .catch(err => {
                     console.log(err);

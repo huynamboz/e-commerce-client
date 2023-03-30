@@ -1,4 +1,7 @@
 export default function (context){
     console.log("[LOG]: Middleware router-log.js is running")
-	context.$auth.setUser(JSON.parse(localStorage.getItem('auth.user')));
+	if (!context.$cookies.get("auth.user")?.value){
+		console.log("[LOG]: User is logged in")
+		context.$auth.setUser(JSON.parse(context.$cookies.get('auth.user')));
+	}
 }

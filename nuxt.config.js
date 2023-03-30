@@ -1,10 +1,8 @@
 export default {
-	target: 'static',
-    ssr: true,
+    ssr: false,
     router:{
       base: "/e-commerce-client/dist/",
-	  middleware: 'router-log',
-		middleware: ['auth']
+		middleware: ['router-log','auth']
     },
 	server: {
 		port: 3000,
@@ -73,7 +71,10 @@ export default {
 		autoFetchUser: false,
 
 	},
-
+	generate: {
+		dir: 'public',
+		fallback: true
+	  },
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
 	],
