@@ -1,7 +1,7 @@
 export default {
     ssr: false,
     router:{
-      base: "/e-commerce-client/dist/",
+    //   base: "/e-commerce-client/dist/",
 		middleware: ['router-log','auth']
     },
 	server: {
