@@ -1,10 +1,8 @@
 export default {
-	target: 'static',
-    ssr: true,
+    ssr: false,
     router:{
       base: "/e-commerce-client/dist/",
-	  middleware: 'router-log',
-		middleware: ['auth']
+		middleware: ['router-log','auth']
     },
 	server: {
 		port: 3000,

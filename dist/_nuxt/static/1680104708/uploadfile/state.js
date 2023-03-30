@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a){return {staticAssetsBase:"\u002Fe-commerce-client\u002Fdist\u002F_nuxt\u002Fstatic\u002F1680104708",layout:"default",error:a,state:a,serverRendered:false,routePath:"\u002Fuploadfile",config:{_app:{basePath:"\u002Fe-commerce-client\u002Fdist\u002F",assetsPath:"\u002Fe-commerce-client\u002Fdist\u002F_nuxt\u002F",cdnURL:a}}}}(null));
