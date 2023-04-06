@@ -6,7 +6,6 @@ export default {
     },
 	server: {
 		port: 3000,
-		host: "0.0.0.0",
 		// https: {
 		//   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
 		//   cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
@@ -39,6 +38,12 @@ export default {
 		"~static/icons/uicons-bold-rounded.css",
 	],
 	auth: {
+		redirect: {
+			login: '/login',
+			logout: '/',
+			callback: '/login',
+			home: '/'
+		  },
 		strategies: {
 			local: {
 				user: {
@@ -51,7 +56,7 @@ export default {
 					maxAge: 60 
 				},
 				token: {
-					property: 'token',
+					property: 'accessToken',
 					global: true,
 					type: 'Bearer',
 				},
@@ -60,14 +65,12 @@ export default {
 					user: false //phải để là false để không tự động fetch user chứ không là méo lưu được trạng thái login con mẹ nó đc tốn thời gian của bố m vcl
 				},
 			},
-			tokenType: ''
 		},
-		redirect: {
-			login: '/',
-			logout: '/',
-		},
+		// redirect: {
+		// 	login: '/login',
+		// },
+		// redirect: false,
 		watchLoggedIn: true,
-		rewriteRedirects: true,
 		autoFetchUser: false,
 
 	},
@@ -77,22 +80,23 @@ export default {
 	  },
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
+		{ src: "~plugins/api/index" },
 	],
 	axios: {
-		baseURL: 'http://localhost:5000/api',
+		baseURL: 'http://localhost:5000/api/v1',
 	},
 	// Auto import components: https://go.nuxtjs.dev/config-components
 	components: true,
 
 	// Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
 	buildModules: [
+		['@nuxtjs/dotenv']
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
 	modules: [
 		'@nuxtjs/axios',
-		'@nuxtjs/auth',
-		
+		'@nuxtjs/auth-next',
 	],
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build

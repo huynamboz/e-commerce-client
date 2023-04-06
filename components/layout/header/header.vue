@@ -1,7 +1,7 @@
 <template>
 	<div class="container-header">
     <div class="header-container">
-        <div class="site-logo">
+        <div class="site-logo" @click="$router.push('/login')">
             <img src="~/assets/img/logo-colored.png" alt="" class="logo-site">
         </div>
         <search />
@@ -27,7 +27,7 @@
                                 <!-- <img src="~/assets/img/avatar.png" alt=""> -->
                             </div>
                             <div class="popup-detail-user-content-header-info">
-                                <p class="popup-detail-user-content-header-info-name">Nguyễn Văn A</p>
+                                <p class="popup-detail-user-content-header-info-name">{{  $auth.user.name }}</p>
                                 <p class="popup-detail-user-content-header-info-email">
                                 </p>
                             </div>
@@ -55,6 +55,17 @@ export default {
             isShow: false
         }
     },
+	computed: {
+		isLoggedIn() {
+			return this.$auth.user;
+		},
+	},
+	watch: {
+		isLoggedIn: function (val) {
+			console.log(this.$auth, "sdfDFS");
+			this.$forceUpdate();
+		}
+	},
     methods: {
         goToMessage() {
             if (!this.$auth.loggedIn) {
@@ -107,7 +118,7 @@ export default {
     gap: 5px;
     align-items: center;
     font-size: 25px;
-    color: #ff7227;
+    color: #ff4131;
 
     &:hover {
         cursor: pointer;

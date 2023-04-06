@@ -57,61 +57,7 @@
         </div>
 
 
-        <div class="cate-content-main">
-            <div class="cate-banner-2">
-                <h1>Sản phẩm cho gia đình</h1>
-                <button>Xem thêm</button>
-            </div>
-            <div class="cate-content-list">
-
-
-                <div class="item-cate-front card-item-sub">
-                        <img src="~/assets/img/category/01.png" alt="" class="item-cate-img">
-                        <p>Bình đựng nước</p>
-                    </div>
-                    <div class="item-cate-behind card-item-sub">
-                        <img src="~/assets/img/category/02.png" alt="" class="item-cate-img">
-                        <p>Tai nghe</p>
-                    </div>
-                    <div class="item-cate-front card-item-sub">
-                        <img src="~/assets/img/category/03.png" alt="" class="item-cate-img">
-                        <p>Bình đựng nước</p>
-                    </div>
-                    <div class="item-cate-behind card-item-sub">
-                        <img src="~/assets/img/category/04.png" alt="" class="item-cate-img">
-                        <p>Tai nghe</p>
-                    </div>
-                    <div class="item-cate-front card-item-sub">
-                        <img src="~/assets/img/category/05.png" alt="" class="item-cate-img">
-                        <p>Bình đựng nước</p>
-                    </div>
-                    <div class="item-cate-behind card-item-sub">
-                        <img src="~/assets/img/category/06.png" alt="" class="item-cate-img">
-                        <p>Tai nghe</p>
-                    </div>
-                    <div class="item-cate-front card-item-sub">
-                        <img src="~/assets/img/category/07.png" alt="" class="item-cate-img">
-                        <p>Bình đựng nước</p>
-                    </div>
-                    <div class="item-cate-behind card-item-sub">
-                        <img src="~/assets/img/category/08.png" alt="" class="item-cate-img">
-                        <p>Tai nghe</p>
-                    </div>
-                    <div class="item-cate-front card-item-sub">
-                        <img src="~/assets/img/category/09.png" alt="" class="item-cate-img">
-                        <p>Bình đựng nước</p>
-                    </div>
-                    <div class="item-cate-behind card-item-sub">
-                        <img src="~/assets/img/category/10.png" alt="" class="item-cate-img">
-                        <p>Tai nghe</p>
-                    </div>
-
-
-                
-
-
-            </div>
-        </div>
+    
 
 
 
@@ -119,7 +65,6 @@
 </template>
 <style lang="scss" scoped>
 .cate-container{
-    margin-top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-		<div id="popup-container" class="popup-container">
+		<div id="popup-container" class="popup-container" v-show="authError">
 			<div class="popup">
 				<div class="popup-content">
 					<div class="popup-title">
@@ -48,7 +48,7 @@
     </div>
 </template>
 <script>
-import loading from '~/components/loading/loading-style-2.vue'
+import loading from '~/components/loading/main.vue'
 export default {
     components: {
         loading
@@ -60,12 +60,32 @@ export default {
             email: '',
             password: '',
 			userID: '',
+			authError: false
         }
     },
+	mounted() {
+	},
     methods: {
 		closePopup(){
-			let popup = document.getElementById('popup-container');
-			popup.style.display = 'none';
+			this.authError = false;
+		},
+		async fetchUserData(){
+			let user = {
+				id : 1,
+				name: "Nguyen Van A",
+				avatar: "https://i.pinimg.com/originals/1c/0d/0d/1c0d0d1b1f1f1b1b1f1f1b1b1f1f1b1b.jpg",
+			}
+			this.$auth.$storage.setUniversal('user', user, true)
+			// await this.$api.auth.getUserById(this.userID)
+			// 	.then(resp => {
+			// 		console.log(resp.data, "get by id done")
+			// 		this.$auth.$storage.setUniversal('user', resp.data, true)
+			// 		console.log(this.$auth.$storage.getUniversal('user'), "get universal");
+			// 		this.$router.push('/')
+			// 	})
+			// 	.catch(err => {
+			// 			this.isLoading = false;
+			// 	})
 		},
         async signin() {
             this.isLoading = true;
@@ -79,22 +99,16 @@ export default {
                 .then(resp => {
                     this.isLoading = false;
 					this.userID = resp.data.user_id;
-                    this.$router.push('/uploadfile?abc=123')
+					this.userID = 1; //temp to test
+					this.fetchUserData();
                 })
                 .catch(err => {
                     console.log(err);
+					this.authError = true;
+					console.log(this.authError);
+					this.isLoading = false;
                 })
-				this.$axios.get(`http://localhost:5000/api/auth/user/${this.userID}`)
-				.then(resp => {
-					console.log(resp.data)
-					this.$auth.$storage.setUniversal('user', resp.data, true)
-					console.log(this.$auth.$storage.getUniversal('user'));
-				})
-				.catch(err => {
-					let popup = document.getElementById('popup-container');
-						popup.style.display = 'flex';
-						this.isLoading = false;
-				})
+				
         }
     }
 }
@@ -110,7 +124,7 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	display: none;
+	display: flex;
 	animation: blur 0.3s;
 	@media screen and (max-width: 768px) {
 		padding: 0 20px;

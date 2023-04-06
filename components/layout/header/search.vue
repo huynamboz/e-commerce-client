@@ -1,5 +1,5 @@
 <template>
-	<div class="search-container">
+	<div class="section">
 		<div class="custom-select-wrapper">
 			<div class="custom-select" >
 				<button class="custom-select-trigger" @click="openForm()">
@@ -12,10 +12,14 @@
 				</div>
 			</div>
 		</div>
-		<input type="text" placeholder="search" class="search-input">
-		<div class="icon-search">
-			<i class="fi fi-rr-search"></i>
+	<div class="search-container">
+		<input type="text" v-model="keyword" placeholder="search" class="search-input">
+		<div class="icon-search" @click="$router.push(`/search?keyword=${keyword}`)">
+			<div class="icon-search-img">
+				<i class="fi fi-rr-search"></i>
+			</div>
 		</div>
+	</div>
 	</div>
 </template>
 <script>
@@ -27,6 +31,7 @@ export default {
 			hoverIndex: -1,
 			isCheck: false,
 			isError: false,
+			keyword: "",
 			checked: false,
 			data:{
 				name: "",
@@ -77,6 +82,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.section{
+	display: flex;
+	gap: 20px;
+}
 .btn-search {
 	color: white;
 	border: none;
@@ -102,27 +111,49 @@ input {
 }
 
 .search-container {
-	padding: 5px 5px;
+	padding: 0px 5px;
 	display: flex;
 	align-items: center;
 	border-radius: 10px;
 	background-color: #ffffff;
 	width: 500px;
-	border: 1px solid #ff7227;
+	border: 1px solid #ff4131;
 	position: relative;
 	justify-content: space-between;
 }
 
 .icon-search {
-	margin-top: 5px;
-	font-size: 20px;
 	margin-right: 10px;
-	color: #ff7227;
+	color: #ff4131;
+	border-radius: 50%;
+	padding: 5px;
+	width: 30px;
+	min-width: 30px;
+	height: 30px;
+	cursor: pointer;
+	& > .icon-search-img{
+		transform: translate(2px,2px);
+	}
+	transition: .2s ease-in-out;
+	&:hover{
+		margin-top: unset;
+		padding: 5px;
+		width: 30px;
+		min-width: 30px;
+		height: 30px;
+		font-size: unset;
+		transition: .2s ease-in-out;
+		background-color: #ff4131;
+		color: #ffffff;
+	}
+}
+.custom-select-wrapper{
+	position: relative;
 }
 .custom-select-trigger{
-	padding: 15px 20px;
+	padding: 10px 20px;
 	width: 150px;
-	background-color: #ff7227;
+	background-color: #ff4131;
 	border: none;
 	color: #ffffff;
 	border-radius: 10px;

@@ -5,23 +5,53 @@
 			<h1 class="title" v-else>Thêm sản phẩm</h1>
 			<div class="line"></div>
 			<div class="main">
-				<label for="">Tên sản phẩm <span style="color:red">*</span></label>
-				<input type="text" placeholder="Bàn ghế" v-model="name" @change="fetchCompare()">
-				<label for="">Giá <span style="color:red">*</span></label>
-				<input type="text" placeholder="100000" v-model="price">
-				<label for="">Mô tả <span style="color:red">*</span></label>
-				<textarea type="text" placeholder="Mô tả về sản phẩm" v-model="description"></textarea>
-				<label for="">category <span style="color:red">*</span></label>
-				<input type="text" v-model="category">
-				<label for="">Giảm giá(%) <span style="color:red">*</span></label>
-				<input type="text" placeholder="10" v-model="discount">
-				<label for="key">Từ khóa <span style="color:red">*</span></label>
-				<input type="text" placeholder="Bàn ghế, ghế gỗ" v-model="keyword"><label class="choose-file" for="inp-file">Chọn ảnh</label>
-				<input type="file" ref="fileInput" accept="image/*" multiple name="" id="inp-file" @change="previewImage($event)">
-				<div class="list-img-preview">
-					<img v-for="item in previewUrl" :src="item" alt="" class="item-img" v-if="item">
+				<div class="main-right">
+						<div class="inp-container">
+							<label for="">Tên sản phẩm <span style="color:red">*</span></label>
+							<input type="text" placeholder="Bàn ghế" v-model="newProductData.name" @change="fetchCompare()">
+						</div>
+						<div class="inp-container">
+							<label for="">Giá <span style="color:red">*</span></label>
+							<input type="text" placeholder="100000" v-model="newProductData.price">
+						</div>
+						<div class="inp-container">
+							<label for="">Giảm giá(%) <span style="color:red">*</span></label>
+							<input type="text" placeholder="10" v-model="newProductData.discount">
+						</div>
+						<div class="inp-container">
+							<label for="">Tình trạng <span style="color:red">*</span></label>
+							<input type="text" placeholder="Đã qua sử dụng" v-model="newProductData.status">
+						</div>
+						<div class="inp-container">
+							<label for="">category <span style="color:red">*</span></label>
+							<input type="text" v-model="newProductData.category">
+						</div>
+						<div class="inp-container">
+							<label for="">Mô tả <span style="color:red">*</span></label>
+							<textarea type="text" placeholder="Mô tả về sản phẩm" v-model="newProductData.description"></textarea>
+						</div>
+						<div class="inp-container">
+							<label for="">Thumbnails(mỗi link xuống dòng)<span style="color:red">*</span></label>
+							<textarea type="text" placeholder="Link ảnh" v-model="newProductData.thumbnailsList"></textarea>
+						</div>
+						
+						<div class="inp-container">
+							<label for="key">Từ khóa <span style="color:red">*</span></label>
+							<input type="text" placeholder="Bàn ghế, ghế gỗ" v-model="newProductData.keyword">
+						</div>
+						
+						<button @click="postData()" class="btn-submit">Đăng</button>
 				</div>
-				<button @click="postData()" class="btn-submit">Đăng</button>
+				<div class="main-left">
+					<label class="choose-file" for="inp-file"><div class="choose-icon">
+						<p>Chọn ảnh</p>
+						<i class="fi fi-rr-images"></i>
+					</div></label>
+					<input type="file" ref="fileInput" accept="image/*" multiple name="" id="inp-file" @change="previewImage($event)">
+					<div class="list-img-preview">
+						<img v-for="item in previewUrl" :src="item" alt="" class="item-img" v-if="item">
+					</div>
+				</div>
 
 				<loading v-if="isLoading" />
 			</div>
@@ -48,19 +78,25 @@
 <script>
 import loading from '~/components/loading/loading-style-1.vue'
 export default {
+	layout: 'default',
 	auth:false,
 	components: {
 		loading
 	},
 	data() {
 		return {
-			name: "",
-			price: "",
-			description: "",
-			thumbnail: "",
-			category: "",
-			keyword: "",
-			discount: "",
+			newProductData:{
+				name: "",
+				price: "",
+				description: "",
+				thumbnailsList: "",
+				thumbnail: "",
+				category: "",
+				keyword: "",
+				discount: "",
+				status: "",
+			},
+			
 			previewUrl: [],
 			listFile: [],
 			fileInput: null,
@@ -97,14 +133,6 @@ export default {
 			})
 		},
 		fetchCompare(){
-			this.$axios.get(`https://www.lazada.vn/tag/?_keyori=ss&ajax=true&catalog_redirect_tag=true&from=input&isFirstRequest=true&page=1&q=${encodeURIComponent(this.name)}&spm=a2o4n.searchlist.search.go.1c21431ebkDUEK`,
-			//add header
-			)
-			.then(res=>{
-				//search items same name in array
-				this.listCompare = res["data"]["mods"]["listItems"];
-				console.log(this.listCompare);
-			})
 		}
 		,
 		previewImage(event) {
@@ -132,42 +160,45 @@ export default {
 			try {
 				this.isLoading = true;
 				console.log(this.$auth.user);
-				await this.$axios.post('http://localhost:5000/api/product', {
-					user_id: this.$auth.user.user_id,
-					name: this.name,
-					price: this.price,
-					description: JSON.stringify(this.description),
-					thumbnail_url: "null",
-					category_id: this.category,
-					discount: this.discount
+				await this.$axios.post(process.env.BASE_URL_API +'/products', {
+					name: this.newProductData.name,
+					price: this.newProductData.price,
+					description: JSON.stringify(this.newProductData.description),
+					thumbnails: this.newProductData.thumbnailsList.split("\n"),
+					category_id: 1,
+					discount: this.newProductData.discount,
+					keyword: this.newProductData.keyword,
+					product_status : "Đã qua dùng"
 				}).then(res => {
 					console.log(res);
 					this.dataProduct = res.data;
+					this.$router.push(`/product/${this.dataProduct.id}`);
 				}).catch(err => {
 					console.log(err);
 				})
-				let listFD = [];
-				let formData = new FormData();
-				this.listFile.forEach(item => {
-					formData.append('files', item);
-				})
-				await this.$axios.post(`http://localhost:5000/api/thumbnail/${this.dataProduct.id}/upload`, formData, {
-				})
-					.then(res => {
-						console.log(res);
-						this.thumbnail = res.data;
-					})
-					.catch(err => {
-						console.log(err);
-						this.isLoading = false;
-					})
-				await this.$axios.put(`http://localhost:5000/api/product/${this.dataProduct.id}/thumbnail?imgPath=${this.thumbnail[0].filePath}`, {
-				}).then(res => {
-					console.log(res);
-					this.isLoading = false;
-				}).catch(err => {
-					console.log(err);
-				})
+				// let listFD = [];
+				// let formData = new FormData();
+				// this.listFile.forEach(item => {
+				// 	formData.append('files', item);
+				// })
+				// await this.$axios.post(process.env.BASE_URL_API +`/thumbnail/${this.dataProduct.id}/upload`, formData, {
+				// })
+				// 	.then(res => {
+				// 		console.log(res);
+				// 		this.thumbnail = res.data;
+				// 	})
+				// 	.catch(err => {
+				// 		console.log(err);
+				// 		this.isLoading = false;
+				// 	})
+				// await this.$axios.put(process.env.BASE_URL_API +`/product/${this.dataProduct.id}/thumbnail?imgPath=${this.thumbnail[0].filePath}`, {
+				// }).then(res => {
+				// 	console.log(res);
+				// 	this.isLoading = false;
+				// 	this.$router.push(`/product/${this.dataProduct.id}`);
+				// }).catch(err => {
+				// 	console.log(err);
+				// })
 			} catch (error) {
 				console.log(error);
 			}
@@ -214,14 +245,16 @@ textarea {
 	border-radius: 10px;
 	padding: 10px;
 	margin: 5px 20px;
-	border: 1px solid #c9c9c9;
+	border:none;
+	background-color: #f1f3f5;
 }
 
 input {
 	margin: 5px 20px;
 	border-radius: 6px;
 	padding: 10px 10px;
-	border: 1px solid #c9c9c9;
+	border:none;
+	background-color: #f1f3f5;
 	/* make slightly boxshadow */
 }
 input[type="text"], input[type="password"], textarea, select { 
@@ -254,7 +287,7 @@ input[type="text"], input[type="password"], textarea, select {
 .choose-file {
 	padding: 10px;
 	height: 200px;
-	width: 200px;
+	width: 100%;
 	border-radius: 10px;
 	background-color: #ffffff;
 	cursor: pointer;
@@ -263,17 +296,52 @@ input[type="text"], input[type="password"], textarea, select {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	position: relative;
 	background-image: url('~/assets/img/choose.png');
 }
-
+.choose-icon{
+	position: absolute;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	top: 10px;
+	right: 10px;
+	font-size: 34px;
+	& > p{
+		font-size: 14px;
+	}
+}
 .main {
 	width: 100%;
 	display: flex;
-	flex-direction: column;
-	gap: 10px;
+	gap: 50px;
 	background-color: #ffffff;
 	padding: 20px;
 	border-radius: 10px;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+	align-items: flex-start;
+}
+.main-left{
+	width: 100%;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 10px;
+}
+.inp-container{
+	display: flex;
+	flex-direction: column;
+}
+.main-right{
+	width: 100%; 
+	display: grid;
+	flex: 2;
+	gap: 10px;
+	grid-template-columns: auto auto;
+	& > .inp-container:nth-child(1){
+		grid-column: 1 / span 2;
+	}
 }
 
 .list-product {

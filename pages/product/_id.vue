@@ -4,12 +4,12 @@
 			<section class="overview-product">
 				<div class="list-thumbnail">
 					<div class="main-thumbnail">
-						<img v-if="thumbnail" :src="currentThumbnail" alt="" class="product-thumbnail">
+						<img v-if="currentThumbnail" :src="currentThumbnail" alt="" class="product-thumbnail">
 						<img v-else src="~/assets/img/img-none.png" alt="" class="product-thumbnail">
 					</div>
 					<div class="list-item-thumbnail">
-						<div class="item-thumbnail" v-for="(item, index) in thumbnail" :key="index">
-							<img :src="item" alt="" class="thumbnail-list-item-img" @click="changeThumbnail(index,$event)">
+						<div v-if="products.thumbnails.length > 0" class="item-thumbnail" v-for="(item, index) in products?.thumbnails" :key="index">
+							<img :src="products.thumbnails[index]" alt="" class="thumbnail-list-item-img" @click="changeThumbnail(index,$event)">
 						</div>
 					</div>
 				</div>
@@ -18,26 +18,26 @@
 					<div class="product-info">
 					<div class="product-info-content">
 						<h1 class="name-product">
-							{{ product?.name }}
+							{{ products?.name }}
 						</h1>
 						<div class="product-cost">
 							<p class="product-label-cost">
 								Giá :
-								<span class="main-cost">{{ formatPrice(product?.price) }}</span>
-								<span class="discount-cost"><del>{{ product?.discount }}</del></span>
+								<span class="main-cost">{{ formatPrice(products?.price - (products?.price * products?.discount /100)) }}</span>
+								<span class="discount-cost" v-if="products?.discount > 0"><del>{{ formatPrice(products?.price) }}</del></span>
 							</p>
 						</div>
 						<div class="product-type">
 							<p class="product-label">
 								Loại 
 							</p>
-							<span class="type-of-product">: {{ product?.type }}</span>
+							<span class="type-of-product">: {{ products?.status }}</span>
 						</div>
 						<div class="status">
 							<p class="product-label">
 								Trạng thái 
 							</p>
-							<span class="status-of-product">: {{ product?.status }}</span>
+							<span class="status-of-product">: {{ products?.product_status }}</span>
 						</div>
 					</div>
 				</div>
@@ -68,18 +68,22 @@
 			</section>
 			<section class="compare-container">
 				<div class="compare-container-main">
-					<h1 class="compare-title">So sánh giá ở những nơi khác</h1>
+					<div class="cmp-header">
+						<h1 class="compare-title">Xem giá ở những nơi khác</h1>
+						<button class="request-new-cmp" @click="fetchCompare()">generate dữ liệu so sánh mới</button>
+						<mini-loading v-if="isCrawling"/>
+					</div>
 					<div class="compare-list">
 						<div class="compare-item" v-for="(item,index) in listCompare" :key="index">
 							<div class="compare-item-thumbnail">
-								<img :src="item?.thumbs[0].image" alt="" class="compare-item-thumbnail-img">
+								<img :src="item?.url_img" alt="" class="compare-item-thumbnail-img">
 							</div>
 							<div class="compare-item-content">
 								<div class="cmp-item-name">
 									{{ item?.name }}
 								</div>
 								<div class="cmp-item-cost">
-									{{ item?.priceShow }}
+									{{ item?.cost }}
 								</div>
 							</div>
 						</div>
@@ -93,7 +97,7 @@
 						</div>
 						<div class="product-description-content">
 							<pre class="product-description-content-text">
-								{{ product?.description }}
+								{{ products?.description }}
 								<!-- <textarea name="" :value="product?.description" id="" readonly cols="30" rows="10"></textarea> -->
 							</pre>
 						</div>
@@ -128,36 +132,53 @@
 	</section>
 </template>
 <script>
+import miniLoading from '~/components/loading/mini-loading.vue'
 export default {
+	components: {
+		miniLoading
+	},
 	auth:false,
 	layout: 'default',
 	data() {
 		return {
 			// data
 			t: "test",
-			product: null,
+			products: {
+				thumbnails: [],
+			},
 			user: null,
 			thumbnail: null,
 			currentThumbnail: "",
 			listCompare: [],
+			isCrawling: false,
 		}
 	},
 	async mounted() {
 		await this.fetchData();
 		console.log(this.$auth.$storage.getUniversal('user'))
-		await this.fetchCompare();
+		// await this.fetchCompare();
 	},
 	methods: {
-		async fetchCompare(){
-			await this.$axios.get(`https://www.lazada.vn/tag/?_keyori=ss&ajax=true&catalog_redirect_tag=true&from=input&isFirstRequest=true&page=1&q=${encodeURIComponent(this.product.name)}&spm=a2o4n.searchlist.search.go.1c21431ebkDUEK`,
-			//add header
-			)
-			.then(res=>{
-				//search items same name in array
-				this.listCompare = res["data"]["mods"]["listItems"];
-				console.log(this.listCompare);
-			})
-		},
+		// async fetchCompare(){
+		// 	this.isCrawling = true;
+		// 	await this.$axios.get(`http://localhost:5000/api/crawl?key=${this.products?.name}`,
+		// 	//add header
+		// 	)
+		// 	.then(res=>{
+		// 		//search items same name in array
+		// 		this.listCompare = res["data"];
+		// 		console.log(this.listCompare);
+		// 		this.isCrawling = false;
+		// 	})
+		// 	.catch(err=>{
+		// 		console.log(err);
+		// 		this.isCrawling = false;
+		// 	})
+		// 	await this.$axios.post(`https://api.goship.io/api/ext_v1/rates`,
+		// 	{"shipment":{"address_from":{"city":"220000","district":"230400"},"address_to":{"city":"230000","district":"231000"},"parcel":{"cod":0,"weight":500,"length":0,"width":0,"height":0}}}).then(res=>{
+		// 		console.log(res);
+		// 	})
+		// },
 		formatPrice(price){
 			let formatter = new Intl.NumberFormat('vi-VN', {
 				style: 'currency',
@@ -167,25 +188,13 @@ export default {
 			let formatted = formatter.format(price);
 			return formatted;
 		},
-		test(){
-			this.$axios.put('https://635d4fb7cb6cf98e56b20ae8.mockapi.io/api/listpost/product/1', {
-				name: "Điện thoại samsung s20 ultra plus cực xịn và múp nhiều nước",
-				cost: "12.333.333",
-				discount: "15.444.332",
-				type: "Đồ điện tử",
-				status: "Đã qua sử dụng",
-				id: "1",
-				description: JSON.stringify(this.t),
-			}).then((response) => {
-			 console.log(response)})
-		},
 		makeCall(){
-			window.location.href = `tel:${this.product?.phone_number}`
+			window.location.href = `tel:${this.products?.phone_number}`
 		},
 		changeThumbnail(index,ele){
 			console.log(ele.target)
 			ele.target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-			this.currentThumbnail = this.thumbnail[index]
+			this.currentThumbnail = this.products.thumbnails[index]
 			let listEle = document.querySelectorAll(".thumbnail-list-item-img")
 			listEle.forEach((ele) => {
 				if (ele.classList.contains("active")) {
@@ -196,20 +205,22 @@ export default {
 			console.log(ele.target)
 		},
 		async fetchData() {
-			await this.$axios.get(`http://localhost:5000/api/product/${this.$route.params.id}`)
-				.then((response) => {
-					this.product = response['data']['data']
-					// this.product.description = JSON.parse(this.product.description)
-					this.thumbnail = response['data']['thumbnails']
-					this.thumbnail.forEach((ele,index) => {
-						this.thumbnail[index] = "http://localhost:5000" + ele
-					})
-					this.currentThumbnail = this.thumbnail[0]
-					console.log(this.thumbnail)
-					this.product.description = JSON.parse(this.product.description)
+			// await this.$axios.get(process.env.BASE_URL_API +`${this.$route.params.id}`)
+			await this.$api.products.getProductById(this.$route.params.id)
+			.then((response) => {
+					this.products = response['data']['data']
+					// this.products.thumbnails.forEach((ele,index) => {
+					// 	this.products.thumbnails[index] = process.env.BASE_URL_IMG + ele
+					// })
+					console.log("ré",this.products.thumbnails[0])
+					this.currentThumbnail = this.products.thumbnails[0]
+					this.products.description = JSON.parse(this.products.description)
 				})
-			console.log(this.product)
-			// await this.$axios.get(`https://640b058281d8a32198d72c54.mockapi.io/images/${this.product.id}`)
+				.catch((error) => {
+					console.log(error)
+				})
+			console.log(this.products)
+			// await this.$axios.get(`https://640b058281d8a32198d72c54.mockapi.io/images/${this.products.id}`)
 			// 	.then((response) => {
 			// 		this.thumbnail = response.data
 			// 		this.currentThumbnail = this.thumbnail.thumbnails[0]
@@ -437,25 +448,65 @@ export default {
 	box-shadow: 1px 7px 20px 1px #5698fc63;
 
 }
+.compare-container-main{
+	padding-top: 20px;
+}
+.compare-title{
+	font-size: 24px;
+	font-weight: 500;
+	padding-bottom: 5px;
+	border-bottom: 2px solid #fa3434;
+}
+.compare-list{
+	border: 1px solid #fa3434;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	border-radius: 10px;
+	background-color: #ffffff;
+	padding: 10px;
+}
+.cmp-header{
+	display: flex;
+	margin-bottom: 20px;
+	gap: 50px;
+	align-items: center;
+}
+.request-new-cmp{
+	border: none;
+	padding: 10px;
+	background-color: #ff4131;
+	color: #ffffff;
+	font-size: 18px;
+	border-radius: 6px;
+	cursor: pointer;
+}
 .compare-item{
 	padding: 20px;
 	display: flex;
 	gap: 30px;
-	border: 1px solid #fa3434;
 	border-radius: 10px;
-	background-color: #ffffff;
+	//make box shadow slightly
+	&:hover{
+		box-shadow: 1px 7px 20px 0px rgba(189, 189, 189, 0.75);
+	}
 }
 .cmp-item-name{
 	font-size: 18px;
 	font-weight: 500;
 }
 .compare-item-thumbnail-img{
-	width: 150px;
-	height: 150px;
+	width: 120px;
+	height: 120px;
 }
 .compare-item-content{
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+}
+.cmp-item-cost{
+	font-size: 24px;
+	color: #fa3434;
+	font-weight: 500;
 }
 </style>
