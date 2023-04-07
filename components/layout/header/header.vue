@@ -1,7 +1,7 @@
 <template>
 	<div class="container-header">
     <div class="header-container">
-        <div class="site-logo" @click="$router.push('/login')">
+        <div class="site-logo" @click="$router.push('/')">
             <img src="~/assets/img/logo-colored.png" alt="" class="logo-site">
         </div>
         <search />
@@ -83,7 +83,7 @@ export default {
 <style lang="scss" scoped>
 .logo-site {
     height: 50px;
-
+	cursor: pointer;
 }
 .container-header{
 	display: flex;

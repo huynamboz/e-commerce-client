@@ -52,8 +52,8 @@ export default {
 					autoFetch: false
 				},
 				refreshToken: {
-					property: 'refresh_token',
-					data: 'refresh_token',
+					property: 'refreshToken',
+					data: 'refreshToken',
 					maxAge: 60 
 				},
 				token: {
@@ -63,7 +63,8 @@ export default {
 				},
 				endpoints: {
 					login: { url: '/auth/login', method: 'post', propertyName: 'token' },
-					user: false //phải để là false để không tự động fetch user chứ không là méo lưu được trạng thái login con mẹ nó đc tốn thời gian của bố m vcl
+					user: false, //phải để là false để không tự động fetch user chứ không là méo lưu được trạng thái login con mẹ nó đc tốn thời gian của bố m vcl
+					refresh: { url: '/auth/refresh-token', method: 'post' },
 				},
 			},
 		},

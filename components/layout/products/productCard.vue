@@ -45,6 +45,7 @@ export default{
 <style lang="scss" scoped>
 .card-container{
 	width: 220px;
+	min-height: 328px;
 	height: auto;
 	display: flex;
 	flex-direction: column;
@@ -70,6 +71,8 @@ export default{
 	width: 100%;
 	height: 100%;
 	max-height: 200px;
+	min-height: 200px;
+	object-fit: cover;
 	object-fit: cover;
 }
 .item-product-content{
