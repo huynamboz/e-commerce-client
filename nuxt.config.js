@@ -80,7 +80,7 @@ export default {
 		{ src: "~plugins/api/index" },
 	],
 	axios: {
-		baseURL: 'http://localhost:5000/api/v1',
+		baseURL: 'http://103.116.53.105:3013/api/v1',
 	},
 	// Auto import components: https://go.nuxtjs.dev/config-components
 	components: true,
