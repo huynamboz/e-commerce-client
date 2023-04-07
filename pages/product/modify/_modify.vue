@@ -20,7 +20,7 @@
 						</div>
 						<div class="inp-container">
 							<label for="">Tình trạng <span style="color:red">*</span></label>
-							<input type="text" placeholder="Đã qua sử dụng" v-model="newProductData.status">
+							<input type="text" placeholder="1" v-model="newProductData.status">
 						</div>
 						<div class="inp-container">
 							<label for="">category <span style="color:red">*</span></label>
@@ -160,15 +160,15 @@ export default {
 			try {
 				this.isLoading = true;
 				console.log(this.$auth.user);
-				await this.$axios.post(process.env.BASE_URL_API +'/products', {
+				await this.$axios.post(process.env.BASE_URL_API +'/products/my-products', {
 					name: this.newProductData.name,
 					price: this.newProductData.price,
 					description: JSON.stringify(this.newProductData.description),
 					thumbnails: this.newProductData.thumbnailsList.split("\n"),
 					category_id: 1,
+					status_id: 1,
 					discount: this.newProductData.discount,
 					keyword: this.newProductData.keyword,
-					product_status : "Đã qua dùng"
 				}).then(res => {
 					console.log(res);
 					this.dataProduct = res.data;
