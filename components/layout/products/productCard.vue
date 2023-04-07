@@ -56,7 +56,8 @@ export default{
 	position: relative;
 	box-shadow: -1px 5px 20px 1px rgb(130 130 130 / 10%);
 	@media screen and (max-width:768px) {
-		max-width: 160px;
+		max-width: 205px;
+		width: calc( 100vw / 2 - 15px);
 		min-height: unset;
 		height: fit-content;
 		max-height: unset;
