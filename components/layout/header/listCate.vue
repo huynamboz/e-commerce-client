@@ -29,13 +29,18 @@
 	justify-content: center;
 	align-items: center;
 	box-shadow: -1px 8px 20px 2px rgb(197 197 197 / 26%);
+	@media screen and (max-width:768px) {
+		display: none;
+	}
 }
 .list-cate{
 	display: flex;
 	align-items: center;
 	gap: 20px;
 	max-width: 1240px;
-
+	@media screen and (max-width:768px) {
+		width: 100%;
+	}
 }
 a{
 	text-decoration: none;

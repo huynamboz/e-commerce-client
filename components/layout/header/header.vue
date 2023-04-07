@@ -91,6 +91,9 @@ export default {
 	justify-content: center;
 	position: relative;
 	z-index: 999;
+	@media screen and (max-width: 768px) {
+		flex-direction: column;
+	}
 }
 .header-container {
     width: 100%;
@@ -100,6 +103,10 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 15px 50px;
+	@media screen and (max-width:768px){
+		flex-direction: column;
+		gap: 20px;
+	}
 }
 
 .list-action {

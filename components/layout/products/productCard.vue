@@ -55,6 +55,14 @@ export default{
 	overflow: hidden;
 	position: relative;
 	box-shadow: -1px 5px 20px 1px rgb(130 130 130 / 10%);
+	@media screen and (max-width:768px) {
+		max-width: 160px;
+		min-height: unset;
+		height: fit-content;
+		max-height: unset;
+		height: 280px;
+		margin-bottom: 15px;
+	}
 }
 .tag-sale{
 	position: absolute;
@@ -74,6 +82,11 @@ export default{
 	min-height: 200px;
 	object-fit: cover;
 	object-fit: cover;
+	@media screen and (max-width:768px) {
+		max-height: 60px;
+		min-height: 160px;
+		max-width: unset;
+	}
 }
 .item-product-content{
 	padding: 20px 5px 0 5px;
@@ -85,6 +98,9 @@ export default{
 	font-weight: 400;
 	color: #adadad;
 	font-size: 16px;
+	@media screen and (max-width:768px) {
+		font-size: 14px;
+	}
 }
 .item-product-name{
 	font-weight: 400;
@@ -94,6 +110,9 @@ export default{
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	@media screen and (max-width:768px) {
+		font-size: 14px;
+	}
 }
 .item-cost-parent{
 	display: flex;
@@ -103,6 +122,9 @@ export default{
 	font-weight: 400;
 	color: #ff4131;
 	font-size: 18px;
+	@media screen and (max-width:768px) {
+		font-size: 14px;
+	}
 }
 .addr{
 	font-weight: 400;

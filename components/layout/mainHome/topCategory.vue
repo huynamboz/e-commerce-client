@@ -69,6 +69,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+	
 }
 .cate-content-main{
     margin-top: 40px;
@@ -79,12 +80,16 @@
     padding: 30px;
     border-radius: 9px;
     background-color: #fff;
-
+	@media screen and (max-width:768px) {
+		padding: 0;
+	}
 }
 .cate-content-list{
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-
+	@media screen and (max-width:768px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
 .cate-item{
     display: flex;
@@ -146,6 +151,9 @@
         }
         border: none;
     }
+	@media screen and (max-width:768px) {
+		display: none;
+	}
 }
 
 

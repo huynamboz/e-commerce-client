@@ -33,5 +33,9 @@ export default{
 	flex-wrap: wrap;
 	gap: 20px;
 	justify-content: space-around;
+	@media screen and (max-width:768px) {
+		gap: 5px;
+		padding: 0 12px;
+	}
 }
 </style>

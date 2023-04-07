@@ -97,10 +97,15 @@ body {
 	& > h2{
 		font-size: 24px;
 		font-weight: 500;
+		@media screen and (max-width:768px) {
+			text-align: center;
+			font-size: 18px;
+		}
 	}
 	& > p{
 		padding-bottom: 5px;
 		border-bottom: 2px solid #8cb7f5;
+		font-size: 16px;
 	}
 }
 </style>

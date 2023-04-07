@@ -120,6 +120,9 @@ input {
 	border: 1px solid #ff4131;
 	position: relative;
 	justify-content: space-between;
+	@media screen and (max-width:768px) {
+		width: 100%;
+	}
 }
 
 .icon-search {
@@ -157,6 +160,9 @@ input {
 	border: none;
 	color: #ffffff;
 	border-radius: 10px;
+	@media screen and (max-width:768px) {
+		width: 100px;
+	}
 }
 .custom-options{
 	position: absolute;
