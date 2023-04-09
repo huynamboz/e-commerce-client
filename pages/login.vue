@@ -1,5 +1,6 @@
 <template>
     <div class="login-container">
+        <loading v-if="isLoading"/>
         <div class="login-content-main">
             <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
             <div class="login-fiels">
@@ -22,25 +23,198 @@
 
                 <span class="forgot">Forgot password?</span>
                 <div class="login-list-btn">
-                    <button class="login-btn">LOGIN</button>
+                    <button class="login-btn" @click="signin()">LOGIN</button>
                     <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button>
                 </div>
             </div>
         </div>
+		<div id="popup-container" class="popup-container" v-show="authError">
+			<div class="popup">
+				<div class="popup-content">
+					<div class="popup-title">
+						Lỗi
+					</div>
+					<div class="popup-text">
+						Sai tài khoản hoặc mật khẩu. Vui lòng thử lại
+						<span>{{ email }}</span>
+					</div>
+					<div class="popup-btn">
+						<button class="btn-popup-close" @click="closePopup()">Đóng</button>
+					</div>
+				</div>
+			</div>
+			<div class="popup-blur"  @click="closePopup()"></div>
+		</div>
     </div>
 </template>
 <script>
+import loading from '~/components/loading/main.vue'
 export default {
+    components: {
+        loading
+    },
     name: 'login',
     data() {
         return {
+            isLoading: false,
             email: '',
-            password: ''
+            password: '',
+			userID: '',
+			authError: false
         }
     },
+	mounted() {
+	},
+    methods: {
+		closePopup(){
+			this.authError = false;
+		},
+		async fetchUserData(){
+			let user = {
+				id : 1,
+				name: "Nguyen Van A",
+				avatar: "https://i.pinimg.com/originals/1c/0d/0d/1c0d0d1b1f1f1b1b1f1f1b1b1f1f1b1b.jpg",
+			}
+			this.$auth.$storage.setUniversal('user', user, true)
+			// await this.$api.auth.getUserById(this.userID)
+			// 	.then(resp => {
+			// 		console.log(resp.data, "get by id done")
+			// 		this.$auth.$storage.setUniversal('user', resp.data, true)
+			// 		console.log(this.$auth.$storage.getUniversal('user'), "get universal");
+			// 		this.$router.push('/')
+			// 	})
+			// 	.catch(err => {
+			// 			this.isLoading = false;
+			// 	})
+		},
+        async signin() {
+            this.isLoading = true;
+            await this.$auth.loginWith('local',
+            {
+                data: {
+						email: this.email,
+						password: this.password,
+					}
+            })
+                .then(resp => {
+                    this.isLoading = false;
+					this.userID = resp.data.user_id;
+					this.userID = 1; //temp to test
+					this.fetchUserData();
+                })
+                .catch(err => {
+                    console.log(err);
+					this.authError = true;
+					console.log(this.authError);
+					this.isLoading = false;
+                })
+				
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
+.popup-container{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	animation: blur 0.3s;
+	@media screen and (max-width: 768px) {
+		padding: 0 20px;
+	}
+}
+// make animation keyframe from blur 0 to 1
+@keyframes blur {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+.popup-blur{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+}
+.popup{
+	padding: 82px 105px;
+	display: flex;
+	position: relative;
+	align-items: center;
+	justify-content: center;
+	background: #FFFFFF;
+	border-radius: 40px;
+	z-index: 999;
+	@media screen and (max-width: 768px){
+		padding: 40px 20px;
+	}
+}
+.popup-title{
+	font-weight: 700;
+font-size: 38px;
+line-height: 150%;
+color: #E02D3C;
+@media screen and (max-width: 768px){
+	font-weight: 700;
+font-size: 24px;
+line-height: 150%;
+	
+}
+}
+.popup-text{
+	max-width: 400px;
+	font-weight: 400;
+font-size: 16px;
+line-height: 150%;
+color: #3E3F66;
+&> span{
+	font-weight: 500;
+}
+@media screen and (max-width: 768px){
+	font-weight: 400;
+font-size: 14px;
+line-height: 150%;
+	max-width: 100%;
+}
+}
+.popup-btn{
+	@media screen and (max-width: 768px) {
+		width: 100%;
+	}
+}
+.btn-popup-close{
+	background: #E02D3C;
+border-radius: 80px;
+padding: 9.5px 24px;
+gap: 4px;
+color: #FFFFFF;
+font-weight: 700;
+font-size: 14px;
+line-height: 150%;
+border: none;
+width: 298px;
+@media screen and (max-width: 768px){
+	width: 100%;
+	
+}
+}
+.popup-content{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
 span,p{
     margin: 0;
 }

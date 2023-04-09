@@ -45,7 +45,7 @@
                 
                 <!-- <span class="forgot">Forgot password?</span> -->
                 <div class="login-list-btn">
-                    <button class="login-btn">SIGN UP</button>
+                    <button class="login-btn" @click="signup()">SIGN UP</button>
                     <button class="create-btn" @click="$router.push('/login')">BACK TO LOGIN</button>
                 </div>
             </div>
@@ -64,6 +64,22 @@ export default {
             lastName: '',
         }
     },
+    methods: {
+        signup() {
+            this.$axios.$post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.ApiKey}`,
+            {
+                email: this.email,
+                password: this.password,
+                returnSecureToken: true
+            })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
