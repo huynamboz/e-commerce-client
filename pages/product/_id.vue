@@ -273,7 +273,7 @@ export default {
 	overflow-y: auto;
 	@media screen and (max-width:768px) {
 		width: calc(100vw - 40px);
-		
+		max-width: 100%;
 	}
 }
 .product-thumbnail{
