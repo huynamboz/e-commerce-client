@@ -244,12 +244,19 @@ export default {
 	padding: 40px;
 	border-radius: 5px;
 	gap: 30px;
+	@media screen and (max-width:768px) {
+		flex-direction: column;
+		padding: 20px;
+	}
 }
 .main-thumbnail{
 	display: flex;
 	justify-content: center;
 	background-color: #e5e5e5;
 	border-radius: 5px;
+	@media screen and (max-width:768px) {
+		width: 100%;
+	}
 }
 .list-item-thumbnail {
 	display: flex;
@@ -264,6 +271,10 @@ export default {
 	height: 500px;
 	display: block;
 	object-fit: cover;
+	@media screen and (max-width:768px) {
+		width: 100%;
+		
+	}
 }
 .thumbnail-list-item-img {
 	width: 100px;
@@ -404,6 +415,11 @@ export default {
 	margin-top: 40px;
 	display: flex;
 	gap: 14px;
+	@media screen and (max-width:768px) {
+		flex-direction: column;
+		width: 100%;
+		
+	}
 }
 .product-description-content{
 	border: 1px solid #e5e5e5;
@@ -471,6 +487,9 @@ export default {
 	margin-bottom: 20px;
 	gap: 50px;
 	align-items: center;
+	@media screen and (max-width:768px) {
+		flex-direction: column;
+	}
 }
 .request-new-cmp{
 	border: none;
