@@ -234,9 +234,15 @@ export default {
 	margin-top: 60px;
 	display: flex;
 	justify-content: center;
+	@media screen and (max-width:768px) {
+		padding: 0 12px;
+	}
 }
 .page-product{
 	width: 1180px;
+	@media screen and (max-width:768px) {
+		width: 100%;
+	}
 }
 .overview-product {
 	display: flex;
