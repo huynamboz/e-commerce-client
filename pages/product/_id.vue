@@ -265,6 +265,10 @@ export default {
 	cursor: pointer;
 	max-width: 500px;
 	overflow-y: auto;
+	@media screen and (max-width:768px) {
+		width: calc(100vw - 40px);
+		
+	}
 }
 .product-thumbnail{
 	width: 500px;
