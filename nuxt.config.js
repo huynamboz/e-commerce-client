@@ -47,24 +47,26 @@ export default {
 		  },
 		strategies: {
 			local: {
+				scheme: 'refresh',
 				user: {
-					property: 'user',
-					autoFetch: false
+					property: false,
+					},
+				token: {
+					property: 'accessToken',
+					maxAge: 1800
 				},
 				refreshToken: {
 					property: 'refreshToken',
-					data: 'refreshToken',
-					maxAge: 60 
-				},
-				token: {
-					property: 'accessToken',
-					global: true,
-					type: 'Bearer',
+					data: 'refresh_token',
+					maxAge: 60 * 60 * 24
 				},
 				endpoints: {
-					login: { url: '/auth/login', method: 'post', propertyName: 'token' },
-					user: false, //phải để là false để không tự động fetch user chứ không là méo lưu được trạng thái login con mẹ nó đc tốn thời gian của bố m vcl
-					refresh: { url: '/auth/refresh-token', method: 'post' },
+					login: { url: '/auth/login', method: 'post', propertyName: 'accessToken' },
+					user: {url: '/users/me', method: 'get', propertyName: false},
+					refresh: { url: '/auth/refresh-token', method: 'post' ,
+					propertyName: 'refreshToken',
+					},
+					logout :false
 				},
 			},
 		},
@@ -72,8 +74,6 @@ export default {
 		// 	login: '/login',
 		// },
 		// redirect: false,
-		watchLoggedIn: true,
-		autoFetchUser: false,
 
 	},
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -81,7 +81,7 @@ export default {
 		{ src: "~plugins/api/index" },
 	],
 	axios: {
-		baseURL: 'http://103.116.53.105:3013/api/v1',
+		baseURL: process.env.BASE_URL_API,
 	},
 	// Auto import components: https://go.nuxtjs.dev/config-components
 	components: true,

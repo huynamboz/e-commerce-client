@@ -70,12 +70,12 @@ export default {
 			this.authError = false;
 		},
 		async fetchUserData(){
-			let user = {
-				id : 1,
-				name: "Nguyen Van A",
-				avatar: "https://i.pinimg.com/originals/1c/0d/0d/1c0d0d1b1f1f1b1b1f1f1b1b1f1f1b1b.jpg",
-			}
-			this.$auth.$storage.setUniversal('user', user, true)
+			// let user = {
+			// 	id : 1,
+			// 	name: "Nguyen Van A",
+			// 	avatar: "https://i.pinimg.com/originals/1c/0d/0d/1c0d0d1b1f1f1b1b1f1f1b1b1f1f1b1b.jpg",
+			// }
+			// this.$auth.$storage.setUniversal('user', user, true)
 			// await this.$api.auth.getUserById(this.userID)
 			// 	.then(resp => {
 			// 		console.log(resp.data, "get by id done")
@@ -86,6 +86,16 @@ export default {
 			// 	.catch(err => {
 			// 			this.isLoading = false;
 			// 	})
+			await this.$api.users.getInfoMe()
+				.then(resp => {
+					console.log(resp.data, "get by id done")
+					this.$auth.$storage.setUniversal('user', resp.data, true)
+					console.log(this.$auth.$storage.getUniversal('user'), "get universal");
+					this.$router.push('/')
+				})
+				.catch(err => {
+						this.isLoading = false;
+				})
 		},
         async signin() {
             this.isLoading = true;
@@ -97,10 +107,18 @@ export default {
 					}
             })
                 .then(resp => {
+					// Lấy thời gian hết hạn của token
+					this.$router.push('/')
+
+			// 		let user = {
+			// 	id : 1,
+			// 	name: "Nguyen Van A",
+			// 	avatar: "https://i.pinimg.com/originals/1c/0d/0d/1c0d0d1b1f1f1b1b1f1f1b1b1f1f1b1b.jpg",
+			// }
+			// this.$auth.$storage.setUniversal('user', user, true)
+				console.log(this.$auth, "auth");
                     this.isLoading = false;
-					this.userID = resp.data.user_id;
-					this.userID = 1; //temp to test
-					this.fetchUserData();
+					// this.fetchUserData();
                 })
                 .catch(err => {
                     console.log(err);
@@ -108,7 +126,6 @@ export default {
 					console.log(this.authError);
 					this.isLoading = false;
                 })
-				
         }
     }
 }
@@ -237,6 +254,11 @@ span,p{
     padding: 20px 50px;
     // make box shadow
     box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
+}
+.login-img-banner{
+	@media screen and (max-width:768px) {
+		display: none;
+	}
 }
 .input-email-img{
     width: 20px;

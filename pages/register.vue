@@ -13,18 +13,11 @@
                     </div>
                 </div>
                 <div class="infor-more">
-                    <div class="login-input-name" :class="[{'gray-bg' : firstName.length > 0}]">
+                    <div class="login-input-name" :class="[{'gray-bg' : name.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>First name</span>
-                        <input :class="[{'gray-bg' : firstName.length > 0}]" type="text" v-model="firstName" placeholder="First name" class="input-email">
-                    </div>
-                </div>
-                <div class="login-input-name" :class="[{'gray-bg' : lastName.length > 0}]">
-                    <img src="~/assets/img/mail.png" alt="" class="input-email-img">
-                    <div class="fiels-input">
-                        <span>Last name</span>
-                        <input :class="[{'gray-bg' : lastName.length > 0}]" type="text" v-model="lastName" placeholder="Last name" class="input-email">
+                        <span>Name</span>
+                        <input :class="[{'gray-bg' : name.length > 0}]" type="text" v-model="name" placeholder="First name" class="input-email">
                     </div>
                 </div>
                 </div>
@@ -35,11 +28,11 @@
                         <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
                     </div>
                 </div>
-                <div class="login-input-pass" :class="[{'gray-bg' : password2.length > 0}]">
+                <div class="login-input-pass" :class="[{'gray-bg' : confirm_password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
                         <span>Confirm password</span>
-                        <input :class="[{'gray-bg' : password2.length > 0}]" type="password" v-model="password2" placeholder="Password" class="input-email">
+                        <input :class="[{'gray-bg' : confirm_password.length > 0}]" type="password" v-model="confirm_password" placeholder="Password" class="input-email">
                     </div>
                 </div>
                 
@@ -53,26 +46,35 @@
     </div>
 </template>
 <script>
+import process from 'process';
+
 export default {
     name: 'login',
+	auth:false,
     data() {
         return {
             email: '',
             password: '',
-            password2: '',
-            firstName: '',
-            lastName: '',
+            confirm_password: '',
+            name: '',
         }
     },
+	mounted(){
+		if (this.$auth.loggedIn){
+			this.$router.push('/')
+		}
+	},
     methods: {
         signup() {
-            this.$axios.$post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.ApiKey}`,
+            this.$axios.$post(`/auth/register`,
             {
                 email: this.email,
                 password: this.password,
-                returnSecureToken: true
+				name : this.name,
+				confirm_password : this.confirm_password
             })
                 .then(res => {
+					this.$router.push('/login')
                     console.log(res);
                 })
                 .catch(err => {
@@ -91,6 +93,11 @@ span,p{
     justify-content: center;
     align-items: center;
     height: 100vh;
+	@media screen and (max-width:768px) {
+		height: auto;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
 }
 .login-content-main{
     display: flex;
@@ -105,6 +112,14 @@ span,p{
     padding: 20px 50px;
     // make box shadow
     box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
+	@media screen and (max-width:768px) {
+		height: 100%;
+	}
+}
+.login-img-banner{
+	@media screen and (max-width:768px) {
+		display: none;
+	}
 }
 .input-email-img{
     width: 20px;
@@ -192,6 +207,9 @@ background-color: #ffffff;
     display: flex;
     gap: 20px;
     margin: 20px 0;
+	@media screen and (max-width:768px) {
+		flex-direction: column;
+	}
 }
 .login-input-name{
     display: flex;
