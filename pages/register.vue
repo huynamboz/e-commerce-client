@@ -40,7 +40,9 @@
                 <div class="login-list-btn">
                     <button class="login-btn" @click="signup()">SIGN UP</button>
                     <button class="create-btn" @click="$router.push('/login')">BACK TO LOGIN</button>
-                </div>
+					<button @click="showToast('error','ok')"> áodjslkdja</button>
+					
+				</div>
             </div>
         </div>
     </div>
@@ -50,6 +52,7 @@ import process from 'process';
 
 export default {
     name: 'login',
+	layout:'empty',
 	auth:false,
     data() {
         return {
@@ -57,6 +60,7 @@ export default {
             password: '',
             confirm_password: '',
             name: '',
+			err: ''
         }
     },
 	mounted(){
@@ -65,6 +69,14 @@ export default {
 		}
 	},
     methods: {
+		showToast(status,message) {
+			try{
+			status == "success" ? this.$toast.success(message ? message : "Thành công") : this.$toast.error(message ? message : "Thất bại");
+			}
+			catch(err){
+				console.log(err);
+			}
+		},
         signup() {
             this.$axios.$post(`/auth/register`,
             {
@@ -74,10 +86,12 @@ export default {
 				confirm_password : this.confirm_password
             })
                 .then(res => {
+					this.showToast("success","Đăng ký thành công");
 					this.$router.push('/login')
                     console.log(res);
                 })
                 .catch(err => {
+					this.showToast("error",err.response.data.message);
                     console.log(err);
                 })
         }
@@ -94,9 +108,7 @@ span,p{
     align-items: center;
     height: 100vh;
 	@media screen and (max-width:768px) {
-		height: auto;
-		margin-top: 20px;
-		margin-bottom: 20px;
+		
 	}
 }
 .login-content-main{
@@ -113,7 +125,7 @@ span,p{
     // make box shadow
     box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
 	@media screen and (max-width:768px) {
-		height: 100%;
+		height: fit-content;
 	}
 }
 .login-img-banner{
@@ -185,6 +197,7 @@ background-color: #ffffff;
     margin-right: 8px;
     transition: .2s ease-in-out;
     &:hover{
+		background-color: #38aefd;
         // make box shadow
         box-shadow: 0 13px 20px 10px rgba(151, 207, 244, 0.242);
     }
@@ -215,11 +228,12 @@ background-color: #ffffff;
     display: flex;
     align-items: center;
     gap: 20px;
+	width: 100%;
     padding: 10px 20px;
     background-color: #ffffff;
     border-radius: 6px;
     input {
-        width: 150px;
+		width: 100%;
     }
 }
 .gray-bg{

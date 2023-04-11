@@ -28,28 +28,12 @@
                 </div>
             </div>
         </div>
-		<div id="popup-container" class="popup-container" v-show="authError">
-			<div class="popup">
-				<div class="popup-content">
-					<div class="popup-title">
-						Lỗi
-					</div>
-					<div class="popup-text">
-						Sai tài khoản hoặc mật khẩu. Vui lòng thử lại
-						<span>{{ email }}</span>
-					</div>
-					<div class="popup-btn">
-						<button class="btn-popup-close" @click="closePopup()">Đóng</button>
-					</div>
-				</div>
-			</div>
-			<div class="popup-blur"  @click="closePopup()"></div>
-		</div>
     </div>
 </template>
 <script>
 import loading from '~/components/loading/main.vue'
 export default {
+	layout:'empty',
     components: {
         loading
     },
@@ -107,22 +91,15 @@ export default {
 					}
             })
                 .then(resp => {
-					// Lấy thời gian hết hạn của token
 					this.$router.push('/')
-
-			// 		let user = {
-			// 	id : 1,
-			// 	name: "Nguyen Van A",
-			// 	avatar: "https://i.pinimg.com/originals/1c/0d/0d/1c0d0d1b1f1f1b1b1f1f1b1b1f1f1b1b.jpg",
-			// }
-			// this.$auth.$storage.setUniversal('user', user, true)
-				console.log(this.$auth, "auth");
+					console.log(this.$auth, "auth");
+					this.$toast.success('Đăng nhập thành công');
                     this.isLoading = false;
-					// this.fetchUserData();
                 })
                 .catch(err => {
                     console.log(err);
 					this.authError = true;
+					this.$toast.error('Đăng nhập thất bại');
 					console.log(this.authError);
 					this.isLoading = false;
                 })

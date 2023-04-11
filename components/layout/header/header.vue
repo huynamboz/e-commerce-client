@@ -27,7 +27,7 @@
                                 <!-- <img src="~/assets/img/avatar.png" alt=""> -->
                             </div>
                             <div class="popup-detail-user-content-header-info">
-                                <p class="popup-detail-user-content-header-info-name">{{  $auth.user.name }}</p>
+                                <p class="popup-detail-user-content-header-info-name"><b>Hi </b>{{  $auth.user.name }}</p>
                                 <p class="popup-detail-user-content-header-info-email">
                                 </p>
                             </div>
@@ -48,7 +48,7 @@ import search from '~/components/layout/header/search.vue'
 export default {
     name: 'headerTab',
     components: {
-        search
+        search,
     },
     data() {
         return {
