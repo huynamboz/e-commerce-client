@@ -234,9 +234,15 @@ export default {
 	margin-top: 60px;
 	display: flex;
 	justify-content: center;
+	@media screen and (max-width:768px) {
+		padding: 0 12px;
+	}
 }
 .page-product{
 	width: 1180px;
+	@media screen and (max-width:768px) {
+		width: 100%;
+	}
 }
 .overview-product {
 	display: flex;
@@ -265,6 +271,10 @@ export default {
 	cursor: pointer;
 	max-width: 500px;
 	overflow-y: auto;
+	@media screen and (max-width:768px) {
+		width: calc(100vw - 40px);
+		max-width: 100%;
+	}
 }
 .product-thumbnail{
 	width: 500px;
