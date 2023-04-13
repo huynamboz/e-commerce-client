@@ -23,7 +23,7 @@
 <script>
 import tabLeft from '~/components/filter/tabLeft.vue';
 import loading from '~/components/loading/main.vue';
-import productCard from '~/components/layout/products/productCard.vue';
+import productCard from '~/components/products/productCard.vue';
 export default{
 	layout:'default',
 	auth:false,
