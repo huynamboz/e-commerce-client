@@ -27,11 +27,21 @@
                                 <!-- <img src="~/assets/img/avatar.png" alt=""> -->
                             </div>
                             <div class="popup-detail-user-content-header-info">
-                                <p class="popup-detail-user-content-header-info-name"><b>Hi </b>{{  $auth.user.name }}</p>
-                                <p class="popup-detail-user-content-header-info-email">
-                                </p>
+                                <p class="popup-detail-user-content-header-info-name"><b>Hi </b>{{  $auth.user.name }} <i class="fi fi-rr-badge-check"></i></p>
+                                <div class="line"></div>
+								<div class="popup-detail-user-content-header-info-product">
+									<i class="fi fi-rr-shopping-bag"></i>
+									<p class="my-product-title">Bài đăng của tôi</p>
+                                </div>
+								<div class="btn-setting-user" @click="$router.push('/user/settings')">
+									<i class="fi fi-rr-settings-sliders"></i>
+									<p class="setting-title">Cài đặt tài khoản</p>
+								</div>
+								<div class="btn-add-post" @click="$router.push('/product/modify')">
+									<i class="fi fi-rr-shopping-bag-add"></i>
+									<p class="add-post-title">Đăng sản phẩm mới</p>
+								</div>
                             </div>
-							<button class="add-product-btn" @click="$router.push('/product/modify')">Đăng sản phẩm</button>
                         </div>
                         <div class="not-login" v-else>
                         <button class="signin-btn" @click="$router.push('/login')">Đăng nhập</button>
@@ -125,7 +135,6 @@ export default {
     gap: 5px;
     align-items: center;
     font-size: 25px;
-    color: #ff4131;
 
     &:hover {
         cursor: pointer;
@@ -151,36 +160,38 @@ export default {
 }
 
 .popup-detail-user-content{
-    position: relative;
-    padding: 20px;
-    width: 200px;
-    height: 300px;
-    // make box shadow slightly
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
-    animation: openPopUp 0.2s ease-in-out;
-    &::after{
-        position: absolute;
-        content:"";
-        width: 100%;
-        height: 40px;
-        background-color: transparent;
-        top: -30px;
-        
-
-    }
-    &::before{
-        content: "";
-        position: absolute;
-        width: 0; 
-  height: 0; 
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 15px solid rgb(255, 255, 255);
-    top: -10px;
-    right: 10px;
-    }
+	position: relative;
+	width: 200px;
+	height: 300px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	z-index: 1;
+	box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
+	animation: openPopUp 0.2s ease-in-out;
+	&::after{
+		content: "";
+		position: absolute;
+		width: 0; 
+		height: 0; 
+		border-left: 15px solid transparent;
+		border-right: 15px solid transparent;
+		border-bottom: 15px solid rgb(255, 255, 255);
+		top: -10px;
+		right: 10px;
+		z-index: 0;
+	}
+	&::before{
+		content: "";
+		position: absolute;
+		width: 0; 
+		height: 0; 
+		border-left: 15px solid transparent;
+		border-right: 15px solid transparent;
+		border-bottom: 15px solid rgb(255, 255, 255);
+		top: -10px;
+		right: 10px;
+		z-index: 0;
+	}
 }
 @keyframes openPopUp{
     0%{
@@ -228,5 +239,53 @@ button{
 		background-color: #1e75f8;
 	}
 }
-
+.popup-detail-user-content-header-info{
+	display: flex;
+	flex-direction: column;
+	gap: 0px;
+}
+.btn-setting-user{
+	display: flex;
+	align-items: center;
+	gap:10px;
+	padding: 10px 20px;
+	cursor: pointer;
+	&:hover{
+		background-color: #3d8bfd;
+		color: #ffffff;
+	}
+	& > i{
+		font-size: 14px;
+	}
+}
+.line{
+	border-bottom: 1px solid #e0e0e0;
+}
+.popup-detail-user-content-header-info-product{
+	display: flex;
+	padding: 10px 20px;
+	gap: 10px;
+	&:hover{
+		background-color: #3d8bfd;
+		color: #ffffff;
+	}
+	& > i{
+		font-size: 14px;
+	}
+}
+.popup-detail-user-content-header-info-name{
+	padding: 10px 20px;
+}
+.btn-add-post{
+	display: flex;
+	padding: 10px 20px;
+	gap: 10px;
+	&:hover{
+		background-color: #3d8bfd;
+		color: #ffffff;
+	}
+	& > i{
+		font-size: 14px;
+	}
+}
 </style>
