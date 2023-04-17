@@ -46,7 +46,7 @@ export default{
 .card-container{
 	width: 220px;
 	min-height: 328px;
-	height: auto;
+	height: 346px;
 	display: flex;
 	flex-direction: column;
 	background-color: #ffffff;

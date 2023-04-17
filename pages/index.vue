@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="container mx-auto">
 		<!-- <header-tab /> -->
 		<div class="main-content">
 

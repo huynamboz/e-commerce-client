@@ -153,7 +153,7 @@ export default {
 
 .popup-detail-user{
     position: absolute;
-    top: 50px;
+    top: 40px;
     right: -10px;
     z-index: 999;
     display: none;
