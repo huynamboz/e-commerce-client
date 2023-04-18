@@ -1,5 +1,5 @@
 <template>
-	<nuxt-link :to="`product/${product.id}`" class="card-container">
+	<nuxt-link :to="`/product/${product.id}`" class="card-container">
 			<div class="tag-sale" v-if="product.discount > 0">{{ product.discount }}% giảm</div>
 			<img v-if="product.thumbnails[0]" :src="product.thumbnails[0]" @error="handleError" alt="" class="item-bg">
 			<img v-else :src="fallbackImageUrl" alt="" class="item-bg">

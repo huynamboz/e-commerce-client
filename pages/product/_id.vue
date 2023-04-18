@@ -156,29 +156,33 @@ export default {
 	async mounted() {
 		await this.fetchData();
 		console.log(this.$auth.$storage.getUniversal('user'))
+		//wait 3s to fetch compare
+		setTimeout(() => {
+			this.fetchCompare();
+		}, 3000);
 		// await this.fetchCompare();
 	},
 	methods: {
-		// async fetchCompare(){
-		// 	this.isCrawling = true;
-		// 	await this.$axios.get(`http://localhost:5000/api/crawl?key=${this.products?.name}`,
-		// 	//add header
-		// 	)
-		// 	.then(res=>{
-		// 		//search items same name in array
-		// 		this.listCompare = res["data"];
-		// 		console.log(this.listCompare);
-		// 		this.isCrawling = false;
-		// 	})
-		// 	.catch(err=>{
-		// 		console.log(err);
-		// 		this.isCrawling = false;
-		// 	})
+		async fetchCompare(){
+			this.isCrawling = true;
+			await this.$axios.get(`/products/${this.products.id}/comparisons`,
+			//add header
+			)
+			.then(res=>{
+				//search items same name in array
+				this.listCompare = res["data"];
+				console.log(this.listCompare);
+				this.isCrawling = false;
+			})
+			.catch(err=>{
+				console.log(err);
+				this.isCrawling = false;
+			})
 		// 	await this.$axios.post(`https://api.goship.io/api/ext_v1/rates`,
 		// 	{"shipment":{"address_from":{"city":"220000","district":"230400"},"address_to":{"city":"230000","district":"231000"},"parcel":{"cod":0,"weight":500,"length":0,"width":0,"height":0}}}).then(res=>{
 		// 		console.log(res);
 		// 	})
-		// },
+		},
 		formatPrice(price){
 			let formatter = new Intl.NumberFormat('vi-VN', {
 				style: 'currency',
@@ -208,7 +212,7 @@ export default {
 			// await this.$axios.get(process.env.BASE_URL_API +`${this.$route.params.id}`)
 			await this.$api.products.getProductById(this.$route.params.id)
 			.then((response) => {
-					this.products = response['data']['data']
+					this.products = response['data']
 					// this.products.thumbnails.forEach((ele,index) => {
 					// 	this.products.thumbnails[index] = process.env.BASE_URL_IMG + ele
 					// })

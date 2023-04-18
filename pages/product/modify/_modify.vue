@@ -30,17 +30,14 @@
 							<label for="">Mô tả <span style="color:red">*</span></label>
 							<textarea type="text" placeholder="Mô tả về sản phẩm" v-model="newProductData.description"></textarea>
 						</div>
-						<div class="inp-container">
-							<label for="">Thumbnails(mỗi link xuống dòng)<span style="color:red">*</span></label>
-							<textarea type="text" placeholder="Link ảnh" v-model="newProductData.thumbnailsList"></textarea>
-						</div>
+						
 						
 						<div class="inp-container">
 							<label for="key">Từ khóa <span style="color:red">*</span></label>
 							<input type="text" placeholder="Bàn ghế, ghế gỗ" v-model="newProductData.keyword">
 						</div>
 						
-						<button @click="postData()" class="btn-submit">Đăng</button>
+						<button @click="postData()" class="btn-submit ml-20">Đăng</button>
 				</div>
 				<div class="main-left">
 					<label class="choose-file" for="inp-file"><div class="choose-icon">
@@ -160,21 +157,41 @@ export default {
 			try {
 				this.isLoading = true;
 				console.log(this.$auth.user);
-				await this.$axios.post(process.env.BASE_URL_API +'/products/my-products', {
+				if(this.listFile.length == 0){
+					this.$toast.error("Vui lòng chọn ảnh");
+					return;
+				}
+				let listThumbnail = [];
+				let formData = new FormData();
+				this.listFile.forEach(item => {
+					formData.append('files', item);
+				})
+				this.$toast.success("Đang tạo sản phẩm");
+				await this.$api.products.uploadImage(formData).then(res => {
+					console.log(res);
+					listThumbnail = res.data;
+					this.$toast.success("Tải ảnh thành công");
+				}).catch(err => {
+					console.log(err);
+					this.$toast.error("Tải ảnh thất bại");
+				})
+				await this.$api.products.addNewProduct ({
 					name: this.newProductData.name,
 					price: this.newProductData.price,
 					description: JSON.stringify(this.newProductData.description),
-					thumbnails: this.newProductData.thumbnailsList.split("\n"),
+					thumbnailUrls: listThumbnail,
 					category_id: 1,
 					status_id: 1,
 					discount: this.newProductData.discount,
-					keyword: this.newProductData.keyword,
 				}).then(res => {
 					console.log(res);
-					this.dataProduct = res.data;
+					this.dataProduct = res;
 					this.$router.push(`/product/${this.dataProduct.id}`);
+					this.$toast.success("Tạo sản phẩm thành công", { duration: 3000 });
 				}).catch(err => {
 					console.log(err);
+					this.$toast.error(err.response.data.message,{ duration: 3000 });
+					this.isLoading = false;
 				})
 				// let listFD = [];
 				// let formData = new FormData();
@@ -201,6 +218,7 @@ export default {
 				// })
 			} catch (error) {
 				console.log(error);
+				this.$toast.error("Có lỗi xảy ra, vui lòng thử lại sau");
 			}
 		}
 	}
@@ -277,7 +295,7 @@ input[type="text"], input[type="password"], textarea, select {
 }
 .btn-submit{
 	border: none;
-	border-radius: 20px;
+	border-radius: 5px;
 	background-color: #113366;
 	max-width: 100px;
 	cursor: pointer;

@@ -21,7 +21,7 @@
 								<i class="fi fi-rr-calendar-day"></i>
 								Ngày tham gia: <span class="text-[#3d8bfd]">3/04/2023</span>
 							</div>
-							<div class="transition-colors duration-300  hover:bg-[#6294d9] p-2 px-8 rounded-lg bg-[#8cb7f5] text-[#ffffff] text-[14px]
+							<div class="transition-colors duration-300  hover:bg-[#6294d9] p-10 px-12 rounded-5 bg-[#8cb7f5] text-[#ffffff] text-[14px]
 							cursor-pointer
 							">Chỉnh sửa trang cá nhân</div>
 						</div>
