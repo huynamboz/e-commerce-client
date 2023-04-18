@@ -31,7 +31,7 @@
                                 <div class="line"></div>
 								<div class="popup-detail-user-content-header-info-product">
 									<i class="fi fi-rr-shopping-bag"></i>
-									<p class="my-product-title">Bài đăng của tôi</p>
+									<p class="my-product-title" @click="$router.push(`/user/detail`)">Bài đăng của tôi</p>
                                 </div>
 								<div class="btn-setting-user" @click="$router.push('/user/settings')">
 									<i class="fi fi-rr-settings-sliders"></i>
@@ -43,8 +43,8 @@
 								</div>
                             </div>
                         </div>
-                        <div class="not-login" v-else>
-                        <button class="signin-btn" @click="$router.push('/login')">Đăng nhập</button>
+                        <div class="not-login pt-10" v-else>
+                        <button class="text-[14px] text-center flex justify-center bg-gray-100 w-[100%] p-10 mt-10" @click="$router.push('/login')">Đăng nhập</button>
                     </div>
                     </div>
                 </div>
@@ -153,7 +153,7 @@ export default {
 
 .popup-detail-user{
     position: absolute;
-    top: 50px;
+    top: 40px;
     right: -10px;
     z-index: 999;
     display: none;

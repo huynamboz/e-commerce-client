@@ -6,7 +6,8 @@ export default {
     },
 	server: {
 		port: 3000,
-		host: '0.0.0.0'
+		// host: '0.0.0.0'
+		host: 'localhost'
 		// https: {
 		//   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
 		//   cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
@@ -35,6 +36,7 @@ export default {
 	css: [
 		//make global file css from assets/css/global.css
 		"~static/global.css",
+		"~assets/css/main.css",
 		"~static/css/uicons-regular-rounded.css",
 		"~static/icons/uicons-bold-rounded.css",
 		'vue-toastification/dist/index.css',
@@ -90,7 +92,8 @@ export default {
 
 	// Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
 	buildModules: [
-		['@nuxtjs/dotenv']
+		['@nuxtjs/dotenv'],
+		'@nuxtjs/tailwindcss',
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
@@ -101,6 +104,14 @@ export default {
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {
+		postcss: {
+			postcssOptions: {
+				plugins: {
+					tailwindcss: {},
+					autoprefixer: {},
+				},
+			},
+		},
 		loaders: {
 			sass: {
 				implementation: require('sass'),

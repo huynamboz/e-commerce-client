@@ -1,7 +1,7 @@
 <template>
-	<div class="container">
+	<div class="root flex justify-center">
 		<!-- <header-tab /> -->
-		<div class="main-content">
+		<div class="main-content container mx-auto">
 
 			<top-category />
 			<section class="product-container">

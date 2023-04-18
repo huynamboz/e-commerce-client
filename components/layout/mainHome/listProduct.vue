@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<div class="listProduct">
-			<div v-for="item in listProduct" :key="item.id">
+			<div v-for="item in listProduct" :key="item.id" class="product-item">
 				<productCard :product="item"/>
 			</div>
 		</div>
