@@ -1,10 +1,10 @@
 <template>
 	<section class="product-container">
 		<div class="page-product">
-			<section class="overview-product">
+			<section class="overview-product flex gap-11">
 				<div class="list-thumbnail">
 					<div class="main-thumbnail">
-						<img v-if="currentThumbnail" :src="currentThumbnail" alt="" class="product-thumbnail">
+						<img v-if="currentThumbnail" :src="currentThumbnail" alt="" class="product-thumbnail rounded-lg">
 						<img v-else src="~/assets/img/img-none.png" alt="" class="product-thumbnail">
 					</div>
 					<div class="list-item-thumbnail">
@@ -14,41 +14,74 @@
 					</div>
 				</div>
 
-				<div class="info-product-section-2">
+				<div class="info-product-section-2 ">
 					<div class="product-info">
 					<div class="product-info-content">
 						<h1 class="name-product">
 							{{ products?.name }}
 						</h1>
 						<div class="product-cost">
-							<p class="product-label-cost">
+							<div class="product-label-cost flex
+							max-md:flex-wrap 
+							gap-5 
+							items-center 
+							max-md:gap-1
+							max-md:mb-4">
 								Giá :
 								<span class="main-cost">{{ formatPrice(products?.price - (products?.price * products?.discount /100)) }}</span>
 								<span class="discount-cost" v-if="products?.discount > 0"><del>{{ formatPrice(products?.price) }}</del></span>
-							</p>
+								<div class="bg-rose-500 text-white p-1 rounded-md w-fit">
+									{{ products?.discount }}% giảm giá
+								</div>
+							</div>
 						</div>
-						<div class="product-type">
-							<p class="product-label">
-								Loại 
-							</p>
-							<span class="type-of-product">: {{ products?.status }}</span>
-						</div>
-						<div class="status">
-							<p class="product-label">
-								Trạng thái 
-							</p>
-							<span class="status-of-product">: {{ products?.product_status }}</span>
+						<div class="grid grid-cols-[auto_auto]  gap-4">
+							<div class="w-50">
+								<p class="text-gray-500">Loại </p>
+							</div>
+							<div>Điện tử</div>
+							<div>
+								<p class="text-gray-500">Trạng thái </p>
+							</div>
+							<div>Chưa qua sử dụng</div>
+							<div class="text-gray-500">
+								Vận chuyển
+							</div>
+							<div>
+								<div class="flex gap-1 flex-col">
+									<p>Vận chuyển tới <i class="fi fi-rr-truck-side"></i></p>
+									<div class="flex gap-3 flex-wrap mt-3">
+										<div class="choose-city bg-sky-300 p-1 rounded-lg h-[fit-content] w-fit" >
+											<select class="list-select bg-transparent text-sky-700" v-model="currentCity" @change="getDistrict">
+											<option value="">Chọn thành phố</option>
+											<option v-for="city in cities" :value="city.id" @click="getDistrict(city)">{{ city.name }}</option>
+											</select>
+										</div>
+										<div class="choose-city bg-sky-300 p-1 rounded-lg h-[fit-content] w-fit" >
+											<select class="list-select bg-transparent text-sky-700" v-model="currentDistrict">
+											<option value="">Chọn quận huyện</option>
+											<option  v-for="district in districts" :value="district.id">{{ district.name }}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="flex gap-3 mt-3">
+									<p>Cước phí :</p>
+									<p>500.000đ</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="supplier-info">
-					<div class="supplier-header">
-						<div class="supplier-header-left">
+				<div class="supplier-info shadow-lg p-3 rounded-lg w-[400px] mt-5 max-md:w-full">
+					<div class="supplier-header flex justify-between">
+						<div class="supplier-header-left flex items-center gap-5">
 							<div class="supplier-avatar">
 								<img src="https://st.chotot.com/storage/images/tips/1_mobile.png" alt="" class="avatar-img">
 							</div>
 							<div class="supplier-name">
-								Trinh huy nammm
+								<p class="font-medium text-base">{{ products?.user?.name }}</p>
+								<p class="text-sm">{{ products?.user?.location }}</p>
 							</div>
 						</div>
 						<div class="supplier-header-right">
@@ -57,12 +90,30 @@
 							</div>
 						</div>
 					</div>
-					<div class="supplier-action-contact">
-						<div class="contact-call" @click="makeCall()">
-							 <span class="contact-left-text">0984619309</span>
+					<div class="supplier-action-contact mt-5	">
+						<div class="contact-call hover:shadow-md transition hover:duration-500 cursor-pointer w-full bg-blue-400 py-2 px-3 rounded-lg text-white flex justify-center" @click="makeCall()">
+							<span class="contact-left-text">{{ products?.user?.phone_number }}</span>
 							<span class="contact-right-text">Gọi cho người bán</span></div>
-						<div class="contact-message"><i class="fi fi-rr-comment-alt"></i>Chat với người bán</div>
+						<div class="contact-message flex items-center gap-2 justify-center mt-5"><i class="fi fi-rr-comment-alt"></i>Chat với người bán</div>
 					</div>
+				</div>
+				<div class="mt-8 flex gap-8">
+					<div class="text-rose-500 font-medium cursor-pointer">
+						Thêm vào yêu thích <i class="fi fi-rr-heart"></i>
+					</div>
+					<div class="cursor-pointer">
+						Báo cáo sản phẩm <i class="fi fi-rr-flag"></i>
+					</div>
+				</div>
+				<div class="mt-8 flex gap-5 items-center">
+					<p>Chia sẻ</p>
+					<div><img src="~/assets/icon/fb.svg" alt="" class="h-8 w-8"></div>
+					<div><img src="~/assets/icon/mess.svg" alt="" class="h-8 w-8"></div>
+					<div><img src="~/assets/icon/zalo.svg" alt="" class="h-8 w-8"></div>
+					<div><img src="~/assets/icon/ig.svg" alt="" class="h-8 w-8"></div>
+					<a href="https://www.facebook.com/sharer/sharer.php?u=http://103.116.53.105:3000/product/4" target="_blank">
+  Share on Facebook
+</a>
 				</div>
 				</div>
 			</section>
@@ -139,9 +190,32 @@ export default {
 	},
 	auth:false,
 	layout: 'default',
+	head() {
+		return {
+		title: this.products.name,
+		meta: [
+			{ hid: 'description', name: 'description', content: 'Chợ tốt, chợ vip' },
+			{ hid: 'keywords', name: 'keywords', content: this.products.name },
+			{ hid: 'og:title', property: 'og:title', content: this.products.name },
+			{ hid: 'og:description', property: 'og:description', content: 'Mô tả Open Graph' },
+			{ hid: 'og:image', property: 'og:image', content: this.products.thumbnails[0] },
+			{ hid: 'og:url', property: 'og:url', content: `http://103.116.53.105:3000/product/${this.products.id}` },
+			{ hid: 'og:site_name', property: 'og:site_name', content: 'Tên trang web' },
+			{ hid: 'og:type', property: 'og:type', content: 'Loại nội dung Open Graph' }
+		],
+		link: [
+			{ rel: 'canonical', href: 'URL-canonical-của-trang' },
+			{ rel: 'stylesheet', href: 'URL-của-file-CSS' }
+		]
+		}
+	},
 	data() {
 		return {
 			// data
+			cities: [],
+			districts: [],
+			currentCity:'',
+			currentDistrict:'',
 			t: "test",
 			products: {
 				thumbnails: [],
@@ -156,6 +230,7 @@ export default {
 	async mounted() {
 		await this.fetchData();
 		console.log(this.$auth.$storage.getUniversal('user'))
+		this.getCities();
 		//wait 3s to fetch compare
 		setTimeout(() => {
 			this.fetchCompare();
@@ -163,6 +238,28 @@ export default {
 		// await this.fetchCompare();
 	},
 	methods: {
+		async getDistrict(){
+			console.log("ok",this.currentCity)
+			await this.$axios.get(`https://api.goship.io/api/ext_v1/cities/${this.currentCity}/districts`)
+			.then(res => {
+				this.districts = res.data.data;
+				console.log(this.districts,"district");
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		},
+		async getCities(){
+			// this.$axios.get('https://api.goship.io/api/ext_v1/cities')
+			await this.$axios.get('location/cities')
+			.then(res => {
+				this.cities = res.data;
+				console.log(this.cities,"cityyyy");
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		},
 		async fetchCompare(){
 			this.isCrawling = true;
 			await this.$axios.get(`/products/${this.products.id}/comparisons`,
@@ -193,7 +290,7 @@ export default {
 			return formatted;
 		},
 		makeCall(){
-			window.location.href = `tel:${this.products?.phone_number}`
+			window.location.href = `tel:${this.products?.user.phone_number}`
 		},
 		changeThumbnail(index,ele){
 			console.log(ele.target)
@@ -249,11 +346,9 @@ export default {
 	}
 }
 .overview-product {
-	display: flex;
 	background-color: #ffffff;
 	padding: 40px;
 	border-radius: 5px;
-	gap: 30px;
 	@media screen and (max-width:768px) {
 		flex-direction: column;
 		padding: 20px;
@@ -312,11 +407,7 @@ export default {
 	align-items: center;
 	gap: 10px;
 }
-.product-label-cost{
-	display: flex;
-	gap: 20px;
-	align-items: center;
-}
+
 .main-cost{
 	font-size: 30px;
 	font-weight: 500;
@@ -340,13 +431,7 @@ export default {
 .status{
 	display: flex;
 }
-.supplier-info{
-	border: 1px solid #e5e5e5;
-	padding: 20px;
-	border-radius: 5px;
-	width: fit-content;
-	margin-top: 24px;
-}
+
 .avatar-img{
 	width: 50px;
 	height: 50px;
@@ -354,73 +439,8 @@ export default {
 	border-radius: 50%;
 	border: 1px solid #e5e5e5;
 }
-.supplier-header{
-	display: flex;
-	gap: 30px;
-}
-.view-profile-btn{
-	border:1px solid #3d8bfd;
-	background-color: transparent;
-	padding: 10px 20px;
-	color: #3d8bfd;
-	font-weight: 500;
-	border-radius: 5px;
-	display: flex;
-	align-items: center;
-	gap: 5px;
-	//make box shadow slightly 
-	// box-shadow: 1px 7px 20px 0px rgb(223 139 139 / 75%);
-}
-.supplier-name{
-	font-size: 18px;
-	font-weight: 500;
-}
-.supplier-header-left{
-	display: flex;
-	gap: 20px;
-	align-items: center;
-}
-.supplier-action-contact{
-	margin-top: 20px;
-	&:hover{
-		cursor: pointer;
-	}
-}
-.contact-call{
-	background-color: transparent;
-	padding: 12px 20px;
-	background-color: #3d8bfd;
-	border-radius: 5px;
-	display: flex;
-	justify-content: space-between;
-	color: #ffffff;
-	align-items: center;
-}
-.contact-left-text{
-	font-size: 24px;
-	font-weight: 500;
-	color: #ffffff;
-}
-.contact-message{
-	height: 55px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: 2px solid #3d8bfd;
-	padding: 15px 20px;
-	border-radius: 5px;
-	color: #3d8bfd;
-	text-align: center;
-	font-size: 18px;
-	font-weight: 500;
-	cursor: pointer;
-	margin-top: 12px;
-	& > i{
-		margin-right: 20px;
-		font-size: 30px;
-		font-weight: 300;
-	}
-}
+
+
 .product-description-header{
 	margin-bottom: 20px;
 }

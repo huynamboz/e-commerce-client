@@ -1,11 +1,11 @@
 <template>
 	<div class="container-header">
-    <div class="header-container">
+    <div class="header-container flex items-center">
         <div class="site-logo" @click="$router.push('/')">
             <img src="~/assets/img/logo-colored.png" alt="" class="logo-site">
         </div>
         <search />
-        <div class="list-action">
+        <div class="list-action flex items-center">
             <div class="cart action-item" @click="goToCart()" title="Thông báo">
                 <!-- <img src="~/assets/img/noti.png" alt="" class="icon-action"> -->
                 <i class="fi fi-rr-bell"></i>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="not-login pt-10" v-else>
-                        <button class="text-[14px] text-center flex justify-center bg-gray-100 w-[100%] p-10 mt-10" @click="$router.push('/login')">Đăng nhập</button>
+                        <button class="text-[14px] text-center flex justify-center w-[100%] p-10 mt-[10px]" @click="$router.push('/login')">Đăng nhập</button>
                     </div>
                     </div>
                 </div>
