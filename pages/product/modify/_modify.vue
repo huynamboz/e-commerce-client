@@ -8,36 +8,36 @@
 				<div class="main-right">
 						<div class="inp-container">
 							<label for="">Tên sản phẩm <span style="color:red">*</span></label>
-							<input type="text" placeholder="Bàn ghế" v-model="newProductData.name" @change="fetchCompare()">
+							<input type="text" placeholder="Bàn ghế" maxlength="50" v-model="ProductData.name" @change="fetchCompare()">
 						</div>
 						<div class="inp-container">
 							<label for="">Giá <span style="color:red">*</span></label>
-							<input type="text" placeholder="100000" v-model="newProductData.price">
+							<input type="text" placeholder="100000" v-model="ProductData.price">
 						</div>
 						<div class="inp-container">
 							<label for="">Giảm giá(%) <span style="color:red">*</span></label>
-							<input type="text" placeholder="10" v-model="newProductData.discount">
+							<input type="text" placeholder="10" v-model="ProductData.discount">
 						</div>
 						<div class="inp-container">
 							<label for="">Tình trạng <span style="color:red">*</span></label>
-							<input type="text" placeholder="1" v-model="newProductData.status">
+							<input type="text" placeholder="1" v-model="ProductData.status">
 						</div>
 						<div class="inp-container">
 							<label for="">category <span style="color:red">*</span></label>
-							<input type="text" v-model="newProductData.category">
+							<input type="text" v-model="ProductData.category">
 						</div>
 						<div class="inp-container">
 							<label for="">Mô tả <span style="color:red">*</span></label>
-							<textarea type="text" placeholder="Mô tả về sản phẩm" v-model="newProductData.description"></textarea>
+							<textarea type="text" placeholder="Mô tả về sản phẩm" v-model="ProductData.description"></textarea>
 						</div>
 						
 						
-						<div class="inp-container">
+						<!-- <div class="inp-container">
 							<label for="key">Từ khóa <span style="color:red">*</span></label>
-							<input type="text" placeholder="Bàn ghế, ghế gỗ" v-model="newProductData.keyword">
-						</div>
+							<input type="text" placeholder="Bàn ghế, ghế gỗ" v-model="ProductData.keyword">
+						</div> -->
 						
-						<button @click="postData()" class="btn-submit ml-20">Đăng</button>
+						<button @click="postData()" class="btn-submit ml-20 h-[fit-content]">Đăng</button>
 				</div>
 				<div class="main-left">
 					<label class="choose-file" for="inp-file"><div class="choose-icon">
@@ -46,7 +46,10 @@
 					</div></label>
 					<input type="file" ref="fileInput" accept="image/*" multiple name="" id="inp-file" @change="previewImage($event)">
 					<div class="list-img-preview">
-						<img v-for="item in previewUrl" :src="item" alt="" class="item-img" v-if="item">
+						<div  v-for="item in previewUrl" class="relative">
+							<i class="fi fi-rr-cross-circle text-white absolute top-2 right-2 cursor-pointer" @click="removeIMG(item)"></i>
+							<img :src="item" alt="" class="item-img" v-if="item">
+						</div>
 					</div>
 				</div>
 
@@ -82,7 +85,7 @@ export default {
 	},
 	data() {
 		return {
-			newProductData:{
+			ProductData:{
 				name: "",
 				price: "",
 				description: "",
@@ -90,7 +93,7 @@ export default {
 				thumbnail: "",
 				category: "",
 				keyword: "",
-				discount: "",
+				discount: 0,
 				status: "",
 			},
 			
@@ -105,8 +108,29 @@ export default {
 	mounted() {
 		// this.fetchAllProduct();
 		console.log(this.$auth.user)
+		console.log(this.$route.params.modify)
+		if(this.$route.params.modify){
+			this.fetchProduct()
+		}
 	},
 	methods: {
+		removeIMG(item){
+			this.previewUrl = this.previewUrl.filter(i=>i!=item)
+		},
+		async fetchProduct(){
+			await this.$api.products.getProductById(this.$route.params.modify)
+			.then(res=>{
+				console.log(res)
+				this.ProductData = res.data
+				// this.ProductData.description = JSON.parse(this.ProductData.description)
+				// this.ProductData.thumbnail = this.ProductData.thumbnail_url
+				this.ProductData.thumbnailsList = this.ProductData.thumbnailsList.map(item=>{
+					return item.image
+				})
+				this.previewUrl = this.ProductData.thumbnailsList
+				console.log(this.previewUrl)
+			})
+		},
 		formatPrice(price) {
 			let formatter = new Intl.NumberFormat('vi-VN', {
 				style: 'currency',
@@ -130,6 +154,7 @@ export default {
 			})
 		},
 		fetchCompare(){
+			console.log(typeof this.ProductData.discount)
 		}
 		,
 		previewImage(event) {
@@ -147,18 +172,22 @@ export default {
 						this.previewUrl.push(reader.result);
 					}
 				})
-
-
+				console.log(this.previewUrl);
 			} catch (error) {
 				console.log(error);
 			}
 		},
 		async postData() {
 			try {
+				if(this.$auth.user.active_status == false){
+					this.$toast.error("Bạn phải cập nhật đầy đủ thông tin tài khoản trước",{duration: 5000});
+					return;
+				}
 				this.isLoading = true;
 				console.log(this.$auth.user);
 				if(this.listFile.length == 0){
 					this.$toast.error("Vui lòng chọn ảnh");
+					this.isLoading = false;
 					return;
 				}
 				let listThumbnail = [];
@@ -174,19 +203,20 @@ export default {
 				}).catch(err => {
 					console.log(err);
 					this.$toast.error("Tải ảnh thất bại");
+					return;
 				})
 				await this.$api.products.addNewProduct ({
-					name: this.newProductData.name,
-					price: this.newProductData.price,
-					description: JSON.stringify(this.newProductData.description),
+					name: this.ProductData.name,
+					price: this.ProductData.price,
+					description: JSON.stringify(this.ProductData.description),
 					thumbnailUrls: listThumbnail,
 					category_id: 1,
 					status_id: 1,
-					discount: this.newProductData.discount,
+					discount: parseInt(this.ProductData.discount),
 				}).then(res => {
 					console.log(res);
-					this.dataProduct = res;
-					this.$router.push(`/product/${this.dataProduct.id}`);
+					this.dataProduct = res.data;
+					this.$router.push(`/product/${res.data.id}`);
 					this.$toast.success("Tạo sản phẩm thành công", { duration: 3000 });
 				}).catch(err => {
 					console.log(err);
@@ -358,6 +388,9 @@ input[type="text"], input[type="password"], textarea, select {
 	gap: 10px;
 	grid-template-columns: auto auto;
 	& > .inp-container:nth-child(1){
+		grid-column: 1 / span 2;
+	}
+	& > .inp-container:nth-child(6){
 		grid-column: 1 / span 2;
 	}
 }

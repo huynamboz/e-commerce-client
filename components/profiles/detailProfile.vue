@@ -13,6 +13,12 @@
 				<div class="info-inp">
 					<label for="name">Tên</label>
 					<input type="text" placeholder="Nguyễn Văn A" class="inp" id="name" v-model="user.name">
+					<div>
+						<label for="male">Nam</label>
+						<input type="radio" name="gender" id="male" :value="user.gender" >
+						<label for="female">Nữ</label>
+						<input type="radio" name="gender" id="female" :value="user.gender">
+					</div>
 				</div>
 				<div class="info-inp">
 					<label for="name">Email</label>
@@ -20,31 +26,42 @@
 				</div>
 				<div class="info-inp">
 					<label for="name">Số điện thoại</label>
-					<input type="text" class="inp" placeholder="09876xx" id="name" v-model="user.number">
+					<input type="text" class="inp" placeholder="09876xx" id="name" v-model="user.phone_number">
 				</div>
-					<div class="address-inp">
+				<div class="info-inp">
+					<label for="bday">Ngày sinh</label>
+					<input type="date" class="inp" placeholder="09876xx" id="name" v-model="user.birthday">
+				</div>
+					<div class="address-inp flex gap-5">
 						<div class="address">
-						<label for="City">Thành phố</label>
-						<div class="choose-city" >
-							<div class="list-select" @click="isOpenListCity = !isOpenListCity">{{ currentCity ? currentCity.name : 'Chọn thành phố' }}</div>
-							<div class="list-city" :class="{'open':isOpenListCity,'close':!isOpenListCity}" >
-							<div v-for="city in cities" :value="city.id" @click="getDistrict(city)">{{ city.name }}</div>
+							<label for="City">Thành phố</label>
+							<div class="choose-city" >
+								<select class="list-select" v-model="currentCity" @change="getDistrict">
+								<option value="">Chọn thành phố</option>
+								<option v-for="city in cities" :value="city.id" @click="getDistrict(city)">{{ city.name }}</option>
+								</select>
 							</div>
 						</div>
-					</div>
-					<div class="address">
-						
-						<label for="District">Quận huyện</label>
-						<div class="choose-city" >
-							<div class="list-select" @click="isOpenListDistrict = !isOpenListDistrict">{{ currentDistrict ? currentDistrict.name : 'Chọn quận huyện' }}</div>
-							<div class="list-city" v-if="districts" :class="{'open':isOpenListDistrict,'close':!isOpenListDistrict}" >
-							<div  v-for="district in districts" :value="district.id" @click="chooseDistrict(district)">{{ district.name }}</div>
+						<div class="address">
+							<label for="District">Quận huyện</label>
+							<div class="choose-city" >
+								<select class="list-select" v-if="districts" v-model="user.district_id">
+								<option value="">Chọn quận huyện</option>
+								<option  v-for="district in districts" :value="district.id">{{ district.name }}</option>
+								</select>
 							</div>
 						</div>
-					</div>
+				</div>
+				<div class="info-inp mt-5">
+					<label for="bday">Địa chỉ cụ thể</label>
+					<input type="text" class="inp" placeholder="Nhà số xx, đường ..." id="name" v-model="user.address">
 				</div>
 			</div>
-			<button class="submit">Thay đổi</button>
+			<div class="flex flex-col mt-5">
+				<label for="address">Nhập mật khẩu xác nhận</label>
+				<input type="password" name="" id="" class="inp" v-model="user.password">
+			</div>
+			<button class="submit" @click="PushDataUser()">Thay đổi</button>
 		</div>
 	</div>
 </template>
@@ -55,38 +72,59 @@ export default {
 			name: '',
 			email: '',
 			number: '',
-			currentCity: null,
+			currentCity: "",
 			isOpenListCity: false,
 			isOpenListDistrict: false,
 			cities: [],
-			currentDistrict: null,
+			currentDistrict: "",
 			districts: [],
-			user: this.$auth.user
+			user: {
+				name:this.$auth.user.name,
+				email:this.$auth.user.email,
+				phone_number:this.$auth.user.phone_number ? this.$auth.user.phone_number : '',
+				address:this.$auth.user.address ? this.$auth.user.address : '',
+				gender: this.$auth.user.gender ? true : false,
+				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",
+				district_id : '',
+				birthday: this.$auth.user.birthday ? this.$auth.user.birthday.split("T")[0] : new Date(),
+				password:''
+			}
 		}
 	},
 	mounted(){
 		this.getCities();
 	},
 methods: {
+		PushDataUser(){
+			this.user.birthday = new Date(this.user.birthday).toISOString();
+			console.log(this.user);
+			this.$axios.put('/users/me',this.user)
+			.then(res => {
+				console.log(res);
+				this.$toast.success("Thay đổi thông tin thành công");
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		},
 		chooseDistrict(val){
 			this.currentDistrict = val;
 			this.isOpenListDistrict = false;
 		},
 		getCities(){
-			this.$axios.get('https://api.goship.io/api/ext_v1/cities')
+			// this.$axios.get('https://api.goship.io/api/ext_v1/cities')
+			this.$axios.get('location/cities')
 			.then(res => {
-				this.cities = res.data.data;
+				this.cities = res.data;
 				console.log(this.cities,"cityyyy");
 			})
 			.catch(err => {
 				console.log(err);
 			})
 		},
-		getDistrict(val){
-			this.currentCity = val;
-			this.isOpenListCity = false;
-			console.log(val,"val");
-			this.$axios.get(`https://api.goship.io/api/ext_v1/cities/${val.id}/districts`)
+		getDistrict(){
+			console.log("ok",this.currentCity)
+			this.$axios.get(`https://api.goship.io/api/ext_v1/cities/${this.currentCity}/districts`)
 			.then(res => {
 				this.districts = res.data.data;
 				console.log(this.districts,"district");
