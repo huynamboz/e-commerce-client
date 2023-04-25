@@ -9,10 +9,6 @@ module.exports = {
 		"!./components/loading/**/*.vue"
 	],
 	theme: {
-		borderWidth: {
-			'0': '0',
-			'1': '1px',
-		},
 		extend: {},
 	},
 	plugins: [],
