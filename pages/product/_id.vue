@@ -67,7 +67,7 @@
 								</div>
 								<div class="flex gap-3 mt-3">
 									<p>Cước phí :</p>
-									<p>500.000đ</p>
+									<p class="cursor-pointer" @click="openPopupShip()">Xem chi tiết cước phí</p>
 								</div>
 							</div>
 						</div>
@@ -178,7 +178,28 @@
 					</div>
 			</section>
 		</div>
-		
+		<div :class="{'close-popup': !isOpenPopupShip,'show-popup': isOpenPopupShip}" class=" z-[99999] w-[100vw] h-[100vh] flex items-center justify-center fixed top-0 left-0 max-md:p-5">
+				<div class="p-5 max-md:p-2 border-2 border-gray-300 rounded-lg bg-white shadow-2xl relative z-[99999] max-md:h-[70vh] max-md:overflow-y-scroll">
+					<div class="absolute top-3 right-3">
+						<i class="fi fi-rr-cross-circle text-black text-xl absolute top-2 right-2 cursor-pointer" @click="closePopupShip()"></i>
+					</div>
+					<div class="text-rose-500 font-semibold text-lg" v-if="costShipping.length > 0">Cước phí dự tính</div>
+					<div class="text-rose-500 font-semibold text-lg px-6" v-else>Vui lòng chọn địa điểm</div>
+					<div  v-for="item in costShipping" :key="item.id"  class="flex gap-5 items-center justify-between p-4 border-b-2">
+						<div class="flex gap-5 items-center max-md:flex-col max-md:items-center max-md:gap-0">
+							<img :src="item.carrier_logo" alt="" class="h-16 w-16 max-md:w-12 max-md:h-12">
+							<p class="text-center">{{ item.carrier_name }}</p>
+						</div>
+						<div>
+							{{item.expected}}
+						</div>
+						<div>
+							Cước phí: <span class="text-rose-500 text-lg font-medium">{{ formatPrice(item.total_fee) }}</span>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="w-full h-full bg-slate-50 absolute top-0 left-0 z-0 opacity-80"></div> -->
+			</div>
 		<!-- <textarea type="text" name="" v-model="t" id=""> </textarea><button @click="test()">acscascascas</button> -->
 	</section>
 </template>
@@ -225,7 +246,14 @@ export default {
 			currentThumbnail: "",
 			listCompare: [],
 			isCrawling: false,
+			costShipping: [],
+			isOpenPopupShip: false,
 		}
+	},
+	watch: {
+		currentDistrict: function (val) {
+			this.getShipping();
+		},
 	},
 	async mounted() {
 		await this.fetchData();
@@ -238,6 +266,45 @@ export default {
 		// await this.fetchCompare();
 	},
 	methods: {
+		async getShipping() {
+			if (!this.currentCity || !this.currentDistrict) {
+				this.$toast.error('Vui lòng chọn địa điểm');
+				this.costShipping = [];
+				return;
+			}
+			await this.$axios.post(`https://api.goship.io/api/ext_v1/rates`,
+				{
+					"shipment": {
+						"address_from": {
+							"city": 700000,
+							"district": 701000
+						},
+						"address_to": {
+							"city": this.currentCity,
+							"district": this.currentDistrict
+						},
+						"parcel": {
+							"cod": 0,
+							"weight": 500,
+							"length": 0,
+							"width": 0,
+							"height": 0
+						}
+					}
+				}).then(res => {
+					console.log(res.data.data);
+					this.costShipping = res.data.data;
+				}).catch(err => {
+					console.log(err);
+					this.costShipping = [];
+				})
+		},
+		openPopupShip(){
+			this.isOpenPopupShip = true;
+		},
+		closePopupShip(){
+			this.isOpenPopupShip = false;
+		},
 		async getDistrict(){
 			console.log("ok",this.currentCity)
 			await this.$axios.get(`https://api.goship.io/api/ext_v1/cities/${this.currentCity}/districts`)
@@ -561,5 +628,34 @@ export default {
 	font-size: 24px;
 	color: #fa3434;
 	font-weight: 500;
+}
+.show-popup{
+	animation: open 0.2s forwards;
+	display: flex;
+}
+@keyframes open {
+	0% {
+		opacity: 0;
+		transform: scale(0.5);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+.close-popup{
+	animation: close 0.5s forwards;
+	display: none;
+}
+@keyframes close {
+	0% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(0.5);
+		display: none;
+	}
 }
 </style>
