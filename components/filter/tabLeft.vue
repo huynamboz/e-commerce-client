@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="container-filter">
 		<div class="tabLeft-main">
 			<h1 class="filter-title">
 				<i class="fi fi-rr-filter"></i> Bộ lọc tìm kiếm

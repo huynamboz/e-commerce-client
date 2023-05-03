@@ -86,7 +86,7 @@
 						</div>
 						<div class="supplier-header-right">
 							<div class="supplier-view-btn">
-								<button class="view-profile-btn"><i class="fi fi-rr-shop"></i> Xem trang</button>
+								<button class="view-profile-btn" @click="$router.push(`/user`)"><i class="fi fi-rr-shop"></i> Xem trang</button>
 							</div>
 						</div>
 					</div>
@@ -98,11 +98,40 @@
 					</div>
 				</div>
 				<div class="mt-8 flex gap-8">
-					<div class="text-rose-500 font-medium cursor-pointer">
-						Thêm vào yêu thích <i class="fi fi-rr-heart"></i>
+					<div class=" cursor-pointer flex gap-1" >
+						<div  v-if="!isInFavorite" class="flex gap-1" :class="{'text-black font-medium':isInFavorite}"  @click="addToFavourite()">
+							<p>Thêm vào yêu thích </p>
+							<i class="fi fi-rr-heart"></i>
+						</div>
+						<div v-else class="flex gap-1" :class="{'text-rose-500 font-medium':isInFavorite}"  @click="unFavorite()">
+							<p>Đã thêm vào yêu thích</p>
+							<i class="fi fi-sr-heart"></i>
+						</div>
 					</div>
-					<div class="cursor-pointer">
+					<div class="cursor-pointer" @click="isOpenReport = true">
 						Báo cáo sản phẩm <i class="fi fi-rr-flag"></i>
+					</div>
+					<div class="flex items-center px-5 justify-center fixed top-0 left-0 h-[100vh] w-[100vw] z-[1000]" v-if="isOpenReport">
+							<div class="flex z-[1002] relative flex-col items-center px-5 pb-5 justify-center pt-5 bg-white h-[300px] rounded-2xl w-[300px] max-md:w-full">
+								<h1 class="font-lg">Nội dung báo cáo</h1>
+								<div class=" absolute top-2 right-2 cursor-pointer" @click="isOpenReport = !isOpenReport">
+									<i class="fi fi-rr-cross-circle"></i>
+								</div>
+								<textarea v-model="contentReport" placeholder="Noi dung bao cao" name="" id="" cols="30" rows="10" class="w-full h-full border-[1px] rounded-2xl outline-none p-5">
+
+								</textarea>
+								<button class="w-full py-1 
+								bg-blue-200 
+								text-blue-800 
+								rounded-lg mt-3 
+								cursor-pointer 
+								transition duration-500
+								hover:bg-blue-500  
+								hover:text-white" @click=report()>Báo cáo</button>
+						</div>
+						<div class="h-full w-full bg-gray-400 absolute top-0 left-0 z-[1001] opacity-50" @click="isOpenReport = !isOpenReport">
+
+						</div>
 					</div>
 				</div>
 				<div class="mt-8 flex gap-5 items-center">
@@ -143,7 +172,7 @@
 			</section>
 			<section class="product-description">
 					<div class="product-description-content">
-							<div class="product-description-header">
+						<div class="product-description-header">
 							<h2 class="product-description-header-text">Mô tả sản phẩm</h2>
 						</div>
 						<div class="product-description-content">
@@ -178,14 +207,15 @@
 					</div>
 			</section>
 		</div>
-		<div :class="{'close-popup': !isOpenPopupShip,'show-popup': isOpenPopupShip}" class=" z-[99999] w-[100vw] h-[100vh] flex items-center justify-center fixed top-0 left-0 max-md:p-5">
-				<div class="p-5 max-md:p-2 border-2 border-gray-300 rounded-lg bg-white shadow-2xl relative z-[99999] max-md:h-[70vh] max-md:overflow-y-scroll">
+		<div :class="{'close-popup': !isOpenPopupShip,'show-popup': isOpenPopupShip}" class=" z-[99999]  py-6 w-[100vw] h-[100vh] flex items-center justify-center fixed top-0 left-0 max-md:p-5">
+				<div class="p-5 max-md:p-2 border-2 border-gray-300 rounded-lg bg-white h-full shadow-2xl relative z-[99999] max-md:h-[70vh] max-md:overflow-y-scroll">
 					<div class="absolute top-3 right-3">
 						<i class="fi fi-rr-cross-circle text-black text-xl absolute top-2 right-2 cursor-pointer" @click="closePopupShip()"></i>
 					</div>
 					<div class="text-rose-500 font-semibold text-lg" v-if="costShipping.length > 0">Cước phí dự tính</div>
 					<div class="text-rose-500 font-semibold text-lg px-6" v-else>Vui lòng chọn địa điểm</div>
-					<div  v-for="item in costShipping" :key="item.id"  class="flex gap-5 items-center justify-between p-4 border-b-2">
+					<div class="overflow-y-scroll h-[88%]">
+						<div  v-for="item in costShipping" :key="item.id"  class="flex gap-5 items-center justify-between p-4 border-b-2">
 						<div class="flex gap-5 items-center max-md:flex-col max-md:items-center max-md:gap-0">
 							<img :src="item.carrier_logo" alt="" class="h-16 w-16 max-md:w-12 max-md:h-12">
 							<p class="text-center">{{ item.carrier_name }}</p>
@@ -197,6 +227,7 @@
 							Cước phí: <span class="text-rose-500 text-lg font-medium">{{ formatPrice(item.total_fee) }}</span>
 						</div>
 					</div>
+					</div>
 				</div>
 				<!-- <div class="w-full h-full bg-slate-50 absolute top-0 left-0 z-0 opacity-80"></div> -->
 			</div>
@@ -204,6 +235,7 @@
 	</section>
 </template>
 <script>
+import auth from '~/api/auth';
 import miniLoading from '~/components/loading/mini-loading.vue'
 export default {
 	components: {
@@ -237,6 +269,7 @@ export default {
 			districts: [],
 			currentCity:'',
 			currentDistrict:'',
+			isOpenReport:false,
 			t: "test",
 			products: {
 				thumbnails: [],
@@ -248,11 +281,28 @@ export default {
 			isCrawling: false,
 			costShipping: [],
 			isOpenPopupShip: false,
+			listFavorite:[],
+			isInFavorite:false,
+			contentReport:"",
 		}
 	},
 	watch: {
 		currentDistrict: function (val) {
 			this.getShipping();
+		},
+		isOpenReport: function (val) {
+			if (val) {
+				document.body.style.overflow = "hidden";
+			} else {
+				document.body.style.overflow = "auto";
+			}
+		},
+		isOpenPopupShip: function (val) {
+			if (val) {
+				document.body.style.overflow = "hidden";
+			} else {
+				document.body.style.overflow = "auto";
+			}
 		},
 	},
 	async mounted() {
@@ -263,9 +313,62 @@ export default {
 		setTimeout(() => {
 			this.fetchCompare();
 		}, 3000);
+		this.fetchFavorite()
 		// await this.fetchCompare();
 	},
 	methods: {
+		async report(){
+			if(!this.$auth.loggedIn){
+				this.$toast.error("Bạn cần đăng nhập để báo cáo")
+				return;
+			}
+			if(this.contentReport == ""){
+				this.$toast.error("Bạn cần nhập nội dung báo cáo")
+				return;
+			}
+			await this.$axios.post(`/products/${this.products.id}/reports`,{
+				description: this.contentReport
+			}).then(res => {
+				this.$toast.success("Đã báo cáo")
+				this.isOpenReport = false;
+			}).catch(err => {
+				this.$toast.error("Có lỗi xảy ra")
+			})
+		},
+		async unFavorite(){
+			await this.$axios.delete(`/users/me/favorite-products/${this.products.id}`).then(res =>{
+				this.$toast.success("Đã bỏ yêu thích")
+			}).catch(err =>{
+				console.log(err.response)
+				this.$toast.error("Có lỗi xảy ra")
+			})
+			await this.fetchFavorite();
+		},
+		async fetchFavorite(){
+			await this.$axios.get(`/users/me/favorite-products`).then(res =>{
+				this.listFavorite = res.data.data;
+				this.isInFavorite = this.listFavorite.filter(item => item.id == this.products.id).length > 0 ? true : false;
+				console.log(this.listFavorite.filter(item => item.id == this.products.id),"ok")
+			}).catch(err =>{
+				console.log(err.response)
+			})
+		},
+		async addToFavourite(){
+			if(!this.$auth.loggedIn){
+				this.$toast.error("Vui lòng đăng nhập trước")
+				return;
+			}
+			await this.$axios.post(`/users/me/favorite-products`,{
+				product_id: this.products.id
+			}).then(res =>{
+				this.$toast.success("Đã thêm sản phẩm vào danh sách yêu thích")
+			}).catch(err =>{
+				console.log(err.response)
+				if(err.response.data.message == "Product is already in your favorite")
+				this.$toast.error("Đã có trong iu thít gòyyyy")
+			})
+			await this.fetchFavorite();
+		},
 		async getShipping() {
 			if (!this.currentCity || !this.currentDistrict) {
 				this.$toast.error('Vui lòng chọn địa điểm');
@@ -300,6 +403,10 @@ export default {
 				})
 		},
 		openPopupShip(){
+			if(this.currentCity == "" || this.currentDistrict == ""){
+				this.$toast.error("Vui lòng chọn địa điểm")
+				return
+			}
 			this.isOpenPopupShip = true;
 		},
 		closePopupShip(){
@@ -329,7 +436,7 @@ export default {
 		},
 		async fetchCompare(){
 			this.isCrawling = true;
-			await this.$axios.get(`/products/${this.products.id}/comparisons`,
+			await this.$axios.get(`/products/${this.products.id}/prices-comparison`,
 			//add header
 			)
 			.then(res=>{

@@ -39,6 +39,7 @@ export default {
 		"~assets/css/main.css",
 		"~static/css/uicons-regular-rounded.css",
 		"~static/icons/uicons-bold-rounded.css",
+		"~static/css/uicons-solid-rounded.css",
 		'vue-toastification/dist/index.css',
 	],
 	auth: {

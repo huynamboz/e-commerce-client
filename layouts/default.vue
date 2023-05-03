@@ -1,7 +1,7 @@
 <template>
 	<div class="position-relative">
 		<header-top />
-		<list-cate />
+		<!-- <list-cate /> -->
 		<nuxt id="body" />
 	</div>
 </template>

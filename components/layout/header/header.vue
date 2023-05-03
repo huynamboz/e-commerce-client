@@ -6,6 +6,12 @@
         </div>
         <search />
         <div class="list-action flex items-center">
+			<div class="cart action-item" @click="goToCart()" title="Sản phẩm yêu thích">
+                <!-- <img src="~/assets/img/noti.png" alt="" class="icon-action"> -->
+                <i class="fi fi-rr-heart"></i>
+				
+                <!-- <p>Giỏ hàng</p> -->
+            </div>
             <div class="cart action-item" @click="goToCart()" title="Thông báo">
                 <!-- <img src="~/assets/img/noti.png" alt="" class="icon-action"> -->
                 <i class="fi fi-rr-bell"></i>
@@ -16,11 +22,20 @@
                 <i class="fi fi-rr-comment"></i>
                 <!-- <p>Tin nhắn</p> -->
             </div>
-            <div class="profile action-item" @click="">
+            <div class="profile action-item" @click="handleOpenPopup()">
                 <!-- <img src="~/assets/img/profile.png" alt="" class="icon-action"> -->
-                <i class="fi fi-rr-user" title="Thông tin shop"></i>
+                <i v-if="!$auth.loggedIn" class="fi fi-rr-user" title="Thông tin shop"></i>
+				<div v-else class="relative pl-8">
+					<div class="absolute left-0 -top-2">
+						<img v-if="!$auth.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-[50px] h-[50px] rounded-[50%]">
+						<img v-else :src="$auth.user.avatar"
+						onerror="this.src='~/assets/img/defaultavt.webp';"
+						alt="" class="w-[50px] h-[50px] rounded-[50%]">
+					</div>
+					<div class="name-user py-2 pl-5 pr-3 border-[1px] text-sm rounded-xl">{{ $auth.user.name }}</div>
+				</div>
                 <!-- <p>Cá nhân</p> -->
-                <div class="popup-detail-user">
+                <div class="popup-detail-user" v-if="isShowPopupProfile">
                     <div class="popup-detail-user-content">
                         <div class="popup-detail-user-content-header" v-if="$auth.loggedIn">
                             <div class="popup-detail-user-content-header-avatar">
@@ -31,7 +46,7 @@
                                 <div class="line"></div>
 								<div class="popup-detail-user-content-header-info-product">
 									<i class="fi fi-rr-shopping-bag"></i>
-									<p class="my-product-title" @click="$router.push(`/user/detail`)">Bài đăng của tôi</p>
+									<p class="my-product-title" @click="$router.push(`/user/${$auth.user.id}`)">Bài đăng của tôi</p>
                                 </div>
 								<div class="btn-setting-user" @click="$router.push('/user/settings')">
 									<i class="fi fi-rr-settings-sliders"></i>
@@ -62,7 +77,8 @@ export default {
     },
     data() {
         return {
-            isShow: false
+            isShow: false,
+			isShowPopupProfile: false,
         }
     },
 	computed: {
@@ -77,6 +93,9 @@ export default {
 		}
 	},
     methods: {
+		handleOpenPopup(){
+			this.isShowPopupProfile = !this.isShowPopupProfile
+		},
         goToMessage() {
             if (!this.$auth.loggedIn) {
                 this.$router.push('/login')
@@ -97,7 +116,7 @@ export default {
 }
 .container-header{
 	display: flex;
-    background-color: #ffffff;
+    background-color: transparent;
 	justify-content: center;
 	position: relative;
 	z-index: 999;
@@ -128,7 +147,12 @@ export default {
     gap: 30px;
 
 }
-
+.name-user{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	
+}
 .action-item {
     display: flex;
     flex-direction: column;
@@ -156,7 +180,6 @@ export default {
     top: 40px;
     right: -10px;
     z-index: 999;
-    display: none;
 }
 
 .popup-detail-user-content{
@@ -168,30 +191,30 @@ export default {
 	z-index: 1;
 	box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
 	animation: openPopUp 0.2s ease-in-out;
-	&::after{
-		content: "";
-		position: absolute;
-		width: 0; 
-		height: 0; 
-		border-left: 15px solid transparent;
-		border-right: 15px solid transparent;
-		border-bottom: 15px solid rgb(255, 255, 255);
-		top: -10px;
-		right: 10px;
-		z-index: 0;
-	}
-	&::before{
-		content: "";
-		position: absolute;
-		width: 0; 
-		height: 0; 
-		border-left: 15px solid transparent;
-		border-right: 15px solid transparent;
-		border-bottom: 15px solid rgb(255, 255, 255);
-		top: -10px;
-		right: 10px;
-		z-index: 0;
-	}
+	// &::after{
+	// 	content: "";
+	// 	position: absolute;
+	// 	width: 0; 
+	// 	height: 0; 
+	// 	border-left: 15px solid transparent;
+	// 	border-right: 15px solid transparent;
+	// 	border-bottom: 15px solid rgb(255, 255, 255);
+	// 	top: -10px;
+	// 	right: 10px;
+	// 	z-index: 0;
+	// }
+	// &::before{
+	// 	content: "";
+	// 	position: absolute;
+	// 	width: 0; 
+	// 	height: 0; 
+	// 	border-left: 15px solid transparent;
+	// 	border-right: 15px solid transparent;
+	// 	border-bottom: 15px solid rgb(255, 255, 255);
+	// 	top: -10px;
+	// 	right: 10px;
+	// 	z-index: 0;
+	// }
 }
 @keyframes openPopUp{
     0%{
@@ -205,11 +228,6 @@ export default {
 }
 .profile{
     position: relative;
-    &:hover{
-        .popup-detail-user{
-            display: block;
-        }
-    }
 }
 button{
     border: none;

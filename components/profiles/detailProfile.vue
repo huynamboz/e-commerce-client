@@ -32,7 +32,12 @@
 					<label for="bday">Ngày sinh</label>
 					<input type="date" class="inp" placeholder="09876xx" id="name" v-model="user.birthday">
 				</div>
-					<div class="address-inp flex gap-5">
+				<div class="flex gap-5 flex-row mb-[20px]">
+					<label>Địa chỉ hiện tại :</label>
+					<label>{{ this.$auth.user.location }}</label>
+					<p class="text-rose-500 cursor-pointer" @click="openEditLocation()"><i class="fi fi-rr-edit"></i></p>
+				</div>
+					<div class="address-inp flex gap-5" v-if="isOpenEditLocation">
 						<div class="address">
 							<label for="City">Thành phố</label>
 							<div class="choose-city" >
@@ -78,6 +83,7 @@ export default {
 			cities: [],
 			currentDistrict: "",
 			districts: [],
+			isOpenEditLocation:false,
 			user: {
 				name:this.$auth.user.name,
 				email:this.$auth.user.email,
@@ -95,6 +101,9 @@ export default {
 		this.getCities();
 	},
 methods: {
+		openEditLocation(){
+			this.isOpenEditLocation = !this.isOpenEditLocation
+		},
 		PushDataUser(){
 			this.user.birthday = new Date(this.user.birthday).toISOString();
 			console.log(this.user);
