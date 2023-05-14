@@ -2,17 +2,16 @@
     <div class="login-container">
         <loading v-if="isLoading"/>
         <div class="login-content-main">
-            <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
-            <div class="login-fiels w-[330px]">
+            <div class="login-fiels">
                 <h1 class="login-title">Hi Everyone :)</h1>
                 <p class="login-subtitle">Welcome to our website, </p>
-                <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
+                <!-- <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
                         <span>Email address</span>
                         <input :class="[{'gray-bg' : email.length > 0}]" type="email" v-model="email" placeholder="Email" class="input-email">
                     </div>
-                </div>
+                </div> -->
                 <div class="login-input-pass" :class="[{'gray-bg' : password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
@@ -20,14 +19,18 @@
                         <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
                     </div>
                 </div>
-				<div class="mb-4">
-				<div v-show="$validate.validatePassword(password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validatePassword(password) }}</div>
+				<div class="login-input-pass mt-2" :class="[{'gray-bg' : password.length > 0}]">
+                    <img src="~/assets/img/lock.png" alt="" class="input-email-img">
+                    <div class="fiels-input">
+                        <span>Confirm Password</span>
+                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="confirm_password" placeholder="Password" class="input-email">
+                    </div>
                 </div>
 				<div>
 					<span class="forgot cursor-pointer" @click="$router.push('/forgot')">Forgot password?</span>
 				</div>
                 <div class="login-list-btn">
-                    <button class="login-btn" @click="signin()">LOGIN</button>
+                    <button class="login-btn" @click="changePassword()">CHANGE PASSWORD</button>
                     <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button>
                 </div>
             </div>
@@ -38,6 +41,7 @@
 import loading from '~/components/loading/main.vue'
 export default {
 	layout:'empty',
+	auth: false,
     components: {
         loading
     },
@@ -47,19 +51,34 @@ export default {
             isLoading: false,
             email: '',
             password: '',
+			confirm_password: '',
 			userID: '',
 			authError: false
         }
     },
 	mounted() {
-		console.log(this.$validate)
+		console.log(this.$route);
 	},
     methods: {
 		closePopup(){
 			this.authError = false;
 		},
+		async changePassword(){
+			this.isLoading = true;
+			this.$axios.post('/auth/update-password',{
+				password: this.password,
+				confirm_password: this.confirm_password,
+				reset_token: this.$route.query.token
+			}).then(res => {
+				this.isLoading = false;
+				this.$toast.success('Change password success');
+				this.$router.push('/login');
+			}).catch(err => {
+				this.isLoading = false;
+				this.$toast.error('Change password fail');
+			})
+		},
 		async fetchUserData(){
-			
 			// let user = {
 			// 	id : 1,
 			// 	name: "Nguyen Van A",
@@ -105,7 +124,7 @@ export default {
                 .catch(err => {
                     console.log(err);
 					this.authError = true;
-					this.$toast.error('Kiểm tra lại thông tin đăng nhập');
+					this.$toast.error('Đăng nhập thất bại');
 					console.log(this.authError);
 					this.isLoading = false;
                 })

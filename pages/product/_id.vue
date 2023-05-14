@@ -156,7 +156,7 @@
 					<div class="compare-list">
 						<div class="compare-item" v-for="(item,index) in listCompare" :key="index">
 							<div class="compare-item-thumbnail">
-								<img :src="item?.url_img" alt="" class="compare-item-thumbnail-img">
+								<img :src="item?.img_url" alt="" class="compare-item-thumbnail-img">
 							</div>
 							<div class="compare-item-content">
 								<div class="cmp-item-name">
@@ -310,9 +310,7 @@ export default {
 		console.log(this.$auth.$storage.getUniversal('user'))
 		this.getCities();
 		//wait 3s to fetch compare
-		setTimeout(() => {
-			this.fetchCompare();
-		}, 3000);
+		this.fetchCompare();
 		this.fetchFavorite()
 		// await this.fetchCompare();
 	},

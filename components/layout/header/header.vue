@@ -29,7 +29,6 @@
 					<div class="absolute left-0 -top-2">
 						<img v-if="!$auth.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-[50px] h-[50px] rounded-[50%]">
 						<img v-else :src="$auth.user.avatar"
-						onerror="this.src='~/assets/img/defaultavt.webp';"
 						alt="" class="w-[50px] h-[50px] rounded-[50%]">
 					</div>
 					<div class="name-user py-2 pl-5 pr-3 border-[1px] text-sm rounded-xl">{{ $auth.user.name }}</div>

@@ -8,6 +8,7 @@ export default (api) => ({
 	addNewProduct: async(product)=>{
 		return await api.post("/products/my-products", product);
 	},
+	
 	uploadImage: async(file)=>{
 		return await api.post("/upload", file);
 	},

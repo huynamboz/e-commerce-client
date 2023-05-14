@@ -2,33 +2,21 @@
     <div class="login-container">
         <loading v-if="isLoading"/>
         <div class="login-content-main">
-            <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
-            <div class="login-fiels w-[330px]">
-                <h1 class="login-title">Hi Everyone :)</h1>
-                <p class="login-subtitle">Welcome to our website, </p>
-                <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
+            <!-- <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner"> -->
+            <div class="login-fiels">
+                <h1 class="login-title">Forgot password :)</h1>
+                <p class="login-subtitle">Enter your email to reset password </p>
+                <div class="login-input-email mb-5" :class="[{'gray-bg' : email.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
                         <span>Email address</span>
                         <input :class="[{'gray-bg' : email.length > 0}]" type="email" v-model="email" placeholder="Email" class="input-email">
                     </div>
                 </div>
-                <div class="login-input-pass" :class="[{'gray-bg' : password.length > 0}]">
-                    <img src="~/assets/img/lock.png" alt="" class="input-email-img">
-                    <div class="fiels-input">
-                        <span>Password</span>
-                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
-                    </div>
-                </div>
-				<div class="mb-4">
-				<div v-show="$validate.validatePassword(password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validatePassword(password) }}</div>
-                </div>
-				<div>
-					<span class="forgot cursor-pointer" @click="$router.push('/forgot')">Forgot password?</span>
-				</div>
+				<span class="forgot cursor-pointer" @click="$router.push('/login')">Back to login</span>
+				
                 <div class="login-list-btn">
-                    <button class="login-btn" @click="signin()">LOGIN</button>
-                    <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button>
+                    <button class="login-btn w-full" @click="sendEmail()">SEND EMAIL</button>
                 </div>
             </div>
         </div>
@@ -38,6 +26,7 @@
 import loading from '~/components/loading/main.vue'
 export default {
 	layout:'empty',
+	auth:false,
     components: {
         loading
     },
@@ -52,64 +41,28 @@ export default {
         }
     },
 	mounted() {
-		console.log(this.$validate)
 	},
     methods: {
 		closePopup(){
 			this.authError = false;
 		},
-		async fetchUserData(){
-			
-			// let user = {
-			// 	id : 1,
-			// 	name: "Nguyen Van A",
-			// 	avatar: "https://i.pinimg.com/originals/1c/0d/0d/1c0d0d1b1f1f1b1b1f1f1b1b1f1f1b1b.jpg",
-			// }
-			// this.$auth.$storage.setUniversal('user', user, true)
-			// await this.$api.auth.getUserById(this.userID)
-			// 	.then(resp => {
-			// 		console.log(resp.data, "get by id done")
-			// 		this.$auth.$storage.setUniversal('user', resp.data, true)
-			// 		console.log(this.$auth.$storage.getUniversal('user'), "get universal");
-			// 		this.$router.push('/')
-			// 	})
-			// 	.catch(err => {
-			// 			this.isLoading = false;
-			// 	})
-			await this.$api.users.getInfoMe()
-				.then(resp => {
-					console.log(resp.data, "get by id done")
-					this.$auth.$storage.setUniversal('user', resp.data, true)
-					console.log(this.$auth.$storage.getUniversal('user'), "get universal");
-					this.$router.push('/')
-				})
-				.catch(err => {
-						this.isLoading = false;
-				})
-		},
-        async signin() {
-            this.isLoading = true;
-            await this.$auth.loginWith('local',
-            {
-                data: {
-						email: this.email,
-						password: this.password,
-					}
-            })
-                .then(resp => {
-					this.$router.push('/')
-					console.log(this.$auth, "auth");
-					this.$toast.success('Đăng nhập thành công');
-                    this.isLoading = false;
-                })
-                .catch(err => {
-                    console.log(err);
-					this.authError = true;
-					this.$toast.error('Kiểm tra lại thông tin đăng nhập');
-					console.log(this.authError);
-					this.isLoading = false;
-                })
-        }
+		sendEmail(){
+			if( this.email == '' ){
+				this.$toast.error('Please enter your email');
+				return;
+			}
+			this.isLoading = true;
+			this.$axios.post('/auth/forgot-password',{
+				email: this.email
+			}).then(res => {
+				this.isLoading = false;
+				this.$toast.success('Send email success');
+				this.$router.push('/login');
+			}).catch(err => {
+				this.isLoading = false;
+				this.$toast.error('Send email fail, please check your email again');
+			})
+		}
     }
 }
 </script>

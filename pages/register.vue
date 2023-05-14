@@ -28,20 +28,23 @@
                         <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
                     </div>
                 </div>
-                <div class="login-input-pass" :class="[{'gray-bg' : confirm_password.length > 0}]">
+				<div class="mb-4">
+				<div v-show="$validate.validatePassword(password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validatePassword(password) }}</div>
+                </div>
+				<div class="login-input-pass" :class="[{'gray-bg' : confirm_password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
                         <span>Confirm password</span>
                         <input :class="[{'gray-bg' : confirm_password.length > 0}]" type="password" v-model="confirm_password" placeholder="Password" class="input-email">
                     </div>
                 </div>
-                
+				<div class="mb-4">
+					<div v-show="$validate.validateConfirmPassword(password, confirm_password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validateConfirmPassword(password, confirm_password) }}</div>
+				</div>
                 <!-- <span class="forgot">Forgot password?</span> -->
                 <div class="login-list-btn">
                     <button class="login-btn" @click="signup()">SIGN UP</button>
                     <button class="create-btn" @click="$router.push('/login')">BACK TO LOGIN</button>
-					<button @click="showToast('error','ok')"> áodjslkdja</button>
-					
 				</div>
             </div>
         </div>
@@ -69,6 +72,9 @@ export default {
 		}
 	},
     methods: {
+		validatePassword(){
+			return this.$validate.validatePassword(this.password);
+		},
 		showToast(status,message) {
 			try{
 			status == "success" ? this.$toast.success(message ? message : "Thành công") : this.$toast.error(message ? message : "Thất bại");
@@ -78,6 +84,10 @@ export default {
 			}
 		},
         signup() {
+			if (this.$validate.validatePassword(this.password).length > 0){
+				this.showToast("error",this.$validate.validatePassword(this.password));
+				return;
+			}
             this.$axios.$post(`/auth/register`,
             {
                 email: this.email,
@@ -159,14 +169,13 @@ input{
     }
 }
 .login-input-pass{
-    margin-top: 2px;
-display: flex;
-align-items: center;
-gap: 20px;
-padding: 10px 20px;
-background-color: #ffffff;
-    border-radius: 6px;
-    margin-bottom: 20px;
+	margin-top: 2px;
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 10px 20px;
+	background-color: #ffffff;
+	border-radius: 6px;
 }
 
 .fiels-input{
