@@ -39,6 +39,7 @@ export default {
 		"~assets/css/main.css",
 		"~static/css/uicons-regular-rounded.css",
 		"~static/icons/uicons-bold-rounded.css",
+		"~static/css/uicons-solid-rounded.css",
 		'vue-toastification/dist/index.css',
 	],
 	auth: {
@@ -82,7 +83,8 @@ export default {
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
 		{ src: "~plugins/api/index" },
-		{ src: "~plugins/toast", ssr: false }
+		{ src: "~plugins/toast", ssr: false },
+		{ src: "~plugins/validation" },
 	],
 	axios: {
 		baseURL: process.env.BASE_URL_API,

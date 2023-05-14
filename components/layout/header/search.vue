@@ -1,7 +1,7 @@
 <template>
 	<div class="section">
-	<div class="search-container w-[fit-content] flex bg-slate-100 py-2 px-3 items-center rounded-2xl">
-		<input type="text" v-model="keyword" placeholder="search" class="search-input bg-transparent">
+	<div class="search-container w-[500px] flex bg-slate-100 py-2 px-3 items-center rounded-2xl">
+		<input type="text" v-model="keyword" placeholder="search" class="search-input bg-transparent w-full">
 		<div class="icon-search" @click="$router.push(`/search?keyword=${keyword}`)">
 			<div class="icon-search-img">
 				<i class="fi fi-rr-search"></i>

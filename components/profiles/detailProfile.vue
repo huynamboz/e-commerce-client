@@ -1,9 +1,18 @@
 <template>
 	<div class="profile-container">
+		<loading v-if="isLoading" />
 		<div class="profile-content">
 			<div class="profile-header">
+				<div class="relative">
+					<!-- <img src="~/assets/img/avatar-default.png" alt="" class="icon-avatar" v-if="user.avatar"> -->
+					<img :src="previewUrl[0]" alt="" class="icon-avatar" >
+					
+					<label for="inp-file" class="absolute right-0 top-0 cursor-pointer">
+						<i class="fi fi-rr-edit"></i>
+					</label>
+					<input type="file" class=" hidden" ref="fileInput" accept="image/*"  name="" id="inp-file" @change="previewImage($event)">
+				</div>
 				<!-- <h1 class="profile-title">Chỉnh sửa thông tin</h1> -->
-				<img src="~/assets/img/avatar-default.png" alt="" class="icon-avatar">
 				<div class="detail-user">
 					<p>{{ user.name }}</p>
 					<p>Dang city with love</p>
@@ -15,9 +24,9 @@
 					<input type="text" placeholder="Nguyễn Văn A" class="inp" id="name" v-model="user.name">
 					<div>
 						<label for="male">Nam</label>
-						<input type="radio" name="gender" id="male" :value="user.gender" >
+						<input type="radio" name="gender" id="male" :value="user.gender" :checked="user.gender" @change="chooseMale()">
 						<label for="female">Nữ</label>
-						<input type="radio" name="gender" id="female" :value="user.gender">
+						<input type="radio" name="gender" id="female" :value="!user.gender" :checked="!user.gender" @change="chooseFemale()">
 					</div>
 				</div>
 				<div class="info-inp">
@@ -29,10 +38,15 @@
 					<input type="text" class="inp" placeholder="09876xx" id="name" v-model="user.phone_number">
 				</div>
 				<div class="info-inp">
-					<label for="bday">Ngày sinh</label>
-					<input type="date" class="inp" placeholder="09876xx" id="name" v-model="user.birthday">
+					<label class="flex gap-3" for="bday">Ngày sinh: {{ $auth.user.birthday.split("T")[0] }} <p class="text-rose-500 cursor-pointer" @click="isOpenEditBirthday = !isOpenEditBirthday"><i class="fi fi-rr-edit"></i></p></label>
+					<input v-if="isOpenEditBirthday" type="date" class="inp" placeholder="09876xx" id="name" v-model="user.birthday">
 				</div>
-					<div class="address-inp flex gap-5">
+				<div class="flex gap-5 flex-row mb-[20px]">
+					<label>Địa chỉ hiện tại :</label>
+					<label>{{ this.$auth.user.location }}</label>
+					<p class="text-rose-500 cursor-pointer" @click="openEditLocation()"><i class="fi fi-rr-edit"></i></p>
+				</div>
+					<div class="address-inp flex gap-5" v-if="isOpenEditLocation">
 						<div class="address">
 							<label for="City">Thành phố</label>
 							<div class="choose-city" >
@@ -63,10 +77,15 @@
 			</div>
 			<button class="submit" @click="PushDataUser()">Thay đổi</button>
 		</div>
+
 	</div>
 </template>
 <script>
+import loading from '~/components/loading/main.vue'
 export default {
+	components: {
+		loading
+	},
 	data(){
 		return {
 			name: '',
@@ -75,15 +94,22 @@ export default {
 			currentCity: "",
 			isOpenListCity: false,
 			isOpenListDistrict: false,
+			isOpenEditBirthday: false,
+			isLoading: false,
+			gender:'',
 			cities: [],
 			currentDistrict: "",
 			districts: [],
+			isOpenEditLocation:false,
+			previewUrl: [this.$auth.user.avatar ? this.$auth.user.avatar : "null"],
+			listFile: [],
 			user: {
+				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",
 				name:this.$auth.user.name,
 				email:this.$auth.user.email,
 				phone_number:this.$auth.user.phone_number ? this.$auth.user.phone_number : '',
 				address:this.$auth.user.address ? this.$auth.user.address : '',
-				gender: this.$auth.user.gender ? true : false,
+				gender: this.$auth.user.gender,
 				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",
 				district_id : '',
 				birthday: this.$auth.user.birthday ? this.$auth.user.birthday.split("T")[0] : new Date(),
@@ -91,29 +117,100 @@ export default {
 			}
 		}
 	},
-	mounted(){
-		this.getCities();
+	async mounted(){
+		await this.getCities();
+		await this.getDistrictID()
 	},
 methods: {
-		PushDataUser(){
+	previewImage(event) {
+			try {
+				this.listFile = [];
+				let tmp = [];
+				tmp = event.target.files;
+				for (let i = 0; i < tmp.length; i++) {
+					this.listFile.push(tmp[i]);
+				}
+				this.previewUrl = [];
+				this.listFile.forEach(item => {
+					const reader = new FileReader();
+					reader.readAsDataURL(item);
+					reader.onload = () => {
+						this.previewUrl.push(reader.result);
+					}
+				})
+				console.log(this.previewUrl);
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		chooseFemale(){
+			this.user.gender = false;
+		},
+		chooseMale(){
+			this.user.gender = true;
+		},
+		async getDistrictID(){
+		
+			let cityName = this.$auth.user.location.split(", ")[1];
+			let districtName = this.$auth.user.location.split(", ")[0];
+			this.cities.forEach(item =>{
+				if(item.name == cityName){
+					console.log(item.id,"item");
+					this.currentCity = item.id;
+				}
+			})
+			await this.getDistrict();
+			this.districts.forEach(district => {
+				if(district.name == districtName){
+					this.user.district_id = district.id;
+					this.currentDistrict = district.id;
+				}
+			})
+		},
+		openEditLocation(){
+			this.isOpenEditLocation = !this.isOpenEditLocation
+		},
+		async PushDataUser(){
+			this.isLoading = true;
+			console.log(this.$auth.user);
+			if(this.listFile.length != 0){
+				let listThumbnail = [];
+				let formData = new FormData();
+				this.listFile.forEach(item => {
+					formData.append('files', item);
+				})
+				await this.$api.products.uploadImage(formData).then(res => {
+					console.log(res);
+					listThumbnail = res.data;
+					this.user.avatar = listThumbnail[0];
+					this.$toast.success("Tải ảnh thành công");
+				}).catch(err => {
+					console.log(err);
+					this.$toast.error("Tải ảnh thất bại");
+					this.isLoading = false;
+					return;
+				})
+				
+			}
 			this.user.birthday = new Date(this.user.birthday).toISOString();
 			console.log(this.user);
 			this.$axios.put('/users/me',this.user)
 			.then(res => {
 				console.log(res);
 				this.$toast.success("Thay đổi thông tin thành công");
+				this.isLoading = false;
 			})
 			.catch(err => {
 				console.log(err);
+				this.isLoading = false;
 			})
 		},
 		chooseDistrict(val){
 			this.currentDistrict = val;
 			this.isOpenListDistrict = false;
 		},
-		getCities(){
-			// this.$axios.get('https://api.goship.io/api/ext_v1/cities')
-			this.$axios.get('location/cities')
+		async getCities(){
+			await this.$axios.get('location/cities')
 			.then(res => {
 				this.cities = res.data;
 				console.log(this.cities,"cityyyy");
@@ -122,9 +219,9 @@ methods: {
 				console.log(err);
 			})
 		},
-		getDistrict(){
+		async getDistrict(){
 			console.log("ok",this.currentCity)
-			this.$axios.get(`https://api.goship.io/api/ext_v1/cities/${this.currentCity}/districts`)
+			await this.$axios.get(`https://api.goship.io/api/ext_v1/cities/${this.currentCity}/districts`)
 			.then(res => {
 				this.districts = res.data.data;
 				console.log(this.districts,"district");

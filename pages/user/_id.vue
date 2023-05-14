@@ -52,15 +52,25 @@ export default {
 		}
 	},
 	computed: {
-		// computed
+		pageParams() {
+			return this.$route.params.id
+		}
 	},
+	watch: {
+		// watch
+		pageParams:function() {
+				this.fetchProduct()
+			},
+			immediate: true,
+		}
+	,
 	mounted() {
 		this.fetchProduct()
 	},
 	methods: {
 		fetchProduct() {
 			console.log('fetchProduct', this.pageParams);
-			this.$api.products.getAllProduct(this.pageParams)
+			this.$api.products.getAllProduct()
 				.then(res =>{
 					console.log('res', res);
 					this.listProduct = res.data.data;

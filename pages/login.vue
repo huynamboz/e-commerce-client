@@ -3,7 +3,7 @@
         <loading v-if="isLoading"/>
         <div class="login-content-main">
             <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
-            <div class="login-fiels">
+            <div class="login-fiels w-[330px]">
                 <h1 class="login-title">Hi Everyone :)</h1>
                 <p class="login-subtitle">Welcome to our website, </p>
                 <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
@@ -20,8 +20,12 @@
                         <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
                     </div>
                 </div>
-
-                <span class="forgot">Forgot password?</span>
+				<div class="mb-4">
+				<div v-show="$validate.validatePassword(password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validatePassword(password) }}</div>
+                </div>
+				<div>
+					<span class="forgot cursor-pointer" @click="$router.push('/forgot')">Forgot password?</span>
+				</div>
                 <div class="login-list-btn">
                     <button class="login-btn" @click="signin()">LOGIN</button>
                     <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button>
@@ -48,12 +52,14 @@ export default {
         }
     },
 	mounted() {
+		console.log(this.$validate)
 	},
     methods: {
 		closePopup(){
 			this.authError = false;
 		},
 		async fetchUserData(){
+			
 			// let user = {
 			// 	id : 1,
 			// 	name: "Nguyen Van A",
@@ -99,7 +105,7 @@ export default {
                 .catch(err => {
                     console.log(err);
 					this.authError = true;
-					this.$toast.error('Đăng nhập thất bại');
+					this.$toast.error('Kiểm tra lại thông tin đăng nhập');
 					console.log(this.authError);
 					this.isLoading = false;
                 })
