@@ -6,16 +6,22 @@
 				<div class="relative">
 					<!-- <img src="~/assets/img/avatar-default.png" alt="" class="icon-avatar" v-if="user.avatar"> -->
 					<img :src="previewUrl[0]" alt="" class="icon-avatar" >
-					
-					<label for="inp-file" class="absolute right-0 top-0 cursor-pointer">
+					<div>
+
+					</div>
+					<label for="inp-file" class="absolute -right-2 -top-2 cursor-pointer w-[25px] h-[25px] flex items-center justify-center bg-blue-400 text-white rounded-lg">
 						<i class="fi fi-rr-edit"></i>
 					</label>
 					<input type="file" class=" hidden" ref="fileInput" accept="image/*"  name="" id="inp-file" @change="previewImage($event)">
 				</div>
 				<!-- <h1 class="profile-title">Chỉnh sửa thông tin</h1> -->
 				<div class="detail-user">
-					<p>{{ user.name }}</p>
-					<p>Dang city with love</p>
+					<p class=" font-medium">{{ user.name }}</p>
+					<div class="flex gap-2">
+						Trạng thái : 
+						<p class=" text-rose-600" v-if="!$auth.user.active_status">Chưa kích hoạt</p>
+						<p v-else>Đã kích hoạt</p>
+					</div>
 				</div>
 			</div>
 			<div class="profile-content-info">
@@ -38,8 +44,8 @@
 					<input type="text" class="inp" placeholder="09876xx" id="name" v-model="user.phone_number">
 				</div>
 				<div class="info-inp">
-					<label class="flex gap-3" for="bday">Ngày sinh: {{ $auth.user.birthday.split("T")[0] }} <p class="text-rose-500 cursor-pointer" @click="isOpenEditBirthday = !isOpenEditBirthday"><i class="fi fi-rr-edit"></i></p></label>
-					<input v-if="isOpenEditBirthday" type="date" class="inp" placeholder="09876xx" id="name" v-model="user.birthday">
+					<label class="flex gap-3" for="bday">Ngày sinh: {{ $auth.user.birthday?.split("T")[0] }} <p class="text-rose-500 cursor-pointer" @click="isOpenEditBirthday = !isOpenEditBirthday"><i class="fi fi-rr-edit"></i></p></label>
+					<input v-if="isOpenEditBirthday" type="date" class="inp w-fit cursor-pointer" placeholder="09876xx" id="name" v-model="user.birthday">
 				</div>
 				<div class="flex gap-5 flex-row mb-[20px]">
 					<label>Địa chỉ hiện tại :</label>
@@ -71,11 +77,11 @@
 					<input type="text" class="inp" placeholder="Nhà số xx, đường ..." id="name" v-model="user.address">
 				</div>
 			</div>
-			<div class="flex flex-col mt-5">
+			<!-- <div class="flex flex-col mt-5">
 				<label for="address">Nhập mật khẩu xác nhận</label>
 				<input type="password" name="" id="" class="inp" v-model="user.password">
-			</div>
-			<button class="submit" @click="PushDataUser()">Thay đổi</button>
+			</div> -->
+			<vs-button class="cursor-pointer" @click="PushDataUser()">Thay đổi</vs-button>
 		</div>
 
 	</div>
@@ -88,6 +94,7 @@ export default {
 	},
 	data(){
 		return {
+			value: '',
 			name: '',
 			email: '',
 			number: '',
@@ -111,7 +118,7 @@ export default {
 				address:this.$auth.user.address ? this.$auth.user.address : '',
 				gender: this.$auth.user.gender,
 				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",
-				district_id : '',
+				district_id : null,
 				birthday: this.$auth.user.birthday ? this.$auth.user.birthday.split("T")[0] : new Date(),
 				password:''
 			}
@@ -151,8 +158,8 @@ methods: {
 		},
 		async getDistrictID(){
 		
-			let cityName = this.$auth.user.location.split(", ")[1];
-			let districtName = this.$auth.user.location.split(", ")[0];
+			let cityName = this.$auth.user.location?.split(", ")[1];
+			let districtName = this.$auth.user.location?.split(", ")[0];
 			this.cities.forEach(item =>{
 				if(item.name == cityName){
 					console.log(item.id,"item");
@@ -196,13 +203,17 @@ methods: {
 			console.log(this.user);
 			this.$axios.put('/users/me',this.user)
 			.then(res => {
-				console.log(res);
+				console.log("res:",res);
 				this.$toast.success("Thay đổi thông tin thành công");
 				this.isLoading = false;
+				this.user = res.data.data;
+				this.user.password = '';
+				console.log("user:",this.user);
 			})
 			.catch(err => {
 				console.log(err);
 				this.isLoading = false;
+				this.$toast.error(this.$handleErrorApi(err));
 			})
 		},
 		chooseDistrict(val){
@@ -212,8 +223,8 @@ methods: {
 		async getCities(){
 			await this.$axios.get('location/cities')
 			.then(res => {
-				this.cities = res.data;
-				console.log(this.cities,"cityyyy");
+				this.cities = res['data']['data'];
+				console.log(this.cities,"cityyyy",res.data);
 			})
 			.catch(err => {
 				console.log(err);
@@ -248,7 +259,7 @@ methods: {
 .icon-avatar{
 	width: 100px;
 	height: 100px;
-	border-radius: 50%;
+	border-radius: 15%;
 	object-fit: cover;
 	box-shadow: 2px 18px 20px 1px rgb(153 153 153 / 56%);
 }

@@ -1,6 +1,6 @@
 <template>
 	<div class="container-top">
-		<div class="search-container">
+		<div class="search-container p-5 max-md:p-2 max-md:flex-col">
 			<tab-left/>
 			<div class="tab-right-container">
 				<div class="tab-right-header">
@@ -10,10 +10,13 @@
 						<button class="fil-btn" :class="{'is-active': isSearchMore}"  @click="handleFilterBtn('isSearchMore')">Tìm kiếm nhiều</button>
 					</div>
 				</div>
-				<div class="tab-right-list-item">
+				<div class="tab-right-list-item gap-5 max-md:gap-2 justify-center">
 					<div v-for="item in listProduct" :key="item.id">
 						<product-card :product="item"/>
 					</div>
+				</div>
+				<div class="w-fit mt-5 mb-5">
+					<vs-pagination v-model="page" :length="meta.totalPage ? meta.totalPage : 2" />   
 				</div>
 			</div>
 		</div>
@@ -37,6 +40,8 @@ export default{
 			isLoading: false,
 			isNewest: true,
 			isSearchMore: false,
+			page: 1,
+			meta: {},
 			listProduct:[],
 			baseUrl: process.env.baseUrl,
 			fallbackImageUrl: 'https://via.placeholder.com/300x300'
@@ -75,6 +80,7 @@ export default{
 			await this.$api.products.getAllProduct()
 			.then(resp => {
 				this.listProduct = resp["data"]["data"];
+				this.meta = resp["data"]["meta"];
 				console.log(resp.data);
 			})
 			.catch(err => {
@@ -91,7 +97,6 @@ export default{
 }
 .search-container{
 	display: flex;
-	padding: 20px;
 	padding-top: 40px;
 	justify-content: center;
 	max-width: 1240px;
@@ -124,7 +129,6 @@ export default{
 .tab-right-list-item{
 	display: flex;
 	flex-wrap: wrap;
-	gap: 20px;
 }
 
 

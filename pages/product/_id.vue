@@ -108,7 +108,7 @@
 							<i class="fi fi-sr-heart"></i>
 						</div>
 					</div>
-					<div class="cursor-pointer" @click="isOpenReport = true">
+					<div class="cursor-pointer" @click="isOpenReport = true" v-if="products?.user?.id != $auth.user.id">
 						Báo cáo sản phẩm <i class="fi fi-rr-flag"></i>
 					</div>
 					<div class="flex items-center px-5 justify-center fixed top-0 left-0 h-[100vh] w-[100vw] z-[1000]" v-if="isOpenReport">
@@ -136,13 +136,14 @@
 				</div>
 				<div class="mt-8 flex gap-5 items-center">
 					<p>Chia sẻ</p>
-					<div><img src="~/assets/icon/fb.svg" alt="" class="h-8 w-8"></div>
+					<div>
+						<a href="https://www.facebook.com/sharer/sharer.php?u=http://market.hinam.one/product/4" target="_blank">
+							<img src="~/assets/icon/fb.svg" alt="" class="h-8 w-8">
+						</a></div>
 					<div><img src="~/assets/icon/mess.svg" alt="" class="h-8 w-8"></div>
 					<div><img src="~/assets/icon/zalo.svg" alt="" class="h-8 w-8"></div>
 					<div><img src="~/assets/icon/ig.svg" alt="" class="h-8 w-8"></div>
-					<a href="https://www.facebook.com/sharer/sharer.php?u=http://103.116.53.105:3000/product/4" target="_blank">
-  Share on Facebook
-</a>
+					
 				</div>
 				</div>
 			</section>

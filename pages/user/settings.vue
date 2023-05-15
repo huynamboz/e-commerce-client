@@ -1,12 +1,12 @@
 <template>
-	<div class="setting-container">
-		<div class="setting-detail">
-			<div class="tab-left">
+	<div class="setting-container pb-6">
+		<div class="setting-detail max-md:flex-col">
+			<div class="tab-left w-[300px] max-md:w-full">
 				<div class="tab-left-content">
 					<div class="tab-left-content-header">
 						<p>Cài đặt tài khoản</p>
 					</div>
-					<div class="tab-left-list">
+					<div class="tab-left-list flex-col max-md:flex-row">
 						<div class="tab-left-item" 
 						:class="{'is-choosed':optionSetting == 1}"
 						@click="optionSetting=1">
@@ -23,22 +23,26 @@
 				</div>
 			</div>
 			<div class="tab-right">
-				<tab-profile />
+				<tab-profile v-if="optionSetting == 1"/>
+				<change-password v-else/>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 import tabProfile from '~/components/profiles/detailProfile.vue'
+import ChangePassword from '~/components/profiles/ChangePassword.vue'
 export default {
 	name: 'headerTab',
 	components: {
-		tabProfile
+		tabProfile,
+		ChangePassword
 	},
 	data() {
 		return {
 			isShow: false,
-			optionSetting: 1
+			optionSetting: 1,
+			tab: "PROFILE",
 		}
 	},
 	mounted() {
@@ -79,12 +83,10 @@ export default {
 	font-size: 20px;
 }
 .tab-left{
-	width: 300px;
 	padding: 20px 20px;
 }
 .tab-left-list{
 	display: flex;
-	flex-direction: column;
 	margin-top: 20px;
 	gap: 20px;
 }
@@ -104,6 +106,10 @@ export default {
 	color: #000000;
 	& > i{
 		font-weight: 500;
+	}
+	@media screen and (max-width: 768px) {
+		border-right: none;
+		border-bottom: 3px solid #ef0808;
 	}
 }
 </style>

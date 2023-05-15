@@ -105,7 +105,8 @@ export default {
                 .catch(err => {
                     console.log(err);
 					this.authError = true;
-					this.$toast.error('Kiểm tra lại thông tin đăng nhập');
+					
+					this.$toast.error(this.$handleErrorApi(err));
 					console.log(this.authError);
 					this.isLoading = false;
                 })

@@ -9,7 +9,7 @@
 					<p class="item-cost-before" v-if="product.discount > 0"><del>{{ formatPrice(product.price) }} </del> - </p>
 					<p class="item-cost">{{ formatPrice(product.price - (product.price * product.discount / 100)) }}</p>
 				</div>
-				<p class="addr">{{ product.address }}</p>
+				<p class="addr">{{ product.user.location }}</p>
 			</div>
 	</nuxt-link>
 </template>
@@ -46,7 +46,7 @@ export default{
 .card-container{
 	width: 220px;
 	min-height: 328px;
-	height: 346px;
+	height: 331px;
 	display: flex;
 	flex-direction: column;
 	background-color: #ffffff;
@@ -62,7 +62,6 @@ export default{
 		height: fit-content;
 		max-height: unset;
 		height: 280px;
-		margin-bottom: 15px;
 	}
 }
 .tag-sale{
@@ -90,9 +89,11 @@ export default{
 	}
 }
 .item-product-content{
-	padding: 20px 5px 0 5px;
+	padding: 5px 5px 0 5px;
 	display: flex;
+	height: 100%;
 	flex-direction: column;
+	justify-content: space-between;
 	gap: 10px;
 }
 .item-cost-before{

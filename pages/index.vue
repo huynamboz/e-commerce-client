@@ -13,7 +13,9 @@
 				</div>
 				<list-product :listProduct="listProduct" />
 			</section>
-			<button @click="$router.push(`?page=${++page}`)">nexxt</button>
+			<div class="w-fit mt-5 mb-5">
+				<vs-pagination v-model="page" :length="meta.totalPage ? meta.totalPage : 2" />   
+			</div>
 		</div>
 	</div>
 </template>
@@ -34,6 +36,8 @@ export default {
 	data() {
 		return {
 			listProduct: [],
+			meta: {},
+			totalPage: 2,
 			page: 1,
 		}
 	},
@@ -43,6 +47,10 @@ export default {
 		}
 	},
 	watch: {
+		page: function () {
+			this.$router.push(`?page=${this.page}`)
+			console.log('page', this.page);
+		},
 		pageParams: function () {
 			this.fetchProduct();
 		},
@@ -52,6 +60,7 @@ export default {
 		console.log(this.$auth.user);
 		console.log('fetchProduct', this.$route.query.page);
 		this.fetchProduct();
+		// this.page = this.$route.query.page || 1;
 	},
 	methods: {
 		fetchProduct() {
@@ -60,6 +69,9 @@ export default {
 				.then(res =>{
 					console.log('res', res);
 					this.listProduct = res.data.data;
+					this.meta = res.data.meta;
+					this.totalPage = this.meta.totalPage;
+					this.page = this.meta.currentPage;
 				})
 		}
 	}

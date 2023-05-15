@@ -20,11 +20,40 @@
 						</div>
 						<div class="inp-container">
 							<label for="">Tình trạng <span style="color:red">*</span></label>
-							<input type="text" placeholder="1" v-model="ProductData.status">
+							<vs-select class="ml-4 mt-2"
+							color="success"
+							placeholder="Select"
+							v-model="ProductData.status"
+							>
+								<vs-option label="Mới" value="1">
+								Mới
+								</vs-option>
+								<vs-option label="Như mới" value="2">
+								Như mới
+								</vs-option>
+								<vs-option label="Đã qua sử dụng" value="3">
+								Đã qua sử dụng
+								</vs-option>
+							</vs-select>
 						</div>
+						
 						<div class="inp-container">
 							<label for="">category <span style="color:red">*</span></label>
-							<input type="text" v-model="ProductData.category">
+							<vs-select class="ml-4 mt-2"
+							color="success"
+							placeholder="Select"
+							v-model="ProductData.category"
+							>
+								<vs-option label="Mới" value="1">
+								Đồ điện tử
+								</vs-option>
+								<vs-option label="Như mới" value="2">
+								Điện thoại
+								</vs-option>
+								<vs-option label="Đã qua sử dụng" value="3">
+								Máy tính bảng
+								</vs-option>
+							</vs-select>
 						</div>
 						<div class="inp-container">
 							<label for="">Mô tả <span style="color:red">*</span></label>
@@ -216,7 +245,7 @@ export default {
 				}).then(res => {
 					console.log(res);
 					this.dataProduct = res.data;
-					this.$router.push(`/product/${res.data.id}`);
+					this.$router.push(`/user/${this.$auth.user.id}`);
 					this.$toast.success("Tạo sản phẩm thành công", { duration: 3000 });
 				}).catch(err => {
 					console.log(err);
