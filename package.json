@@ -21,7 +21,8 @@
     "vue": "^2.7.10",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
-    "vue-toastification": "^1.7.14"
+    "vue-toastification": "^1.7.14",
+    "vuesax": "^4.0.1-alpha.25"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.6.5",

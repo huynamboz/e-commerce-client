@@ -35,7 +35,7 @@
 				</div>
                 <!-- <p>Cá nhân</p> -->
                 <div class="popup-detail-user" v-if="isShowPopupProfile">
-                    <div class="popup-detail-user-content">
+                    <div class="popup-detail-user-content h-fit pb-3">
                         <div class="popup-detail-user-content-header" v-if="$auth.loggedIn">
                             <div class="popup-detail-user-content-header-avatar">
                                 <!-- <img src="~/assets/img/avatar.png" alt=""> -->
@@ -43,9 +43,9 @@
                             <div class="popup-detail-user-content-header-info">
                                 <p class="popup-detail-user-content-header-info-name"><b>Hi </b>{{  $auth.user.name }} <i class="fi fi-rr-badge-check"></i></p>
                                 <div class="line"></div>
-								<div class="popup-detail-user-content-header-info-product">
+								<div class="popup-detail-user-content-header-info-product" @click="$router.push(`/user/${$auth.user.id}`)">
 									<i class="fi fi-rr-shopping-bag"></i>
-									<p class="my-product-title" @click="$router.push(`/user/${$auth.user.id}`)">Bài đăng của tôi</p>
+									<p class="my-product-title">Bài đăng của tôi</p>
                                 </div>
 								<div class="btn-setting-user" @click="$router.push('/user/settings')">
 									<i class="fi fi-rr-settings-sliders"></i>
@@ -55,11 +55,18 @@
 									<i class="fi fi-rr-shopping-bag-add"></i>
 									<p class="add-post-title">Đăng sản phẩm mới</p>
 								</div>
+								<div class="btn-add-post" @click="logout()">
+									<i class="fi fi-rr-sign-out-alt"></i>
+									<p class="add-post-title">Đăng xuất</p>
+								</div>
                             </div>
                         </div>
-                        <div class="not-login pt-10" v-else>
-                        <button class="text-[14px] text-center flex justify-center w-[100%] p-10 mt-[10px]" @click="$router.push('/login')">Đăng nhập</button>
-                    </div>
+                        <div class="not-login pt-3" v-else>
+							<div class="btn-add-post" @click="$router.push('/login')">
+								<i class="fi fi-rr-sign-in-alt"></i>
+								<p class="add-post-title">Đăng nhập</p>
+							</div>
+						</div>
                     </div>
                 </div>
             </div>
@@ -92,6 +99,10 @@ export default {
 		}
 	},
     methods: {
+		logout() {
+			this.$auth.logout();
+			this.$router.push('/');
+		},
 		handleOpenPopup(){
 			this.isShowPopupProfile = !this.isShowPopupProfile
 		},
@@ -184,7 +195,6 @@ export default {
 .popup-detail-user-content{
 	position: relative;
 	width: 200px;
-	height: 300px;
 	background-color: #ffffff;
 	border-radius: 10px;
 	z-index: 1;

@@ -1,6 +1,6 @@
 <template>
 	<div class="root">
-		<div class="container mx-auto flex justify-center items-start mt-[20px] gap-[10px]">
+		<div class="container mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col">
 			<header class="flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff]">
 				<div class="container">
 					<img src="https://cdn.dribbble.com/users/1134997/screenshots/6001117/det0cxnuqaaatef.jpg?compress=1&resize=800x600&vertical=top" alt="" 
@@ -28,11 +28,14 @@
 					</div>
 				</div>
 			</header>
-			<div class="main">
-				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] bg-[#ffffff] p-[20px]">
+			<div class="main bg-[#ffffff] p-[20px] max-md:pl-0 max-md:pr-0 flex flex-col items-center">
+				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5">
 					<div v-for="item in listProduct" :key="item.id" class="product-item">
 						<productCard :product="item"/>
 					</div>
+				</div>
+				<div class="w-fit">
+					<vs-pagination v-model="page" :length="5" />
 				</div>
 			</div>
 		</div>
@@ -48,6 +51,7 @@ export default {
 	},
 	data() {
 		return {
+			page: 1,
 			listProduct: [],
 		}
 	},

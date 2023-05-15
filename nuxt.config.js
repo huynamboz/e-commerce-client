@@ -85,6 +85,8 @@ export default {
 		{ src: "~plugins/api/index" },
 		{ src: "~plugins/toast", ssr: false },
 		{ src: "~plugins/validation" },
+		{ src: "~plugins/handleErrorApi" },
+		{ src: '~plugins/vuesax', mode: 'client' },
 	],
 	axios: {
 		baseURL: process.env.BASE_URL_API,
