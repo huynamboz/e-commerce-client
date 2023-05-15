@@ -14,7 +14,7 @@
 				<list-product :listProduct="listProduct" />
 			</section>
 			<div class="w-fit mt-5 mb-5">
-				<vs-pagination v-model="page" :length="meta.totalPage ? meta.totalPage : 2"  @change="onPageChange"/>   
+				<vs-pagination v-model="page" :length="meta.totalPage ? meta.totalPage : 2" />   
 			</div>
 		</div>
 	</div>
