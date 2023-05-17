@@ -6,25 +6,28 @@
         </div>
         <search />
         <div class="list-action flex items-center">
-			<div class="cart action-item" @click="goToCart()" title="Sản phẩm yêu thích">
-                <!-- <img src="~/assets/img/noti.png" alt="" class="icon-action"> -->
-                <i class="fi fi-rr-heart"></i>
-				
-                <!-- <p>Giỏ hàng</p> -->
-            </div>
-            <div class="cart action-item" @click="goToCart()" title="Thông báo">
-                <!-- <img src="~/assets/img/noti.png" alt="" class="icon-action"> -->
-                <i class="fi fi-rr-bell"></i>
-                <!-- <p>Giỏ hàng</p> -->
-            </div>
-            <div class="mess action-item" @click="goToMessage()" title="Tin nhắn">
-                <!-- <img src="~/assets/img/message.png" alt="" class="icon-action"> -->
-                <i class="fi fi-rr-comment"></i>
-                <!-- <p>Tin nhắn</p> -->
-            </div>
-            <div class="profile action-item" @click="handleOpenPopup()">
-                <!-- <img src="~/assets/img/profile.png" alt="" class="icon-action"> -->
-                <i v-if="!$auth.loggedIn" class="fi fi-rr-user" title="Thông tin shop"></i>
+			<div class="cart action-item relative" @click="goToCart()" title="Sản phẩm yêu thích">
+					<i class="fi fi-rr-heart" @click="openFavorite"></i>
+					<div class="bg-white absolute top-full w-[200px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
+						<div class="relative pb-5">
+							<div v-for="i in 10">
+							<p>i</p>
+							</div>
+							<div class="absolute bottom-0 border-t-[1px] w-full flex justify-center text-xs py-2">Xem tất cả</div>
+						</div>
+					</div>
+				</div>
+
+
+				<!-- <div class="cart action-item" @click="goToCart()" title="Thông báo">
+					<i class="fi fi-rr-bell"></i>
+				</div>
+				<div class="mess action-item" @click="goToMessage()" title="Tin nhắn">
+					<i class="fi fi-rr-comment"></i>
+				</div> -->
+				<div class="profile action-item" @click="handleOpenPopup()">
+					<!-- <img src="~/assets/img/profile.png" alt="" class="icon-action"> -->
+					<i v-if="!$auth.loggedIn" class="fi fi-rr-user" title="Thông tin shop"></i>
 				<div v-else class="relative pl-8">
 					<div class="absolute left-0 -top-2">
 						<img v-if="!$auth.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-[50px] h-[50px] rounded-[50%]">
@@ -85,6 +88,8 @@ export default {
         return {
             isShow: false,
 			isShowPopupProfile: false,
+			listFavoriteProduct: [],
+			isOpenFavorite: false,
         }
     },
 	computed: {
@@ -98,13 +103,28 @@ export default {
 			this.$forceUpdate();
 		}
 	},
+	mounted(){
+		this.fetFavoriteProduct();
+	},
     methods: {
+		openFavorite(){
+			this.isOpenFavorite = !this.isOpenFavorite;
+			this.isShowPopupProfile = false;
+		},
+		async fetFavoriteProduct(){
+			// console.log(this.$auth.user.id);
+			// this.$api.users.getFavoriteProduct()
+			// .then((response) => {
+			// 	this.listFavoriteProduct = response.data;
+			// })
+		},
 		logout() {
 			this.$auth.logout();
 			this.$router.push('/');
 		},
 		handleOpenPopup(){
-			this.isShowPopupProfile = !this.isShowPopupProfile
+			this.isShowPopupProfile = !this.isShowPopupProfile;
+			this.isOpenFavorite = false;
 		},
         goToMessage() {
             if (!this.$auth.loggedIn) {
@@ -191,7 +211,16 @@ export default {
     right: -10px;
     z-index: 999;
 }
-
+@keyframes openPopUp{
+    0%{
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
 .popup-detail-user-content{
 	position: relative;
 	width: 200px;
@@ -225,16 +254,10 @@ export default {
 	// 	z-index: 0;
 	// }
 }
-@keyframes openPopUp{
-    0%{
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    100%{
-        transform: translateY(0px);
-        opacity: 1;
-    }
+.open-popup-animate{
+	animation: openPopUp 0.2s ease-in-out;
 }
+
 .profile{
     position: relative;
 }

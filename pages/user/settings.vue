@@ -22,7 +22,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="tab-right">
+			<div class="tab-right w-[700px] max-md:w-full">
 				<tab-profile v-if="optionSetting == 1"/>
 				<change-password v-else/>
 			</div>
@@ -98,7 +98,6 @@ export default {
 	color:#6f6f6f;
 }
 .tab-right{
-	width: 700px;
 }
 .is-choosed{
 	border-right: 3px solid #ef0808;
