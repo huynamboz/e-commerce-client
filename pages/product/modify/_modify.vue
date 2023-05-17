@@ -4,8 +4,8 @@
 			<h1 class="title" v-if="$route.params.modify">Chỉnh sửa sản phẩm</h1>
 			<h1 class="title" v-else>Thêm sản phẩm</h1>
 			<div class="line"></div>
-			<div class="main">
-				<div class="main-right">
+			<div class="main flex-row-reverse max-md:flex-col-reverse">
+				<div class="main-right grid max-md:flex max-md:flex-col">
 						<div class="inp-container">
 							<label for="">Tên sản phẩm <span style="color:red">*</span></label>
 							<input type="text" placeholder="Bàn ghế" maxlength="50" v-model="ProductData.name" @change="fetchCompare()">
@@ -395,7 +395,6 @@ input[type="text"], input[type="password"], textarea, select {
 	background-color: #ffffff;
 	padding: 20px;
 	border-radius: 10px;
-	flex-direction: row-reverse;
 	justify-content: flex-end;
 	align-items: flex-start;
 }
@@ -412,7 +411,6 @@ input[type="text"], input[type="password"], textarea, select {
 }
 .main-right{
 	width: 100%; 
-	display: grid;
 	flex: 2;
 	gap: 10px;
 	grid-template-columns: auto auto;

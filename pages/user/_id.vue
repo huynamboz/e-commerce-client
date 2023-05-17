@@ -1,8 +1,8 @@
 <template>
 	<div class="root">
-		<div class="container mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col">
-			<header class="flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff]">
-				<div class="container">
+		<div class="mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col">
+			<header class="flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center">
+				<div class="container flex max-md:justify-center">
 					<img src="https://cdn.dribbble.com/users/1134997/screenshots/6001117/det0cxnuqaaatef.jpg?compress=1&resize=800x600&vertical=top" alt="" 
 				class="object-cover w-[200px] h-[200px] rounded-[10px]">
 				</div>
