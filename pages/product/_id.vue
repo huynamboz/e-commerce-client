@@ -108,7 +108,7 @@
 							<i class="fi fi-sr-heart"></i>
 						</div>
 					</div>
-					<div class="cursor-pointer" @click="isOpenReport = true" v-if="products?.user?.id != $auth.user.id">
+					<div class="cursor-pointer" @click="isOpenReport = true" v-if="products?.user?.id != $auth.user?.id">
 						Báo cáo sản phẩm <i class="fi fi-rr-flag"></i>
 					</div>
 					<div class="flex items-center px-5 justify-center fixed top-0 left-0 h-[100vh] w-[100vw] z-[1000]" v-if="isOpenReport">
@@ -137,7 +137,7 @@
 				<div class="mt-8 flex gap-5 items-center">
 					<p>Chia sẻ</p>
 					<div>
-						<a href="https://www.facebook.com/sharer/sharer.php?u=http://market.hinam.one/product/4" target="_blank">
+						<a href="https://www.facebook.com/sharer/sharer.php?u=http://superbad.store/product/4" target="_blank">
 							<img src="~/assets/icon/fb.svg" alt="" class="h-8 w-8">
 						</a></div>
 					<div><img src="~/assets/icon/mess.svg" alt="" class="h-8 w-8"></div>
@@ -344,13 +344,15 @@ export default {
 			await this.fetchFavorite();
 		},
 		async fetchFavorite(){
-			await this.$axios.get(`/users/me/favorite-products`).then(res =>{
+			if(this.$auth.loggedIn){
+				await this.$axios.get(`/users/me/favorite-products?page=1`).then(res =>{
 				this.listFavorite = res.data.data;
 				this.isInFavorite = this.listFavorite.filter(item => item.id == this.products.id).length > 0 ? true : false;
 				console.log(this.listFavorite.filter(item => item.id == this.products.id),"ok")
-			}).catch(err =>{
-				console.log(err.response)
-			})
+				}).catch(err =>{
+					console.log(err.response)
+				})
+			}
 		},
 		async addToFavourite(){
 			if(!this.$auth.loggedIn){
@@ -426,8 +428,8 @@ export default {
 			// this.$axios.get('https://api.goship.io/api/ext_v1/cities')
 			await this.$axios.get('location/cities')
 			.then(res => {
-				this.cities = res.data;
-				console.log(this.cities,"cityyyy");
+				this.cities = res.data.data;
+				console.log(this.cities,"cityyyy",res);
 			})
 			.catch(err => {
 				console.log(err);
