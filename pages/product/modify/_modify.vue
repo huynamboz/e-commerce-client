@@ -57,7 +57,7 @@
 						</div>
 						<div class="inp-container">
 							<label for="">Mô tả <span style="color:red">*</span></label>
-							<textarea type="text" placeholder="Mô tả về sản phẩm" v-model="ProductData.description"></textarea>
+							<textarea type="text" placeholder="Mô tả về sản phẩm" maxlength="4900" v-model="ProductData.description"></textarea>
 						</div>
 						
 						
@@ -83,6 +83,30 @@
 				</div>
 
 				<loading v-if="isLoading" />
+
+				<vs-dialog width="550px" not-center v-model="alertActive">
+					<template #header>
+					<h4 class="not-margin">
+						<b>Tài khoản chưa kích hoạt</b>
+					</h4>
+					</template>
+
+
+					<div class="con-content">
+					<p>
+						Bạn phải kích hoạt tài khoản để có thể đăng tin bán <br/>
+						Vui lòng cập nhật đầy đủ thông tin tài khoản bằng cách <b><a href="/user/settings">bấm vào đây</a></b>
+					</p>
+					</div>
+
+					<template #footer>
+					<div class="con-footer">
+						<vs-button @click="$router.push('/user/settings')" transparent>
+						<b>OK</b>
+						</vs-button>
+					</div>
+					</template>
+				</vs-dialog>
 			</div>
 			<!-- <div class="list-product">
 				<div class="item-product" v-for="item in dataProduct" :key="item.product_id"
@@ -126,6 +150,7 @@ export default {
 				status: "",
 			},
 			
+			alertActive: false,
 			previewUrl: [],
 			listFile: [],
 			fileInput: null,
@@ -209,7 +234,8 @@ export default {
 		async postData() {
 			try {
 				if(this.$auth.user.active_status == false){
-					this.$toast.error("Bạn phải cập nhật đầy đủ thông tin tài khoản trước",{duration: 5000});
+					// this.$toast.error("Bạn phải cập nhật đầy đủ thông tin tài khoản trước",{duration: 5000});
+					this.alertActive = true;
 					return;
 				}
 				this.isLoading = true;

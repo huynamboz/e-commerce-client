@@ -20,9 +20,9 @@
                         <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
                     </div>
                 </div>
-				<div class="mb-4">
+				<!-- <div class="mb-4">
 				<div v-show="$validate.validatePassword(password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validatePassword(password) }}</div>
-                </div>
+                </div> -->
 				<div>
 					<span class="forgot cursor-pointer" @click="$router.push('/forgot')">Forgot password?</span>
 				</div>
