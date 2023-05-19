@@ -47,6 +47,17 @@ export default{
 			fallbackImageUrl: 'https://via.placeholder.com/300x300'
 		}
 	},
+	computed:{
+		pageParams(){
+			return this.$route.query
+		}
+	},
+	watch:{
+		pageParams:function(){
+			this.fetchData();
+		},
+		immediate: true
+	},
 	mounted(){
 		this.fetchData();
 	},
@@ -73,11 +84,11 @@ export default{
 			return formatted;
 		},
 		handleError(event) {
-      event.target.src = this.fallbackImageUrl
-    	},
+			event.target.src = this.fallbackImageUrl
+		},
 		async fetchData(){
 			console.log('fetch data', this.$route);
-			await this.$api.products.getAllProduct()
+			await this.$api.products.searchProduct(this.$route.query.keyword, this.page)
 			.then(resp => {
 				this.listProduct = resp["data"]["data"];
 				this.meta = resp["data"]["meta"];

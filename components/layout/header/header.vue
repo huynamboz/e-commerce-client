@@ -8,10 +8,25 @@
         <div class="list-action flex items-center">
 			<div class="cart action-item relative" @click="goToCart()" title="Sản phẩm yêu thích">
 					<i class="fi fi-rr-heart" @click="openFavorite"></i>
-					<div class="bg-white absolute top-full w-[200px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
-						<div class="relative pb-5">
-							<div v-for="i in 10">
-							<p>i</p>
+					<div class="bg-white absolute top-[calc(100%_+_10px)] max-md:-left-10 w-[320px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
+						<div class="relative pb-9 pt-3">
+							<div v-if="listFavoriteProduct.length > 0" class="flex flex-col">
+								<div v-for="item in listFavoriteProduct" class="px-2 hover:bg-slate-100">
+									<div class="flex items-center gap-2 py-1">
+										<img :src="item.thumbnails[0]" alt="" class="w-7 h-7 object-cover rounded-[4px]" @click="toProduct(item.id)">
+										<div class=" flex flex-col w-[240px]" @click="toProduct(item.id)">
+											<p class=" whitespace-nowrap overflow-ellipsis overflow-hidden text-xs">{{ item.name }}</p>
+											<p class=" text-rose-500">{{ $product.formatPrice(item.price) }}</p>
+										</div>
+										<div class="text-sm text-rose-400">
+											<i class="fi fi-rr-trash" @click="unFavorite(item.id)"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div v-else class="flex flex-col justify-center items-center">
+								<img src="~/assets/icon/empty.png" alt="">
+								<p>Danh sách yêu thích trống</p>
 							</div>
 							<div class="absolute bottom-0 border-t-[1px] w-full flex justify-center text-xs py-2">Xem tất cả</div>
 						</div>
@@ -96,27 +111,50 @@ export default {
 		isLoggedIn() {
 			return this.$auth.user;
 		},
+		listFavoriteStore(){
+			return this.$store.getters['getListFavoriteProduct'];
+		}
 	},
 	watch: {
 		isLoggedIn: function (val) {
 			console.log(this.$auth, "sdfDFS");
 			this.$forceUpdate();
+		},
+		listFavoriteStore: function (val) {
+			console.log("favourite change",this.listFavoriteStore)
+			this.listFavoriteProduct = val;
 		}
 	},
 	mounted(){
-		this.fetFavoriteProduct();
+		this.fetchFavoriteProduct();
 	},
     methods: {
+		toProduct(id){
+			this.$router.push(`/product/${id}`);
+			this.isOpenFavorite = false;
+		},
 		openFavorite(){
 			this.isOpenFavorite = !this.isOpenFavorite;
 			this.isShowPopupProfile = false;
 		},
-		async fetFavoriteProduct(){
-			// console.log(this.$auth.user.id);
-			// this.$api.users.getFavoriteProduct()
-			// .then((response) => {
-			// 	this.listFavoriteProduct = response.data;
-			// })
+		async fetchFavoriteProduct(){
+			console.log(this.$auth.user.id);
+			this.$api.users.getFavoriteProduct()
+			.then((response) => {
+				console.log(response.data.data, "favorite");
+				this.listFavoriteProduct = response.data.data;
+				this.$store.dispatch('addFavoriteStore', response.data.data);
+				console.log(this.$store.getters['getListFavoriteProduct'],"store");
+			})
+		},
+		async unFavorite(val){
+			await this.$axios.delete(`/users/me/favorite-products/${val}`).then(res =>{
+				this.$toast.success("Đã bỏ yêu thích");
+				this.fetchFavoriteProduct();
+			}).catch(err =>{
+				console.log(err.response)
+				this.$toast.error("Có lỗi xảy ra")
+			})
 		},
 		logout() {
 			this.$auth.logout();
@@ -146,7 +184,8 @@ export default {
 }
 .container-header{
 	display: flex;
-    background-color: transparent;
+    background-color: #ffffff;
+	border-bottom: 1px solid #e0e0e0;
 	justify-content: center;
 	position: relative;
 	z-index: 999;

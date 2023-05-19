@@ -114,7 +114,7 @@ export default {
 				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",
 				name:this.$auth.user.name,
 				email:this.$auth.user.email,
-				phone_number:this.$auth.user.phone_number ? this.$auth.user.phone_number : '',
+				phone_number:this.$auth.user.phone_number ? this.$auth.user.phone_number : null,
 				address:this.$auth.user.address ? this.$auth.user.address : '',
 				gender: this.$auth.user.gender,
 				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",

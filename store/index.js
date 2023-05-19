@@ -1,28 +1,21 @@
-import Vuex from 'vuex';
-
-const createStore = () => {
-    return new Vuex.Store({
-        state: {
-
-        },
-        mutations: {
-
-        },
-        actions: {
-
-        },
-        getters: {
-            isAuthenticated(state) {
-                return state.auth.loggedIn
-            },
-
-            loggedInUser(state) {
-                return state.auth.user
-            }
-        },
-        modules: {
-        }
-    });
-};
-
-export default createStore
+export const state = () => ({
+	listFavoriteProduct: [],
+  })
+  
+  export const getters = {
+	getListFavoriteProduct(state) {
+		return state.listFavoriteProduct
+	},
+  }
+  
+  export const mutations = {
+	updateListFavorite(state, data) {
+	  state.listFavoriteProduct = data
+	},
+  }
+  
+  export const actions = {
+	addFavoriteStore(vuexContext,data) {
+		  vuexContext.commit('updateListFavorite', data)
+	},
+  }

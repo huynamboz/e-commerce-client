@@ -306,7 +306,20 @@ export default {
 			}
 		},
 	},
+	computed: {
+		listFavoriteStore(){
+			return this.$store.getters['getListFavoriteProduct'];
+		}
+	},
+	watch: {
+		listFavoriteStore: function (val) {
+			console.log("favourite change",this.listFavoriteStore)
+			this.listFavorite = val;
+			this.checkIsInListFavorite();
+		}
+	},
 	async mounted() {
+		console.log("countet",this.counter)
 		await this.fetchData();
 		console.log(this.$auth.$storage.getUniversal('user'))
 		this.getCities();
@@ -343,12 +356,15 @@ export default {
 			})
 			await this.fetchFavorite();
 		},
+		checkIsInListFavorite(){
+			this.isInFavorite = this.listFavorite.filter(item => item.id == this.products.id).length > 0 ? true : false;
+		},
 		async fetchFavorite(){
 			if(this.$auth.loggedIn){
 				await this.$axios.get(`/users/me/favorite-products?page=1`).then(res =>{
 				this.listFavorite = res.data.data;
-				this.isInFavorite = this.listFavorite.filter(item => item.id == this.products.id).length > 0 ? true : false;
-				console.log(this.listFavorite.filter(item => item.id == this.products.id),"ok")
+				this.checkIsInListFavorite();
+				this.$store.dispatch('addFavoriteStore', res.data.data);
 				}).catch(err =>{
 					console.log(err.response)
 				})
