@@ -1,21 +1,19 @@
 <template>
 	<div class="container-change flex flex-col gap-5 items-start p-5">
 		<div class="flex flex-col">
-			<p>Mật khẩu cũ</p>
-			<vs-input v-model="oldPassword" placeholder="vuesax@gmail.com">
+			<p>Mật khẩu hiện tại</p>
+			<vs-input v-model="oldPassword" placeholder="Mật khẩu hiện tại">
 				<template v-if="validOldPassword" #message-success>
 					Email Valid
 				</template>
-				<template v-if="!validOldPassword && oldPassword !== ''" #message-danger>
-					Mật khẩu phải chứa ít nhất 8 ký tự, một chữ hoa, một chữ thường, một số và một ký tự đặc biệt
-				</template>
+				
 			</vs-input>
 			</div>
 
 		<div class="flex gap-5 max-md:flex-col">
 			<div class="flex flex-col">
 			<p>Mật khẩu mới</p>
-			<vs-input v-model="newPassword" placeholder="vuesax@gmail.com">
+			<vs-input v-model="newPassword" placeholder="Mật khẩu mới">
 				<template v-if="validNewPassword" #message-success>
 					Email Valid
 				</template>
@@ -26,7 +24,7 @@
 			</div>
 			<div class="flex flex-col">
 			<p>Nhập lại mật khẩu mới</p>
-			<vs-input v-model="confirmNewPassword" placeholder="vuesax@gmail.com">
+			<vs-input v-model="confirmNewPassword" placeholder="Xác nhận mật khẩu mới">
 				<template v-if="validConfirmNewPassword" #message-success>
 					Email Valid
 				</template>

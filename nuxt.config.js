@@ -6,8 +6,8 @@ export default {
     },
 	server: {
 		port: 3000,
-		host: '0.0.0.0'
-		// host: 'localhost'
+		// host: '0.0.0.0'
+		host: 'localhost'
 		// https: {
 		//   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
 		//   cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
@@ -83,6 +83,7 @@ export default {
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
 		{ src: "~plugins/api/index" },
+		{ src: "~plugins/product/index" },
 		{ src: "~plugins/toast", ssr: false },
 		{ src: "~plugins/validation" },
 		{ src: "~plugins/handleErrorApi" },
