@@ -30,9 +30,9 @@
 					<input type="text" placeholder="Nguyễn Văn A" class="inp" id="name" v-model="user.name">
 					<div>
 						<label for="male">Nam</label>
-						<input type="radio" name="gender" id="male" :value="user.gender" :checked="user.gender" @change="chooseMale()">
+						<input type="radio" name="gender" id="male" :value="true" v-model="user.gender" @change="chooseMale()">
 						<label for="female">Nữ</label>
-						<input type="radio" name="gender" id="female" :value="!user.gender" :checked="!user.gender" @change="chooseFemale()">
+						<input type="radio" name="gender" id="female" :value="false" v-model="user.gender" @change="chooseFemale()">
 					</div>
 				</div>
 				<div class="info-inp">
