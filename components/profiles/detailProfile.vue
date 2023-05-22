@@ -114,7 +114,7 @@ export default {
 				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",
 				name:this.$auth.user.name,
 				email:this.$auth.user.email,
-				phone_number:this.$auth.user.phone_number ? this.$auth.user.phone_number : '',
+				phone_number:this.$auth.user.phone_number ? this.$auth.user.phone_number : null,
 				address:this.$auth.user.address ? this.$auth.user.address : '',
 				gender: this.$auth.user.gender,
 				avatar: this.$auth.user.avatar ? this.$auth.user.avatar : "null",
@@ -179,7 +179,7 @@ methods: {
 		},
 		async PushDataUser(){
 			this.isLoading = true;
-			console.log(this.$auth.user);
+			let isUploadSuccess = true;
 			if(this.listFile.length != 0){
 				let listThumbnail = [];
 				let formData = new FormData();
@@ -195,13 +195,17 @@ methods: {
 					console.log(err);
 					this.$toast.error("Tải ảnh thất bại");
 					this.isLoading = false;
+					isUploadSuccess = false;
 					return;
 				})
-				
+			}
+			if(!isUploadSuccess){
+				this.isLoading = false;
+				return;
 			}
 			this.user.birthday = new Date(this.user.birthday).toISOString();
 			console.log(this.user);
-			this.$axios.put('/users/me',this.user)
+			await this.$axios.put('/users/me',this.user)
 			.then(res => {
 				console.log("res:",res);
 				this.$toast.success("Thay đổi thông tin thành công");
@@ -209,6 +213,7 @@ methods: {
 				this.user = res.data.data;
 				this.user.password = '';
 				console.log("user:",this.user);
+				this.$auth.fetchUser();
 			})
 			.catch(err => {
 				console.log(err);
@@ -231,8 +236,7 @@ methods: {
 			})
 		},
 		async getDistrict(){
-			console.log("ok",this.currentCity)
-			await this.$axios.get(`https://api.goship.io/api/ext_v1/cities/${this.currentCity}/districts`)
+			await this.$axios.get(`/location/cities/${this.currentCity}/districts`)
 			.then(res => {
 				this.districts = res.data.data;
 				console.log(this.districts,"district");
