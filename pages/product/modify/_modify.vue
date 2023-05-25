@@ -66,18 +66,25 @@
 							<input type="text" placeholder="Bàn ghế, ghế gỗ" v-model="ProductData.keyword">
 						</div> -->
 						
-						<button @click="postData()" class="btn-submit ml-20 h-[fit-content]">Đăng</button>
+						<button @click="handleUploadProduct()" class="btn-submit ml-20 h-[fit-content]">Đăng</button>
 				</div>
 				<div class="main-left">
-					<label class="choose-file" for="inp-file"><div class="choose-icon">
-						<p>Chọn ảnh</p>
-						<i class="fi fi-rr-images"></i>
-					</div></label>
-					<input type="file" ref="fileInput" accept="image/*" multiple name="" id="inp-file" @change="previewImage($event)">
+					<div class=" relative h-[400px] w-full p-2 border-[1px] border-gray-400 rounded-lg">
+						<div class=" absolute top-0 left-0 h-full w-full">
+							<label class="choose-file" for="inp-file"><div class="choose-icon">
+							<div class=" shadow-lg h-10 w-10 border-[1px] border-gray-400 bg-white flex items-center justify-center pt-[3px] rounded-md text-black text-2xl">
+								<i class="fi fi-rr-pencil"></i>
+							</div>
+							</div></label>
+							<input type="file" ref="fileInput" accept="image/*" multiple name="" id="inp-file" @change="previewImage($event)">
+						</div>
+						<img :src="previewUrl[0]" alt="" class="w-full h-full rounded-lg object-cover" v-if="previewUrl[0]">
+						<img src="~/assets/img/upload-preview.jpg" alt="" class="w-full h-full object-cover" v-else>
+					</div>
 					<div class="list-img-preview">
-						<div  v-for="item in previewUrl" class="relative">
+						<div  v-for="item in previewUrl" class="relative" v-if="item != previewUrl[0]">
 							<i class="fi fi-rr-cross-circle text-white absolute top-2 right-2 cursor-pointer" @click="removeIMG(item)"></i>
-							<img :src="item" alt="" class="item-img" v-if="item">
+							<img :src="item" alt="" class="item-img object-cover" v-if="item">
 						</div>
 					</div>
 				</div>
@@ -142,7 +149,7 @@ export default {
 				name: "",
 				price: "",
 				description: "",
-				thumbnailsList: "",
+				thumbnailsList: [],
 				thumbnail: "",
 				category: "",
 				keyword: "",
@@ -168,8 +175,16 @@ export default {
 		}
 	},
 	methods: {
-		removeIMG(item){
-			this.previewUrl = this.previewUrl.filter(i=>i!=item)
+		async removeIMG(item){
+			console.log(this.listFile.length)
+			let index = this.previewUrl.findIndex(i=>i==item)
+			this.previewUrl = this.previewUrl.filter(i=>i!=item);
+			console.log("index",index)
+			if (index > -1) {
+				this.listFile.splice(index, 1);
+				this.ProductData.thumbnailsList.splice(index, 1);
+			}
+			console.log(this.listFile.length)
 		},
 		async fetchProduct(){
 			await this.$api.products.getProductById(this.$route.params.modify)
@@ -178,9 +193,10 @@ export default {
 				this.ProductData = res.data
 				// this.ProductData.description = JSON.parse(this.ProductData.description)
 				// this.ProductData.thumbnail = this.ProductData.thumbnail_url
-				this.ProductData.thumbnailsList = this.ProductData.thumbnailsList.map(item=>{
-					return item.image
+				this.ProductData.thumbnailsList = this.ProductData.thumbnails.map(item=>{
+					return item
 				})
+				this.ProductData.description = JSON.parse(this.ProductData.description)
 				this.previewUrl = this.ProductData.thumbnailsList
 				console.log(this.previewUrl)
 			})
@@ -225,10 +241,42 @@ export default {
 					reader.onload = () => {
 						this.previewUrl.push(reader.result);
 					}
+					// console.log(this.previewUrl, item);
 				})
-				console.log(this.previewUrl);
 			} catch (error) {
 				console.log(error);
+			}
+		},
+		async handleUploadProduct(){
+			if(this.$route.params.modify){
+					await this.updateData()
+				} else {
+					await this.postData()
+				}
+		},
+		async updateData(){
+			try{
+				await this.$api.products.updateProduct({
+				name: this.ProductData.name,
+				price: this.ProductData.price,
+				description: JSON.stringify(this.ProductData.description),
+				thumbnailUrls: this.ProductData.thumbnailsList,
+				category_id: 1,
+				status_id: 1,
+				discount: parseInt(this.ProductData.discount),
+				},this.$route.params.modify).then(res => {
+					console.log(res);
+					this.dataProduct = res.data;
+					this.$router.push(`/user/${this.$auth.user.id}`);
+					this.$toast.success("Cập nhật thành công", { duration: 3000 });
+				}).catch(err => {
+					console.log(err);
+					this.$toast.error(err.response.data.message,{ duration: 3000 });
+					this.isLoading = false;
+				})
+			} catch (error) {
+				console.log(error);
+				this.$toast.error("Có lỗi xảy ra, vui lòng thử lại sau");
 			}
 		},
 		async postData() {
@@ -239,6 +287,7 @@ export default {
 					return;
 				}
 				this.isLoading = true;
+				let isUploadSuccess = true;
 				console.log(this.$auth.user);
 				if(this.listFile.length == 0){
 					this.$toast.error("Vui lòng chọn ảnh");
@@ -250,16 +299,21 @@ export default {
 				this.listFile.forEach(item => {
 					formData.append('files', item);
 				})
-				this.$toast.success("Đang tạo sản phẩm");
 				await this.$api.products.uploadImage(formData).then(res => {
 					console.log(res);
 					listThumbnail = res.data;
 					this.$toast.success("Tải ảnh thành công");
 				}).catch(err => {
 					console.log(err);
-					this.$toast.error("Tải ảnh thất bại");
+					this.isLoading = false;
+					isUploadSuccess = false;
 					return;
 				})
+				if(!isUploadSuccess){
+					this.$toast.error("Tải ảnh thất bại Vui lòng chọn định dạng ảnh hợp lệ");
+					this.isLoading = false;
+					return;
+				}
 				await this.$api.products.addNewProduct ({
 					name: this.ProductData.name,
 					price: this.ProductData.price,
@@ -389,18 +443,20 @@ input[type="text"], input[type="password"], textarea, select {
 }
 .choose-file {
 	padding: 10px;
-	height: 200px;
+	height: 100%;
 	width: 100%;
 	border-radius: 10px;
-	background-color: #ffffff;
+	background-color: transparent;
 	cursor: pointer;
 	color: #ffffff;
-	blur: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	position: relative;
-	background-image: url('~/assets/img/choose.png');
+	// background-image: url('~/assets/img/upload-preview.jpg');
+	// background-size: cover;
+	// background-repeat: no-repeat;
+	// background-position: center;
 }
 .choose-icon{
 	position: absolute;

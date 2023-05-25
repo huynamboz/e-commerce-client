@@ -31,8 +31,8 @@ export default{
 .listProduct{
 	display: flex;
 	flex-wrap: wrap;
-	gap: 20px;
-	justify-content: space-around;
+	gap: 10px;
+	justify-content: center;
 	@media screen and (max-width:768px) {
 		gap: 5px;
 		padding: 0 12px;

@@ -1,19 +1,29 @@
 <template>
 	<div class="container-header">
-    <div class="header-container flex items-center">
+    <div class="header-container max-w-[1240px] flex items-center max-md:w-full max-md:max-w-full">
         <div class="site-logo" @click="$router.push('/')">
             <img src="~/assets/img/logo-colored.png" alt="" class="logo-site">
         </div>
         <search />
-        <div class="list-action flex items-center">
-			<div class="cart action-item relative" @click="goToCart()" title="Sản phẩm yêu thích">
-					<i class="fi fi-rr-heart" @click="openFavorite"></i>
-					<div class="bg-white absolute top-[calc(100%_+_10px)] max-md:-left-10 w-[320px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
-						<div class="relative pb-9 pt-3">
+        <div class="list-action flex items-center max-md:hidden">
+			<div class="cart action-item relative flex items-center">
+					<div class="flex gap-3 items-center" @click="openFavorite" title="Sản phẩm yêu thích">
+						<div class="relative">
+						<div class="flex items-center justify-center h-7 w-7 rounded-full text-sm bg-white text-rose-500 absolute -left-4 -top-4" v-if="listFavoriteProduct.length > 0">
+							{{ listFavoriteProduct.length < 9 ? listFavoriteProduct.length : '9+' }}
+						</div>
+						<i class="text-white fi fi-rr-heart h-[32px] block"></i>
+					</div>
+					<div class="text-white text-base rounded-xl font-normal">Yêu thích</div>
+					</div>
+					<div class="bg-white absolute top-[calc(100%_+_10px)] -left-10 max-md:-left-10 w-[360px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
+						<div class="overlay fixed top-0 left-0 h-[100vh] w-[100vw] z-10" @click="openFavorite"></div>
+						<div class="p-3 text-sm font-medium border-b-[1px] border-slate-300">Đã yêu thích</div>
+						<div class="relative pb-9 pt-3 z-20">
 							<div v-if="listFavoriteProduct.length > 0" class="flex flex-col">
 								<div v-for="item in listFavoriteProduct" class="px-2 hover:bg-slate-100">
 									<div class="flex items-center gap-2 py-1">
-										<img :src="item.thumbnails[0]" alt="" class="w-7 h-7 object-cover rounded-[4px]" @click="toProduct(item.id)">
+										<img :src="item.thumbnails[0]" alt="" class="w-14 h-14 object-cover rounded-[4px]" @click="toProduct(item.id)">
 										<div class=" flex flex-col w-[240px]" @click="toProduct(item.id)">
 											<p class=" whitespace-nowrap overflow-ellipsis overflow-hidden text-xs">{{ item.name }}</p>
 											<p class=" text-rose-500">{{ $product.formatPrice(item.price) }}</p>
@@ -43,13 +53,14 @@
 				<div class="profile action-item" @click="handleOpenPopup()">
 					<!-- <img src="~/assets/img/profile.png" alt="" class="icon-action"> -->
 					<i v-if="!$auth.loggedIn" class="fi fi-rr-user" title="Thông tin shop"></i>
-				<div v-else class="relative pl-8">
-					<div class="absolute left-0 -top-2">
-						<img v-if="!$auth.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-[50px] h-[50px] rounded-[50%]">
+				<div v-else class="relative flex items-center gap-[10px]">
+					<div class=" border-[1px] border-gray-400 rounded-full">
+						<img v-if="!$auth.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-[30px] h-[30px] rounded-[50%]">
 						<img v-else :src="$auth.user.avatar"
-						alt="" class="w-[50px] h-[50px] rounded-[50%]">
+						alt="" class="w-[30px] h-[30px] rounded-[50%]">
 					</div>
-					<div class="name-user py-2 pl-5 pr-3 border-[1px] text-sm rounded-xl">{{ $auth.user.name }}</div>
+					<div class="text-white text-base rounded-xl font-normal">{{ $auth.user.name }}</div>
+					<i class="fi fi-rr-caret-down h-[25px] mb-[4px]"></i>
 				</div>
                 <!-- <p>Cá nhân</p> -->
                 <div class="popup-detail-user" v-if="isShowPopupProfile">
@@ -184,7 +195,7 @@ export default {
 }
 .container-header{
 	display: flex;
-    background-color: #ffffff;
+    background-color: #ee2624;
 	border-bottom: 1px solid #e0e0e0;
 	justify-content: center;
 	position: relative;
@@ -196,7 +207,6 @@ export default {
 .header-container {
     width: 100%;
     top: 0;
-	max-width: 1240px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -204,6 +214,7 @@ export default {
 	@media screen and (max-width:768px){
 		flex-direction: column;
 		gap: 20px;
+		padding: 15px 20px;
 	}
 }
 
@@ -212,7 +223,6 @@ export default {
         font-size: 14px;
     }
 
-    display: flex;
     gap: 30px;
 
 }
@@ -224,8 +234,6 @@ export default {
 }
 .action-item {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
     align-items: center;
     font-size: 25px;
 

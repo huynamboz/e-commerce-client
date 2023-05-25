@@ -51,7 +51,7 @@ export default{
 	flex-direction: column;
 	background-color: #ffffff;
 	padding-bottom: 10px;
-	border-radius: 10px;
+	border-radius: 2px;
 	overflow: hidden;
 	position: relative;
 	box-shadow: -1px 5px 20px 1px rgb(130 130 130 / 10%);
