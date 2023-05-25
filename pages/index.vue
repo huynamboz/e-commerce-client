@@ -13,7 +13,7 @@
 						<h2>Trải nghiệm mua sắm không giới hạn cùng PBL</h2>
 						<p>Have good day with my website :)</p>
 					</div> -->
-					<p class="text-base font-medium">Khám phá sản phẩm</p>
+					<p class="text-base font-medium max-md:pl-5">Khám phá sản phẩm</p>
 				</div>
 				<list-product :listProduct="listProduct" />
 			</section>

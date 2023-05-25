@@ -177,8 +177,7 @@ export default {
 }
 .container-header{
 	display: flex;
-    background-color: #ee2624;
-	border-bottom: 1px solid #e0e0e0;
+    background-color: #06a8f5;
 	justify-content: center;
 	position: sticky;
 	top: 0;
