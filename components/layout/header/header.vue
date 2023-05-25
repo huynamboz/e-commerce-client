@@ -84,7 +84,7 @@
 </template>
 <script>
 import search from '~/components/layout/header/search.vue'
-import listFavorite from '~/components/products/listFavorite.vue'
+import listFavorite from '~/components/products/ListFavorite.vue'
 export default {
     name: 'headerTab',
     components: {
