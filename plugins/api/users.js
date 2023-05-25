@@ -5,4 +5,7 @@ export default (api) => ({
 	getFavoriteProduct: async(page)=>{
 		return await api.get(`/users/me/favorite-products?page=${page?page:1}`);
 	},
+	getUserById: async(id)=>{
+		return await api.get(`/users/${id}`);
+	}
 })

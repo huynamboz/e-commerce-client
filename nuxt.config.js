@@ -7,7 +7,7 @@ export default {
 	server: {
 		port: 3000,
 		host: '0.0.0.0'
-// 		host: 'localhost'
+		// host: 'localhost'
 		// https: {
 		//   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
 		//   cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
@@ -26,7 +26,7 @@ export default {
 			{ name: 'format-detection', content: 'telephone=no' }
 		],
 		link: [
-			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+			{ rel: 'icon', type: 'image/x-icon', href: '/icons/fav.png' }
 		]
 	},
 	env: {

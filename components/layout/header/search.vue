@@ -1,5 +1,5 @@
 <template>
-	<div class="section">
+	<div class="section max-md:w-full">
 	<div class="search-container max-md:w-full w-[500px] flex bg-slate-100 py-2 px-3 items-center rounded-2xl">
 		<input type="text" v-model="keyword" placeholder="search" class="search-input bg-transparent w-full">
 		<div class="icon-search" @click="$router.push(`/search?keyword=${keyword}`)">

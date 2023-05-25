@@ -1,9 +1,12 @@
 <template>
-	<div class="root flex justify-center">
+	<div class="root flex justify-center pt-[60px]">
 		<!-- <header-tab /> -->
 		<div class="main-content container mx-auto">
 
-			<top-category />
+			<!-- <top-category /> -->
+			<div class="w-full bg-white px-5 pt-3">
+				<!-- <slide-banner /> -->
+			</div>
 			<section class="product-container">
 				<div class="product-header">
 					<div class="product-header-text">
@@ -24,6 +27,7 @@
 import headerTab from '../components/layout/header/header.vue'
 import topCategory from '~/components/layout/mainHome/topCategory.vue';
 import listProduct from '~/components/layout/mainHome/listProduct.vue';
+import SlideBanner from '~/components/layout/mainHome/SlideBanner.vue';
 export default {
 	layout: 'default',
 	auth: false,
@@ -31,7 +35,8 @@ export default {
 	components: {
 		headerTab,
 		topCategory,
-		listProduct
+		listProduct,
+		SlideBanner
 	},
 	data() {
 		return {

@@ -70,6 +70,12 @@
 									<p class="cursor-pointer" @click="openPopupShip()">Xem chi tiết cước phí</p>
 								</div>
 							</div>
+							<div class="text-gray-500">
+								Được gửi từ
+							</div>
+							<div>
+								: {{ products?.user?.location }}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -86,7 +92,7 @@
 						</div>
 						<div class="supplier-header-right">
 							<div class="supplier-view-btn">
-								<button class="view-profile-btn" @click="$router.push(`/user`)"><i class="fi fi-rr-shop"></i> Xem trang</button>
+								<button class="view-profile-btn" @click="$router.push(`/user/${products?.user.id}`)"><i class="fi fi-rr-shop"></i> Xem trang</button>
 							</div>
 						</div>
 					</div>
@@ -94,7 +100,7 @@
 						<div class="contact-call hover:shadow-md transition hover:duration-500 cursor-pointer w-full bg-blue-400 py-2 px-3 rounded-lg text-white flex justify-center" @click="makeCall()">
 							<span class="contact-left-text">{{ products?.user?.phone_number }}</span>
 							<span class="contact-right-text">Gọi cho người bán</span></div>
-						<div class="contact-message flex items-center gap-2 justify-center mt-5"><i class="fi fi-rr-comment-alt"></i>Chat với người bán</div>
+						<div class="hidden contact-message items-center gap-2 justify-center mt-5"><i class="fi fi-rr-comment-alt"></i>Chat với người bán</div>
 					</div>
 				</div>
 				<div class="mt-8 flex gap-8">
@@ -147,7 +153,7 @@
 				</div>
 				</div>
 			</section>
-			<section class="compare-container">
+			<!-- <section class="compare-container">
 				<div class="compare-container-main">
 					<div class="cmp-header">
 						<h1 class="compare-title">Xem giá ở những nơi khác</h1>
@@ -155,32 +161,37 @@
 						<mini-loading v-if="isCrawling"/>
 					</div>
 					<div class="compare-list">
-						<div class="compare-item" v-for="(item,index) in listCompare" :key="index">
-							<div class="compare-item-thumbnail">
-								<img :src="item?.img_url" alt="" class="compare-item-thumbnail-img">
-							</div>
-							<div class="compare-item-content">
-								<div class="cmp-item-name">
-									{{ item?.name }}
-								</div>
-								<div class="cmp-item-cost">
-									{{ item?.cost }}
-								</div>
-							</div>
-						</div>
+						
 					</div>
 				</div>
-			</section>
+			</section> -->
 			<section class="product-description">
-					<div class="product-description-content">
-						<div class="product-description-header">
-							<h2 class="product-description-header-text">Mô tả sản phẩm</h2>
+					<div class="product-description-content w-full">
+						<div class="product-description-header flex gap-5 cursor-pointer">
+							<h2 class="product-description-header-text max-md:text-[18px]" :class="{'border-b-[2px] w-fit border-red-500': detailType== 'DESCRIPTION'}" @click="detailType='DESCRIPTION'">Mô tả sản phẩm</h2>
+							<div class="h-[30px] w-[2px] bg-slate-300"></div>
+							<h2 class="product-description-header-text max-md:text-[18px]" :class="{'border-b-[2px] w-fit border-red-500': detailType== 'COMPARE'}" @click="detailType='COMPARE'">So sánh giá <i class=" translate-y-1 fi fi-rr-tags"></i></h2>
 						</div>
 						<div class="product-description-content">
-							<pre class="product-description-content-text">
+							<pre class="product-description-content-text" v-if="detailType=='DESCRIPTION'">
 								{{ products?.description }}
 								<!-- <textarea name="" :value="product?.description" id="" readonly cols="30" rows="10"></textarea> -->
 							</pre>
+							<div v-else class="">
+								<div class="compare-item" v-for="(item,index) in listCompare" :key="index">
+									<div class="compare-item-thumbnail">
+										<img :src="handleImgCrawl(item?.img_url)" alt="" class="compare-item-thumbnail-img object-cover">
+									</div>
+									<div class="compare-item-content">
+										<div class="cmp-item-name">
+											{{ item?.name }}
+										</div>
+										<div class="cmp-item-cost">
+											{{ item?.cost }}
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 
@@ -236,7 +247,6 @@
 	</section>
 </template>
 <script>
-import auth from '~/api/auth';
 import miniLoading from '~/components/loading/mini-loading.vue'
 export default {
 	components: {
@@ -266,6 +276,7 @@ export default {
 	data() {
 		return {
 			// data
+			detailType: 'DESCRIPTION',
 			cities: [],
 			districts: [],
 			currentCity:'',
@@ -329,6 +340,12 @@ export default {
 		// await this.fetchCompare();
 	},
 	methods: {
+		handleImgCrawl(val){
+			if(val.startsWith("data:")){
+				return "https://logovina.com/wp-content/uploads/2020/07/logo-shopee.jpg"
+			}
+			return val;
+		},
 		async report(){
 			if(!this.$auth.loggedIn){
 				this.$toast.error("Bạn cần đăng nhập để báo cáo")
@@ -497,26 +514,17 @@ export default {
 			console.log(ele.target)
 		},
 		async fetchData() {
-			// await this.$axios.get(process.env.BASE_URL_API +`${this.$route.params.id}`)
 			await this.$api.products.getProductById(this.$route.params.id)
 			.then((response) => {
 					this.products = response['data']
-					// this.products.thumbnails.forEach((ele,index) => {
-					// 	this.products.thumbnails[index] = process.env.BASE_URL_IMG + ele
-					// })
 					console.log("ré",this.products.thumbnails[0])
 					this.currentThumbnail = this.products.thumbnails[0]
 					this.products.description = JSON.parse(this.products.description)
+					console.log(this.products.description)
 				})
 				.catch((error) => {
 					console.log(error)
 				})
-			console.log(this.products)
-			// await this.$axios.get(`https://640b058281d8a32198d72c54.mockapi.io/images/${this.products.id}`)
-			// 	.then((response) => {
-			// 		this.thumbnail = response.data
-			// 		this.currentThumbnail = this.thumbnail.thumbnails[0]
-			// 	})
 		}
 	}
 }
@@ -659,6 +667,11 @@ export default {
 .product-description-content-text{
 	word-wrap: break-word;
 	white-space: pre-line;
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
 }
 .img-item-recommend-right{
 	width: 100%;
@@ -666,10 +679,7 @@ export default {
 	object-fit: cover;
 }
 
-.product-description-header-text{
-	font-size: 20px;
-	font-weight: 500;
-}
+
 .img-item-recommend-right{
 	width: 200px;
 	height: 200px;

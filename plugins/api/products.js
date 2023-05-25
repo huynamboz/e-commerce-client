@@ -6,7 +6,13 @@ export default (api) => ({
 		return await api.get(`/products?page=${page?page:1}`);
 	},
 	addNewProduct: async(product)=>{
-		return await api.post("/products/my-products", product);
+		return await api.post("/users/me/products", product);
+	},
+	updateProduct: async(product,id)=>{
+		return await api.put(`/users/me/products/${id}`, product);
+	},
+	getListProductOfUser: async(userID)=>{
+		return await api.get(`/users/${userID}/products`);
 	},
 	uploadImage: async(file)=>{
 		return await api.post("/upload", file);

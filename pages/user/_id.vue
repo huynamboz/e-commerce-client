@@ -3,25 +3,25 @@
 		<div class="mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col">
 			<header class="flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center">
 				<div class="container flex max-md:justify-center">
-					<img src="https://cdn.dribbble.com/users/1134997/screenshots/6001117/det0cxnuqaaatef.jpg?compress=1&resize=800x600&vertical=top" alt="" 
-				class="object-cover w-[200px] h-[200px] rounded-[10px]">
+					<img :src="userData?.avatar" alt="" 
+				class="object-cover w-[257px] h-[200px] rounded-[10px]">
 				</div>
-				<div class="flex flex-col w-[fit-content] min-w-[fit-content] gap-[20px]">
-					<div class="info">
-						<h1 class="font-[400] text-[20px] leading-4">Shop đồ mới</h1>
-						<span class="text-[12px] text-gray-100">Đà nẵng, Quảng Nam</span>
+				<div class="flex flex-col w-[fit-content] min-w-[fit-content] gap-[10px]">
+					<div class="info flex flex-col gap-2">
+						<h1 class="font-[500] text-[20px] leading-4">{{userData?.name}}</h1>
+						<span class="text-[16px] text-gray-600">{{userData?.location}}</span>
 					</div>
 					<div class="flex gap-[50px]">
 						<div class="flex gap-[10px] items-start flex-col">
 							<div class="font-[400] text-[15px] flex gap-[10px]">
 								<i class="fi fi-rr-box-open"></i> 
-								Số sản phẩm: <span class="text-[#3d8bfd]">34</span>
+								Số sản phẩm: <span class="text-[#3d8bfd]">{{ listProduct?.length }}</span>
 							</div>
 							<div class="font-[400] text-[15px] flex gap-[10px]">
 								<i class="fi fi-rr-calendar-day"></i>
-								Ngày tham gia: <span class="text-[#3d8bfd]">3/04/2023</span>
+								Ngày tham gia: <span class="text-[#3d8bfd]">{{ userData?.created_at?.split("T")[0] }}</span>
 							</div>
-							<div class="transition-colors duration-300  hover:bg-[#6294d9] p-2 px-12 rounded-lg bg-[#8cb7f5] text-[#ffffff] text-[14px]
+							<div @click="$router.push('/user/settings')" v-if="pageParams == $auth.user.id" class="transition-colors duration-300  hover:bg-[#6294d9] p-2 px-12 rounded-lg bg-[#8cb7f5] text-[#ffffff] text-[14px]
 							cursor-pointer shadow-lg shadow-indigo-500/40
 							">Chỉnh sửa trang cá nhân</div>
 						</div>
@@ -31,7 +31,10 @@
 			<div class="main bg-[#ffffff] p-[20px] max-md:pl-0 max-md:pr-0 flex flex-col items-center">
 				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5">
 					<div v-for="item in listProduct" :key="item.id" class="product-item">
-						<productCard :product="item"/>
+						<div class="relative">
+							<productCard :product="item"/>
+							<img v-if="pageParams == $auth.user.id" src="~/assets/icon/edit-2.png" class="absolute top-[50%] right-0 h-7 w-7 cursor-pointer" alt="Chỉnh sửa" @click="$router.push(`/product/modify/${item.id}`)">
+						</div>
 					</div>
 				</div>
 				<div class="w-fit">
@@ -53,6 +56,7 @@ export default {
 		return {
 			page: 1,
 			listProduct: [],
+			userData: {},
 		}
 	},
 	computed: {
@@ -68,16 +72,24 @@ export default {
 			immediate: true,
 		}
 	,
-	mounted() {
-		this.fetchProduct()
+	created() {
+		this.fetchProduct();
+		this.fetchUserData();
 	},
 	methods: {
 		fetchProduct() {
 			console.log('fetchProduct', this.pageParams);
-			this.$api.products.getAllProduct()
+			this.$api.products.getListProductOfUser(this.pageParams)
 				.then(res =>{
 					console.log('res', res);
 					this.listProduct = res.data.data;
+				})
+		},
+		fetchUserData() {
+			this.$api.users.getUserById(this.pageParams)
+				.then(res => {
+					console.log('res', res);
+					this.userData = res.data;
 				})
 		}
 	},
