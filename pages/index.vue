@@ -1,18 +1,19 @@
 <template>
-	<div class="root flex justify-center pt-[60px]">
+	<div class="root flex justify-center pt-[10px]">
 		<!-- <header-tab /> -->
 		<div class="main-content container mx-auto">
 
-			<!-- <top-category /> -->
-			<div class="w-full bg-white px-5 pt-3">
-				<!-- <slide-banner /> -->
+			<div class="w-full bg-white px-5 pt-3 max-md:p-0 max-w-[1140px]">
+				<slide-banner />
+				<top-category />
 			</div>
-			<section class="product-container">
-				<div class="product-header">
-					<div class="product-header-text">
+			<section class="product-container bg-white pt-2 pb-5">
+				<div class="product-header mb-2">
+					<!-- <div class="product-header-text">
 						<h2>Trải nghiệm mua sắm không giới hạn cùng PBL</h2>
 						<p>Have good day with my website :)</p>
-					</div>
+					</div> -->
+					<p class="text-base font-medium">Khám phá sản phẩm</p>
 				</div>
 				<list-product :listProduct="listProduct" />
 			</section>
@@ -100,7 +101,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	max-width: 1240px;
+	max-width: 1140px;
 }
 .product-container{
 	margin-top: 40px;

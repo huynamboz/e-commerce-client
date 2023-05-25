@@ -10,7 +10,7 @@
 							@click="toProduct(item.id)">
 						<div class=" flex flex-col w-[240px]" @click="toProduct(item.id)">
 							<p class=" whitespace-nowrap overflow-ellipsis overflow-hidden text-xs">{{ item.name }}</p>
-							<p class=" text-rose-500">{{ $product.formatPrice(item.price) }}</p>
+							<p class=" text-rose-500 text-base">{{ $product.formatPrice(item.price) }}</p>
 						</div>
 						<div class="text-sm text-rose-400">
 							<i class="fi fi-rr-trash" @click="unFavorite(item.id)"></i>
@@ -34,12 +34,6 @@ export default {
 			type: Array,
 			default: () => []
 		},
-		openFavorite: {
-			type: function () {
-				return false;
-			},
-			default: false
-		}
 	},
 	data() {
 		return {
@@ -63,12 +57,29 @@ export default {
 	methods: {
 		toProduct(id) {
 			this.$router.push(`/product/${id}`);
+			this.closeFavorite();
 		},
-		unFavorite(id) {
-			this.$store.dispatch('product/unFavorite', id);
+		async fetchFavoriteProduct(){
+			console.log(this.$auth.user.id);
+			this.$api.users.getFavoriteProduct()
+			.then((response) => {
+				console.log(response.data.data, "favorite");
+				this.$store.dispatch('addFavoriteStore', response.data.data);
+				console.log(this.$store.getters['getListFavoriteProduct'],"store");
+			})
+		},
+		async unFavorite(val){
+			console.log(val,"desktop");
+			await this.$axios.delete(`/users/me/favorite-products/${val}`).then(res =>{
+				this.$toast.success("Đã bỏ yêu thích");
+				this.fetchFavoriteProduct();
+			}).catch(err =>{
+				console.log(err.response)
+				this.$toast.error("Có lỗi xảy ra")
+			})
 		},
 		closeFavorite() {
-			this.$emit('closeFavorite');
+			this.$emit('open-favorite');
 		}
 	}
 }

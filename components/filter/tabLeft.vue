@@ -38,7 +38,7 @@ export default{
 		}
 	},
 mounted(){
-	this.fetchFilter();
+	// this.fetchFilter();
 },
 methods:{
 	async fetchFilter(){

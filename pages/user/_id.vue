@@ -28,7 +28,7 @@
 					</div>
 				</div>
 			</header>
-			<div class="main bg-[#ffffff] p-[20px] max-md:pl-0 max-md:pr-0 flex flex-col items-center">
+			<div class="main bg-[#ffffff] p-[20px] max-md:pl-0 max-md:pr-0 flex flex-col items-center max-md:w-full">
 				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5">
 					<div v-for="item in listProduct" :key="item.id" class="product-item">
 						<div class="relative">

@@ -17,29 +17,8 @@
 					<div class="text-white text-base rounded-xl font-normal">Yêu thích</div>
 					</div>
 					<div class="bg-white absolute top-[calc(100%_+_10px)] -left-10 max-md:-left-10 w-[360px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
-						<div class="overlay fixed top-0 left-0 h-[100vh] w-[100vw] z-10" @click="openFavorite"></div>
-						<div class="p-3 text-sm font-medium border-b-[1px] border-slate-300">Đã yêu thích</div>
-						<div class="relative pb-9 pt-3 z-20">
-							<div v-if="listFavoriteProduct.length > 0" class="flex flex-col">
-								<div v-for="item in listFavoriteProduct" class="px-2 hover:bg-slate-100">
-									<div class="flex items-center gap-2 py-1">
-										<img :src="item.thumbnails[0]" alt="" class="w-14 h-14 object-cover rounded-[4px]" @click="toProduct(item.id)">
-										<div class=" flex flex-col w-[240px]" @click="toProduct(item.id)">
-											<p class=" whitespace-nowrap overflow-ellipsis overflow-hidden text-xs">{{ item.name }}</p>
-											<p class=" text-rose-500">{{ $product.formatPrice(item.price) }}</p>
-										</div>
-										<div class="text-sm text-rose-400">
-											<i class="fi fi-rr-trash" @click="unFavorite(item.id)"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div v-else class="flex flex-col justify-center items-center">
-								<img src="~/assets/icon/empty.png" alt="">
-								<p>Danh sách yêu thích trống</p>
-							</div>
-							<div class="absolute bottom-0 border-t-[1px] w-full flex justify-center text-xs py-2">Xem tất cả</div>
-						</div>
+						
+						<list-favorite :list-favorite-product="listFavoriteProduct" @open-favorite="openFavorite"/>
 					</div>
 				</div>
 
@@ -105,10 +84,12 @@
 </template>
 <script>
 import search from '~/components/layout/header/search.vue'
+import listFavorite from '~/components/products/listFavorite.vue'
 export default {
     name: 'headerTab',
     components: {
         search,
+		listFavorite
     },
     data() {
         return {
@@ -159,6 +140,7 @@ export default {
 			})
 		},
 		async unFavorite(val){
+			console.log(val,"desktop");
 			await this.$axios.delete(`/users/me/favorite-products/${val}`).then(res =>{
 				this.$toast.success("Đã bỏ yêu thích");
 				this.fetchFavoriteProduct();
@@ -198,7 +180,10 @@ export default {
     background-color: #ee2624;
 	border-bottom: 1px solid #e0e0e0;
 	justify-content: center;
-	position: relative;
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
 	z-index: 999;
 	@media screen and (max-width: 768px) {
 		flex-direction: column;
