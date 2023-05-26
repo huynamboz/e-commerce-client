@@ -12,9 +12,7 @@
 </template>
 <script>
 // import slider components
-import { slider, slideritem } from 'vue-concise-slider'
 export default {
-	el: '#app',
 	data() {
 		return {
 			//data list [array]
@@ -57,9 +55,11 @@ export default {
 			}
 		}
 	},
-	components: {
-		slider,
-		slideritem
-	}
 }
 </script>
+<style lang="scss" scoped>
+iframe {
+        width: 100%;
+        height: 500px;
+    }
+</style>

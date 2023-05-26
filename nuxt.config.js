@@ -1,12 +1,12 @@
 export default {
-    ssr: false,
+    ssr: process.env.IS_PRODUCT,
     router:{
     //   base: "/e-commerce-client/dist/",
 		middleware: ['router-log','auth']
     },
 	server: {
 		port: 3000,
-		host: '0.0.0.0'
+		host: process.env.HOST
 		// host: 'localhost'
 		// https: {
 		//   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
@@ -88,6 +88,7 @@ export default {
 		{ src: "~plugins/validation" },
 		{ src: "~plugins/handleErrorApi" },
 		{ src: '~plugins/vuesax', mode: 'client' },
+		{ src: '~plugins/vue-concise-slider', mode: 'client' },
 	],
 	axios: {
 		baseURL: process.env.BASE_URL_API,
@@ -105,10 +106,14 @@ export default {
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/auth-next',
+		'@nuxtjs/sitemap'
 	],
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {
+		transpile: [
+			'defu'
+		],
 		postcss: {
 			postcssOptions: {
 				plugins: {
