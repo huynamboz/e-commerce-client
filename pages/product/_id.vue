@@ -272,25 +272,6 @@ export default {
 	},
 	auth:false,
 	layout: 'default',
-	head() {
-		return {
-		title: this.products.name,
-		meta: [
-			{ hid: 'description', name: 'description', content: 'Chợ tốt, chợ vip' },
-			{ hid: 'keywords', name: 'keywords', content: this.products.name },
-			{ hid: 'og:title', property: 'og:title', content: this.products.name },
-			{ hid: 'og:description', property: 'og:description', content: 'Mô tả Open Graph' },
-			{ hid: 'og:image', property: 'og:image', content: this.products.thumbnails[0] },
-			{ hid: 'og:url', property: 'og:url', content: `http://103.116.53.105:3000/product/${this.products.id}` },
-			{ hid: 'og:site_name', property: 'og:site_name', content: 'Tên trang web' },
-			{ hid: 'og:type', property: 'og:type', content: 'Loại nội dung Open Graph' }
-		],
-		link: [
-			{ rel: 'canonical', href: 'URL-canonical-của-trang' },
-			{ rel: 'stylesheet', href: 'URL-của-file-CSS' }
-		]
-		}
-	},
 	data() {
 		return {
 			// data
@@ -357,6 +338,25 @@ export default {
 		this.fetchCompare();
 		this.fetchFavorite()
 		// await this.fetchCompare();
+	},
+	head() {
+		return {
+		title: this.products.name,
+		meta: [
+			{ hid: 'description', name: 'description', content: 'Chợ tốt, chợ vip chợ mua bán cực nhanh' },
+			{ hid: 'keywords', name: 'keywords', content: this.products.name },
+			{ hid: 'og:title', property: 'og:title', content: this.products.name },
+			{ hid: 'og:description', property: 'og:description', content: 'Nơi giao lưu mua bán sản phẩm không giới hạn' },
+			{ hid: 'og:image', property: 'og:image', content: this.products.thumbnails[0] },
+			{ hid: 'og:url', property: 'og:url', content: `https://superbad.store/product/${this.products.id}` },
+			{ hid: 'og:site_name', property: 'og:site_name', content: 'Chợ siêu tốt' },
+			{ hid: 'og:type', property: 'og:type', content: 'Loại nội dung Open Graph' }
+		],
+		link: [
+			{ rel: 'canonical', href: 'URL-canonical-của-trang' },
+			{ rel: 'stylesheet', href: 'URL-của-file-CSS' }
+		]
+		}
 	},
 	methods: {
 		saveToClipboard(val){
