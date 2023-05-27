@@ -20,7 +20,7 @@
 			</div>
 			<div v-else class="flex flex-col justify-center items-center">
 				<img src="~/assets/icon/empty.png" alt="">
-				<p>Danh sách yêu thích trống</p>
+				<p class=" text-base">Danh sách yêu thích trống</p>
 			</div>
 			<div class="absolute bottom-0 border-t-[1px] w-full flex justify-center text-xs py-2">Xem tất cả</div>
 		</div>

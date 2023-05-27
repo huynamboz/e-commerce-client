@@ -8,21 +8,24 @@
 				<div class="main-right grid max-md:flex max-md:flex-col">
 						<div class="inp-container">
 							<label for="">Tên sản phẩm <span style="color:red">*</span></label>
-							<input type="text" placeholder="Bàn ghế" maxlength="50" v-model="ProductData.name" @change="fetchCompare()">
+							<input :class="{'border-[1px] border-rose-500': ProductData.name.length == 50}" type="text" placeholder="Bàn ghế" maxlength="50" v-model="ProductData.name" @change="fetchCompare()">
+							<p v-show="ProductData.name.length == 50" class="text-sm text-rose-500">Tên tối đa 50 ký tự</p>
 						</div>
 						<div class="inp-container">
 							<label for="">Giá <span style="color:red">*</span></label>
-							<input type="text" placeholder="100000" v-model="ProductData.price">
+							<input :class="{'border-[1px] border-rose-500': !validateCost(ProductData.price) && ProductData.price}" type="text" placeholder="100000" v-model="ProductData.price">
+							<p v-show="!validateCost(ProductData.price) && ProductData.price" class="text-sm text-rose-500">Vui lòng nhập giá hợp lệ</p>
 						</div>
 						<div class="inp-container">
 							<label for="">Giảm giá(%) <span style="color:red">*</span></label>
-							<input type="text" placeholder="10" v-model="ProductData.discount">
+							<input :class="{'border-[1px] border-rose-500': !validateCost(ProductData.discount) && ProductData.discount}" type="text" placeholder="10" v-model="ProductData.discount">
+							<p v-show="!validateCost(ProductData.discount) && ProductData.discount" class="text-sm text-rose-500">Vui lòng nhập số nguyên</p>
 						</div>
 						<div class="inp-container">
 							<label for="">Tình trạng <span style="color:red">*</span></label>
 							<vs-select class="ml-4 mt-2"
 							color="success"
-							placeholder="Select"
+							placeholder="Chọn tình trạng"
 							v-model="ProductData.status"
 							>
 								<vs-option label="Mới" value="1">
@@ -41,16 +44,16 @@
 							<label for="">category <span style="color:red">*</span></label>
 							<vs-select class="ml-4 mt-2"
 							color="success"
-							placeholder="Select"
+							placeholder="Chọn loại"
 							v-model="ProductData.category"
 							>
-								<vs-option label="Mới" value="1">
+								<vs-option label="Đồ điện tử" value="1">
 								Đồ điện tử
 								</vs-option>
-								<vs-option label="Như mới" value="2">
+								<vs-option label="Điện thoại" value="2">
 								Điện thoại
 								</vs-option>
-								<vs-option label="Đã qua sử dụng" value="3">
+								<vs-option label="Máy tính bảng" value="3">
 								Máy tính bảng
 								</vs-option>
 							</vs-select>
@@ -175,6 +178,13 @@ export default {
 		}
 	},
 	methods: {
+		validateCost(val){
+			console.log(Number.isInteger(parseInt(val)))
+			if(Number.isInteger(parseInt(val))){
+				return true
+			}
+			return false
+		},
 		async removeIMG(item){
 			console.log(this.listFile.length)
 			let index = this.previewUrl.findIndex(i=>i==item)
@@ -410,7 +420,7 @@ input {
 	margin: 5px 20px;
 	border-radius: 6px;
 	padding: 10px 10px;
-	border:none;
+	// border:none;
 	background-color: #f1f3f5;
 	/* make slightly boxshadow */
 }

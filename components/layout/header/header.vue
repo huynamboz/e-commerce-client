@@ -9,14 +9,14 @@
 			<div class="cart action-item relative flex items-center">
 					<div class="flex gap-3 items-center" @click="openFavorite" title="Sản phẩm yêu thích">
 						<div class="relative">
-						<div class="flex items-center justify-center h-7 w-7 rounded-full text-sm bg-white text-rose-500 absolute -left-4 -top-4" v-if="listFavoriteProduct.length > 0">
+						<div class="flex items-center justify-center h-5 w-5 rounded-full text-sm bg-rose-400 text-white absolute -left-2 -top-2" v-if="listFavoriteProduct.length > 0">
 							{{ listFavoriteProduct.length < 9 ? listFavoriteProduct.length : '9+' }}
 						</div>
 						<i class="text-white fi fi-rr-heart h-[32px] block"></i>
 					</div>
 					<div class="text-white text-base rounded-xl font-normal">Yêu thích</div>
 					</div>
-					<div class="bg-white absolute top-[calc(100%_+_10px)] -left-10 max-md:-left-10 w-[360px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
+					<div class="bg-white absolute top-[calc(100%_+_10px)] -left-[100%] max-md:-left-10 w-[360px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
 						
 						<list-favorite :list-favorite-product="listFavoriteProduct" @open-favorite="openFavorite"/>
 					</div>

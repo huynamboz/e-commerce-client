@@ -67,7 +67,7 @@
 								</div>
 								<div class="flex gap-3 mt-3">
 									<p>Cước phí :</p>
-									<p class="cursor-pointer" @click="openPopupShip()">Xem chi tiết cước phí</p>
+									<p class="cursor-pointer" @click="openPopupShip()">:Xem chi tiết cước phí</p>
 								</div>
 							</div>
 							<div class="text-gray-500">
@@ -141,7 +141,25 @@
 					</div>
 				</div>
 				<div class="mt-8 flex gap-5 items-center">
-					<p>Chia sẻ</p>
+					<vs-button
+						flat
+						@click="popupShare=!popupShare"
+						>
+						Chia sẻ liên kết
+					</vs-button>
+					<vs-dialog width="550px" not-center v-model="popupShare">
+						<div class="con-content">
+						<div>
+							<p>Sao chép liên kết</p>
+							<div class="flex items-center">
+								<input type="text" :value="`https://superbad.store/product/${products?.id}`" disabled class=" bg-slate-200 rounded-md p-1 w-full h-fit">
+								<vs-button margin="0" @click="saveToClipboard(`https://superbad.store/product/${products?.id}`)">
+									<i class="fi fi-rr-copy-alt"></i>
+								</vs-button>
+							</div>
+						</div>
+						</div>
+					</vs-dialog>
 					<div>
 						<a href="https://www.facebook.com/sharer/sharer.php?u=http://superbad.store/product/4" target="_blank">
 							<img src="~/assets/icon/fb.svg" alt="" class="h-8 w-8">
@@ -282,6 +300,7 @@ export default {
 			currentCity:'',
 			currentDistrict:'',
 			isOpenReport:false,
+			popupShare: false,
 			t: "test",
 			products: {
 				thumbnails: [],
@@ -340,6 +359,13 @@ export default {
 		// await this.fetchCompare();
 	},
 	methods: {
+		saveToClipboard(val){
+			navigator.clipboard.writeText(val).then(() => {
+				this.$toast.success("Đã copy")
+			}).catch(() => {
+				this.$toast.error("Có lỗi xảy ra")
+			})
+		},
 		handleImgCrawl(val){
 			if(val.startsWith("data:")){
 				return "https://logovina.com/wp-content/uploads/2020/07/logo-shopee.jpg"

@@ -21,8 +21,8 @@
 								<i class="fi fi-rr-calendar-day"></i>
 								Ngày tham gia: <span class="text-[#3d8bfd]">{{ userData?.created_at?.split("T")[0] }}</span>
 							</div>
-							<div @click="$router.push('/user/settings')" v-if="pageParams == $auth.user.id" class="transition-colors duration-300  hover:bg-[#6294d9] p-2 px-12 rounded-lg bg-[#8cb7f5] text-[#ffffff] text-[14px]
-							cursor-pointer shadow-lg shadow-indigo-500/40
+							<div @click="$router.push('/user/settings')" v-if="pageParams == $auth.user?.id" class="transition-colors duration-300  hover:bg-[#06a8f5] p-2 px-12 rounded-lg bg-[#06a8f5] text-[#ffffff] text-[14px]
+							cursor-pointer
 							">Chỉnh sửa trang cá nhân</div>
 						</div>
 					</div>
@@ -33,12 +33,12 @@
 					<div v-for="item in listProduct" :key="item.id" class="product-item">
 						<div class="relative">
 							<productCard :product="item"/>
-							<img v-if="pageParams == $auth.user.id" src="~/assets/icon/edit-2.png" class="absolute top-[50%] right-0 h-7 w-7 cursor-pointer" alt="Chỉnh sửa" @click="$router.push(`/product/modify/${item.id}`)">
+							<img v-if="pageParams == $auth.user?.id" src="~/assets/icon/edit-2.png" class="absolute top-[50%] right-0 h-7 w-7 cursor-pointer" alt="Chỉnh sửa" @click="$router.push(`/product/modify/${item.id}`)">
 						</div>
 					</div>
 				</div>
 				<div class="w-fit">
-					<vs-pagination v-model="page" :length="5" />
+					<vs-pagination v-model="page" :length="meta.totalPages ? meta.totalPages : 2"/>
 				</div>
 			</div>
 		</div>
@@ -57,6 +57,7 @@ export default {
 			page: 1,
 			listProduct: [],
 			userData: {},
+			meta: {}
 		}
 	},
 	computed: {
@@ -78,12 +79,19 @@ export default {
 	},
 	methods: {
 		fetchProduct() {
-			console.log('fetchProduct', this.pageParams);
-			this.$api.products.getListProductOfUser(this.pageParams)
-				.then(res =>{
-					console.log('res', res);
-					this.listProduct = res.data.data;
-				})
+			if(this.$auth.loggedIn){
+				console.log('fetchProduct', this.pageParams);
+				this.$api.products.getListProductOfUser(this.pageParams)
+					.then(res =>{
+						console.log('res', res);
+						this.listProduct = res.data.data;
+						this.meta = res.data.meta;
+						this.page = res.data.meta.currentPage;
+					})
+					.catch(err => {
+						console.log('err', err);
+					})
+			}
 		},
 		fetchUserData() {
 			this.$api.users.getUserById(this.pageParams)

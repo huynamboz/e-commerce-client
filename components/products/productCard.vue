@@ -1,15 +1,18 @@
 <template>
 	<nuxt-link :to="`/product/${product.id}`" class="card-container">
-			<div class="tag-sale" v-if="product.discount > 0">{{ product.discount }}% giảm</div>
+			<!-- <div class="tag-sale" v-if="product.discount > 0">{{ product.discount }}% giảm</div> -->
 			<img v-if="product.thumbnails[0]" :src="product.thumbnails[0]" @error="handleError" alt="" class="item-bg">
 			<img v-else :src="fallbackImageUrl" alt="" class="item-bg">
 			<div class="item-product-content">
 				<h3 class="item-product-name">{{ product.name }}</h3>
-				<div class="item-cost-parent">
-					<p class="item-cost-before" v-if="product.discount > 0"><del>{{ formatPrice(product.price) }} </del> - </p>
+				<div class="item-cost-parent flex gap-1">
+					<!-- <p class="item-cost-before" v-if="product.discount > 0"><del>{{ formatPrice(product.price) }} </del> - </p> -->
 					<p class="item-cost">{{ formatPrice(product.price - (product.price * product.discount / 100)) }}</p>
+					<span v-show="product.discount > 0" class="price-tag">
+						<span class="text-xs">{{ product.discount }}% giảm</span>
+					</span>
 				</div>
-				<p class="addr">{{ product.user.location }}</p>
+				<p class="addr text-sm">{{ product.user.location }}</p>
 			</div>
 	</nuxt-link>
 </template>
@@ -43,8 +46,104 @@ export default{
 }
 </script>
 <style lang="scss" scoped>
+$price-tag-background: #ff6347;
+$price-tag-color: #fff;
+$price-tag-height: 20px;
+$price-tag-corner: 4px;
+$price-tag-dot-radius: 6px;
+$price-tag-dot-background: #fff;
+
+.price-tag {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  height: $price-tag-height;
+  margin-left: $price-tag-height / 2;
+  padding: 0 5px 0 10px;
+  color: $price-tag-color;
+  border-radius: 0 $price-tag-corner $price-tag-corner 0;
+  background-color: $price-tag-background;
+  line-height: 1;
+  justify-content: center;
+
+  &::before,
+  &::after {
+    position: absolute;
+    content: '';
+  }
+
+  &::before {
+    $price-tag-side: round($price-tag-height / 1.428);
+
+    left: -$price-tag-side / 2;
+    width: $price-tag-side;
+    height: $price-tag-side;
+    transform: rotate(45deg);
+    border-radius: 0 0 0 $price-tag-corner;
+    background-color: $price-tag-background;
+  }
+
+  &::after {
+    z-index: 1;
+    top: 50%;
+    left: -$price-tag-height / 2;
+    width: $price-tag-dot-radius;
+    height: $price-tag-dot-radius;
+    transform: translate(-50%, -50%) translateX($price-tag-height / 2);
+    border-radius: $price-tag-dot-radius / 2;
+    background-color: $price-tag-dot-background;
+  }
+
+  &__main {
+    font-size: 1.15em;
+    font-weight: bold;
+
+    ~ * {
+      opacity: 0.85;
+    }
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
+
+  &--two-lines {
+    $price-tag-side: round($price-tag-height / 1.428) * 2;
+    margin-left: $price-tag-height;
+    height: $price-tag-height * 2;
+
+    &::before {
+      left: -$price-tag-side / 2;
+      width: $price-tag-side;
+      height: $price-tag-side;
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) translateX($price-tag-height / 2) scale(2);
+    }
+  }
+
+  &--one-line {
+    flex-direction: row;
+    align-items: center;
+
+    span {
+      &:not(:first-child) {
+        &::before {
+          content: ', ';
+        }
+      }
+    }
+  }
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 .card-container{
-	width: 220px;
+	width: 210px;
 	min-height: 328px;
 	height: 331px;
 	display: flex;
@@ -106,7 +205,7 @@ export default{
 }
 .item-product-name{
 	font-weight: 400;
-	font-size: 16px;
+	font-size: 14px;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -129,8 +228,6 @@ export default{
 	}
 }
 .addr{
-	font-weight: 400;
-	font-size: 14px;
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;

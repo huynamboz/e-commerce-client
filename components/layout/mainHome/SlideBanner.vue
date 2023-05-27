@@ -1,6 +1,6 @@
 <template>
 	<!-- Make a div wrapped slider,set height and width -->
-	<div class="h-[400px] max-md:h-[200px]" style="width:100%;margin:20px auto;">
+	<div class="h-[250px] max-md:h-[200px] mb-4" style="width:100%;">
 		<!-- Using the slider component -->
 		<slider ref="slider" :options="options">
 			<!-- slideritem wrapped package with the components you need -->
@@ -20,7 +20,7 @@ export default {
 				{
 					html: '',
 					style: {
-						'background': 'url(https://down-vn.img.susercontent.com/file/vn-50009109-0fa7cb6875fd02f33bbd9ff98d42a222)',
+						'background': 'url(https://salt.tikicdn.com/cache/w1080/ts/tka/0d/e1/6f/7beb243488a74f0712a451fe8e8d3df8.png.webp)',
 						'background-size': 'contain',
 						'background-position': 'center',
 						'border-radius': '7px'
@@ -29,7 +29,7 @@ export default {
 				{
 					html: '',
 					style: {
-						'background': 'url(https://down-vn.img.susercontent.com/file/vn-50009109-b9a5f08ff283b9433a4e39a35975ac77)',
+						'background': 'url(https://salt.tikicdn.com/cache/w1080/ts/tikimsp/bb/19/2e/87cab7dae09c6f078639700d8e53a997.png.webp)',
 						'background-size': 'contain',
 						'background-position': 'center',
 						'border-radius': '7px'
@@ -38,7 +38,7 @@ export default {
 				{
 					html: '',
 					style: {
-						'background': 'url(https://media3.scdn.vn/img4/2023/05_22/yhgwyjbPWlB541oPoXQ4.jpg)',
+						'background': 'url(https://salt.tikicdn.com/cache/w1080/ts/tikimsp/07/df/a1/5b6194ae106d2693d9db60a543522db3.png.webp)',
 						'background-size': 'contain',
 						'background-position': 'center',
 						'border-radius': '7px'
