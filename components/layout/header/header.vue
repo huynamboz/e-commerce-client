@@ -130,14 +130,16 @@ export default {
 			this.isShowPopupProfile = false;
 		},
 		async fetchFavoriteProduct(){
-			console.log(this.$auth.user.id);
-			this.$api.users.getFavoriteProduct()
-			.then((response) => {
-				console.log(response.data.data, "favorite");
-				this.listFavoriteProduct = response.data.data;
-				this.$store.dispatch('addFavoriteStore', response.data.data);
-				console.log(this.$store.getters['getListFavoriteProduct'],"store");
-			})
+			try {
+				this.$api.users.getFavoriteProduct()
+				.then((response) => {
+					this.listFavoriteProduct = response.data.data;
+					this.$store.dispatch('addFavoriteStore', response.data.data);
+					console.log(this.$store.getters['getListFavoriteProduct'],"store");
+				})
+			} catch (error) {
+				console.log(error);
+			}
 		},
 		async unFavorite(val){
 			console.log(val,"desktop");
