@@ -184,33 +184,38 @@
 				</div>
 			</section> -->
 			<section class="product-description">
-					<div class="product-description-content w-full">
-						<div class="product-description-header flex gap-5 cursor-pointer">
-							<h2 class="product-description-header-text max-md:text-[18px]" :class="{'border-b-[2px] w-fit border-red-500': detailType== 'DESCRIPTION'}" @click="detailType='DESCRIPTION'">Mô tả sản phẩm</h2>
-							<div class="h-[30px] w-[2px] bg-slate-300"></div>
-							<h2 class="product-description-header-text max-md:text-[18px]" :class="{'border-b-[2px] w-fit border-red-500': detailType== 'COMPARE'}" @click="detailType='COMPARE'">So sánh giá <i class=" translate-y-1 fi fi-rr-tags"></i></h2>
-						</div>
-						<div class="product-description-content">
-							<pre class="product-description-content-text" v-if="detailType=='DESCRIPTION'">
-								{{ products?.description }}
-								<!-- <textarea name="" :value="product?.description" id="" readonly cols="30" rows="10"></textarea> -->
-							</pre>
-							<div v-else class="">
-								<div class="compare-item" v-for="(item,index) in listCompare" :key="index">
-									<div class="compare-item-thumbnail">
-										<img :src="handleImgCrawl(item?.img_url)" alt="" class="compare-item-thumbnail-img object-cover">
-									</div>
-									<div class="compare-item-content">
-										<div class="cmp-item-name">
-											{{ item?.name }}
+					<div class="flex flex-col w-full">
+						<div class="product-description-content w-full">
+							<div class="product-description-header flex gap-5 cursor-pointer">
+								<h2 class="product-description-header-text max-md:text-[18px]" :class="{'border-b-[2px] w-fit border-red-500': detailType== 'DESCRIPTION'}" @click="detailType='DESCRIPTION'">Mô tả sản phẩm</h2>
+								<div class="h-[30px] w-[2px] bg-slate-300"></div>
+								<h2 class="product-description-header-text max-md:text-[18px]" :class="{'border-b-[2px] w-fit border-red-500': detailType== 'COMPARE'}" @click="detailType='COMPARE'">So sánh giá <i class=" translate-y-1 fi fi-rr-tags"></i></h2>
+								<div class="h-[30px] w-[2px] bg-slate-300"></div>
+								<h2 class="product-description-header-text max-md:text-[18px]" @click="scrollToReview()">Đánh giá <i class="fi fi-rr-comment-alt"></i></h2>
+							</div>
+							<div class="product-description-content">
+								<pre class="product-description-content-text" v-if="detailType=='DESCRIPTION'">
+									{{ products?.description }}
+									<!-- <textarea name="" :value="product?.description" id="" readonly cols="30" rows="10"></textarea> -->
+								</pre>
+								<div v-else class="">
+									<div class="compare-item" v-for="(item,index) in listCompare" :key="index">
+										<div class="compare-item-thumbnail">
+											<img :src="handleImgCrawl(item?.img_url)" alt="" class="compare-item-thumbnail-img object-cover">
 										</div>
-										<div class="cmp-item-cost">
-											{{ item?.cost }}
+										<div class="compare-item-content">
+											<div class="cmp-item-name">
+												{{ item?.name }}
+											</div>
+											<div class="cmp-item-cost">
+												{{ item?.cost }}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<review-content id="review" :listReview="listReview" @fetch-reviews="fetchReviews"/>
 					</div>
 
 					<div class="product-description-recommend">
@@ -265,10 +270,13 @@
 	</section>
 </template>
 <script>
-import miniLoading from '~/components/loading/mini-loading.vue'
+import miniLoading from '~/components/loading/mini-loading.vue';
+import ReviewContent from '~/components/common/ReviewContent.vue';
+import { filterReviewByProductId } from '~/services/reviews';
 export default {
 	components: {
-		miniLoading
+		miniLoading,
+		ReviewContent,
 	},
 	auth:false,
 	layout: 'default',
@@ -296,6 +304,7 @@ export default {
 			listFavorite:[],
 			isInFavorite:false,
 			contentReport:"",
+			listReview:[],
 		}
 	},
 	watch: {
@@ -330,14 +339,11 @@ export default {
 		}
 	},
 	async mounted() {
-		console.log("countet",this.counter)
 		await this.fetchData();
-		console.log(this.$auth.$storage.getUniversal('user'))
 		this.getCities();
-		//wait 3s to fetch compare
 		this.fetchCompare();
 		this.fetchFavorite()
-		// await this.fetchCompare();
+		this.fetchReviews();
 	},
 	head() {
 		return {
@@ -359,6 +365,21 @@ export default {
 		}
 	},
 	methods: {
+		scrollToReview(){
+			let ele = document.getElementById("review");
+			ele.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+		},
+		async fetchReviews(){
+			try {
+				console.log("fetch reviews")
+				const res = await this.$api.users.getReviewsOfUser(this.products.user.id)
+				console.log("comments",res)
+				this.listReview = filterReviewByProductId(this.products.id,res.data.data)
+				console.log("comments",this.listReview)
+			} catch (error) {
+				console.log("review",error)
+			}
+		},
 		saveToClipboard(val){
 			navigator.clipboard.writeText(val).then(() => {
 				this.$toast.success("Đã copy")
@@ -557,7 +578,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .product-container {
-	margin-top: 60px;
+	margin-top: 20px;
 	display: flex;
 	justify-content: center;
 	@media screen and (max-width:768px) {
