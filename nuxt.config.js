@@ -1,5 +1,5 @@
 export default {
-    ssr: process.env.IS_PRODUCT,
+    ssr: false,
     router:{
     //   base: "/e-commerce-client/dist/",
 		middleware: ['router-log','auth']
@@ -106,14 +106,10 @@ export default {
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/auth-next',
-		'@nuxtjs/sitemap'
 	],
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {
-		transpile: [
-			'defu'
-		],
 		postcss: {
 			postcssOptions: {
 				plugins: {

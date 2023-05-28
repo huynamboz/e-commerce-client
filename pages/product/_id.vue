@@ -341,14 +341,14 @@ export default {
 	},
 	head() {
 		return {
-		title: this.products.name,
+		title: this.products?.name,
 		meta: [
 			{ hid: 'description', name: 'description', content: 'Chợ tốt, chợ vip chợ mua bán cực nhanh' },
-			{ hid: 'keywords', name: 'keywords', content: this.products.name },
-			{ hid: 'og:title', property: 'og:title', content: this.products.name },
+			{ hid: 'keywords', name: 'keywords', content: this?.products.name },
+			{ hid: 'og:title', property: 'og:title', content: this.products?.name },
 			{ hid: 'og:description', property: 'og:description', content: 'Nơi giao lưu mua bán sản phẩm không giới hạn' },
-			{ hid: 'og:image', property: 'og:image', content: this.products.thumbnails[0] },
-			{ hid: 'og:url', property: 'og:url', content: `https://superbad.store/product/${this.products.id}` },
+			{ hid: 'og:image', property: 'og:image', content: this.products?.thumbnails[0] },
+			{ hid: 'og:url', property: 'og:url', content: `https://superbad.store/product/${this.products?.id}` },
 			{ hid: 'og:site_name', property: 'og:site_name', content: 'Chợ siêu tốt' },
 			{ hid: 'og:type', property: 'og:type', content: 'Loại nội dung Open Graph' }
 		],
