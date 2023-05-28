@@ -83,6 +83,9 @@ export default {
 		},
 		fetchKeywordRecent() {
 			this.keywordRecent = JSON.parse(localStorage.getItem("keywordRecent"));
+			if (!this.keywordRecent) {
+				this.keywordRecent = [];
+			}
 		},
 		search() {
 			try {
