@@ -85,20 +85,24 @@ export default {
 			this.keywordRecent = JSON.parse(localStorage.getItem("keywordRecent"));
 		},
 		search() {
-			this.openRecent = false;
-			console.log(this.keyword);
-			if (this.keyword.length > 0) {
-				if (this.keywordRecent.length > 0) {
-					if (this.keywordRecent.includes(this.keyword)) {
-						this.keywordRecent.splice(this.keywordRecent.indexOf(this.keyword), 1);
+			try {
+				this.openRecent = false;
+				console.log(this.keyword);
+				if (this.keyword?.length > 0) {
+					if (this.keywordRecent?.length > 0) {
+						if (this.keywordRecent.includes(this.keyword)) {
+							this.keywordRecent.splice(this.keywordRecent.indexOf(this.keyword), 1);
+						}
+						this.keywordRecent.unshift(this.keyword);
+						localStorage.setItem("keywordRecent", JSON.stringify(this.keywordRecent));
+					} else {
+						this.keywordRecent.unshift(this.keyword);
+						localStorage.setItem("keywordRecent", JSON.stringify(this.keywordRecent));
 					}
-					this.keywordRecent.unshift(this.keyword);
-					localStorage.setItem("keywordRecent", JSON.stringify(this.keywordRecent));
-				} else {
-					this.keywordRecent.unshift(this.keyword);
-					localStorage.setItem("keywordRecent", JSON.stringify(this.keywordRecent));
+					this.$router.push(`/search?keyword=${this.keyword}`);
 				}
-				this.$router.push(`/search?keyword=${this.keyword}`);
+			} catch (error) {
+				console.log(error);
 			}
 		},
 	}
