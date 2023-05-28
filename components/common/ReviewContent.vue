@@ -1,0 +1,96 @@
+<template>
+	<div class="w-full border-[1px] mt-5 bg-white flex flex-col p-5">
+		<p class=" text-[20px] font-medium">Đánh giá</p>
+
+		<!-- not have review -->
+		<div class="flex justify-center w-full h-[250px]" v-show="listReview.length==0">
+			<div class="relative w-[40%] h-[80px]">
+				<div class="bg-white shadow-md rounded-lg h-[80px] w-full flex gap-5 items-center px-5">
+					<img src="~/assets/img/defaultavt.webp" alt="" class="w-12 h-12 rounded-full border-[2px] border-[#06a8f5]">
+					<div class="flex flex-col w-full gap-2">
+						<div class="h-[25px] w-full bg-slate-100 rounded-[8px]">
+						</div>
+						<div class="h-[25px] w-[60%] bg-slate-100 rounded-[8px]">
+						</div>
+					</div>
+				</div>
+
+				<div class=" absolute top-[70%] left-[15%] bg-white shadow-md rounded-lg h-[80px] w-full flex gap-5 items-center px-5">
+					<img src="~/assets/img/defaultavt.webp" alt="" class="w-12 h-12 rounded-full border-[2px] border-[#b1a2d5]">
+					<div class="flex flex-col w-full gap-2">
+						<div class="h-[25px] w-full bg-slate-100 rounded-[8px]">
+						</div>
+						<div class="h-[25px] w-[60%] bg-slate-100 rounded-[8px]">
+						</div>
+					</div>
+				</div>
+
+				<p class=" font-semibold text-[30px] mt-[70px] ml-[50px]">Chưa có đánh giá</p>
+			</div>
+		</div>
+		<!-- end not have review -->
+
+		<!-- have review -->
+		<div class="flex flex-col gap-5 mt-5">
+			<div class="flex flex-col gap-5" v-for="(item, index) in listReview" :key="index">
+				<div class="flex gap-5">
+					<img v-show="!item.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+					<img v-show="item.user.avatar" :src="item.user.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+					<div class="flex flex-col">
+						<div class="flex gap-3 items-center">
+							<p class="font-semibold">{{ item.user.name }}</p>
+							<p class="text-[12px] text-gray-400">{{ new Date(item.create_at).toLocaleDateString() }}</p>
+						</div>
+						<p>
+							{{ item.comment }}
+						</p>
+					</div>
+				</div>
+				<div class="w-full h-[1px] bg-slate-300"></div>
+			</div>
+
+			
+
+		</div>
+		<div class="flex items-center mt-5 p-3 bg-slate-100 rounded-lg px-3 gap-4">
+			<img src="~/assets/img/defaultavt.webp" alt="" class="w-7 h-7 rounded-full border-[1px] border-[#06a8f5]">
+			<input @keyup.enter="addReview()" v-model="review" type="text" class="w-[80%] bg-transparent" placeholder="Viết đánh giá">
+			<vs-button flat @click="addReview()">Đánh giá</vs-button>
+		</div>
+	</div>
+</template>
+<script>
+export default {
+	props: {
+		listReview: {
+			type: Array,
+			default: () => []
+		}
+	},
+	data() {
+		return {
+			review: '',
+		}
+	},
+	mounted() {
+		console.log(this.listReview)
+		console.log(this.$route)
+	},
+	methods: {
+		async addReview() {
+			if (this.review == '') {
+				this.$toast.error('Vui lòng nhập đánh giá')
+				return
+			}
+			let data = {
+				comment: this.review,
+				rating: 5,
+			}
+			console.log(this.listReview)
+			let res = await this.$axios.post(`/products/${this.listReview[0]?.product.id ? this.listReview[0]?.product.id : this.$route.params.id}/reviews`, data)
+				this.$emit('fetch-reviews')
+				this.review = ''
+		}
+	}
+}
+</script>

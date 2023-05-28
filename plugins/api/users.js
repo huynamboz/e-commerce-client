@@ -7,5 +7,8 @@ export default (api) => ({
 	},
 	getUserById: async(id)=>{
 		return await api.get(`/users/${id}`);
+	},
+	getReviewsOfUser: async(id)=>{
+		return await api.get(`/users/${id}/reviews`);
 	}
 })
