@@ -88,7 +88,6 @@ export default {
 		{ src: "~plugins/validation" },
 		{ src: "~plugins/handleErrorApi" },
 		{ src: '~plugins/vuesax', mode: 'client' },
-		{ src: '~plugins/vue-concise-slider', mode: 'client' },
 	],
 	axios: {
 		baseURL: process.env.BASE_URL_API,
