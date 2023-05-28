@@ -131,12 +131,14 @@ export default {
 		},
 		async fetchFavoriteProduct(){
 			try {
-				this.$api.users.getFavoriteProduct()
-				.then((response) => {
-					this.listFavoriteProduct = response.data.data;
-					this.$store.dispatch('addFavoriteStore', response.data.data);
-					console.log(this.$store.getters['getListFavoriteProduct'],"store");
-				})
+				if(this.$auth.loggedIn){
+					this.$api.users.getFavoriteProduct()
+					.then((response) => {
+						this.listFavoriteProduct = response.data.data;
+						this.$store.dispatch('addFavoriteStore', response.data.data);
+						console.log(this.$store.getters['getListFavoriteProduct'],"store");
+					})
+				}
 			} catch (error) {
 				console.log(error);
 			}
