@@ -6,7 +6,7 @@ export default {
     },
 	server: {
 		port: 3000,
-		host: process.env.HOST
+		host: '0.0.0.0'
 		// host: 'localhost'
 		// https: {
 		//   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
