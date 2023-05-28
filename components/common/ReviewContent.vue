@@ -3,8 +3,8 @@
 		<p class=" text-[20px] font-medium">Đánh giá</p>
 
 		<!-- not have review -->
-		<div class="flex justify-center w-full h-[250px]" v-show="listReview.length==0">
-			<div class="relative w-[40%] h-[80px]">
+		<div class="flex justify-center w-full h-[250px] max-md:h-[200px]" v-show="listReview.length==0">
+			<div class="relative w-[40%] h-[80px] max-md:mt-4 max-md:w-[80%]">
 				<div class="bg-white shadow-md rounded-lg h-[80px] w-full flex gap-5 items-center px-5">
 					<img src="~/assets/img/defaultavt.webp" alt="" class="w-12 h-12 rounded-full border-[2px] border-[#06a8f5]">
 					<div class="flex flex-col w-full gap-2">
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 
-				<p class=" font-semibold text-[30px] mt-[70px] ml-[50px]">Chưa có đánh giá</p>
+				<p class=" font-semibold max-md:text-[20px] text-[30px] mt-[70px] ml-[50px]">Chưa có đánh giá</p>
 			</div>
 		</div>
 		<!-- end not have review -->
@@ -52,9 +52,9 @@
 			
 
 		</div>
-		<div class="flex items-center mt-5 p-3 bg-slate-100 rounded-lg px-3 gap-4">
+		<div class="flex items-center mt-5 p-3 pr-0 max-h-[50px] bg-slate-100 rounded-lg px-3 gap-4">
 			<img src="~/assets/img/defaultavt.webp" alt="" class="w-7 h-7 rounded-full border-[1px] border-[#06a8f5]">
-			<input @keyup.enter="addReview()" v-model="review" type="text" class="w-[80%] bg-transparent" placeholder="Viết đánh giá">
+			<input @keyup.enter="addReview()" v-model="review" type="text" class="w-[calc(100%_-_102px)] bg-transparent" placeholder="Viết đánh giá">
 			<vs-button flat @click="addReview()">Đánh giá</vs-button>
 		</div>
 	</div>
