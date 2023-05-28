@@ -112,11 +112,6 @@ a{
 	text-decoration: none;
 	color: unset;
 }
-div,
-input,
-textarea,
-button,
-select,
-a {
+* {
     -webkit-tap-highlight-color: transparent;
 }
