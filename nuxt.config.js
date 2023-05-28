@@ -85,6 +85,7 @@ export default {
 		{ src: "~plugins/api/index" },
 		{ src: "~plugins/product/index" },
 		{ src: "~plugins/toast", ssr: false },
+		{ src: "~plugins/vue-concise-slider", ssr: false },
 		{ src: "~plugins/validation" },
 		{ src: "~plugins/handleErrorApi" },
 		{ src: '~plugins/vuesax', mode: 'client' },
