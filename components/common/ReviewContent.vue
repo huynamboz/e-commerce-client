@@ -34,8 +34,11 @@
 		<div class="flex flex-col gap-5 mt-5">
 			<div class="flex flex-col gap-5" v-for="(item, index) in listReview" :key="index">
 				<div class="flex gap-5">
-					<img v-show="!item.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
-					<img v-show="item.user.avatar" :src="item.user.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+					<div class="relative">
+						<img v-show="!item.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+						<img v-show="item.user.avatar" :src="item.user.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+						<div v-if="item.user.id == $auth.user?.id" class=" absolute px-1 rounded-md left-[5px] bottom-1 text-xs bg-blue-400 text-white">Bạn</div>
+					</div>
 					<div class="flex flex-col">
 						<div class="flex gap-3 items-center">
 							<p class="font-semibold">{{ item.user.name }}</p>
