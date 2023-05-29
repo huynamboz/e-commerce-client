@@ -1,5 +1,5 @@
-export default (axios1, axios2) => ({
+export default (api) => ({
 	getUserById: async (idUser) => {
-		return await axios2.get(`auth/user/${idUser}`);
+		return await api.get(`auth/user/${idUser}`);
 	},
 })
