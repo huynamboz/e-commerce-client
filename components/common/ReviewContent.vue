@@ -40,13 +40,14 @@
 						<div class="flex gap-3 items-center">
 							<p class="font-semibold">{{ item.user.name }}</p>
 							<p class="text-[12px] text-gray-400">{{ new Date(item.create_at).toLocaleDateString() }}</p>
+							<product-rating :rating="item.rating" />
 						</div>
 						<p>
 							{{ item.comment }}
 						</p>
 					</div>
 				</div>
-				<div class="w-full h-[1px] bg-slate-300"></div>
+				<div class="w-full h-[0px] border-b-[1px] bg-slate-300"></div>
 			</div>
 
 			
@@ -55,12 +56,17 @@
 		<div class="flex items-center mt-5 p-3 pr-0 max-h-[50px] bg-slate-100 rounded-lg px-3 gap-4">
 			<img src="~/assets/img/defaultavt.webp" alt="" class="w-7 h-7 rounded-full border-[1px] border-[#06a8f5]">
 			<input @keyup.enter="addReview()" v-model="review" type="text" class="w-[calc(100%_-_102px)] bg-transparent" placeholder="Viết đánh giá">
-			<vs-button flat @click="addReview()">Đánh giá</vs-button>
+			<button class=" whitespace-nowrap bg-blue-400 mr-1 hover:bg-blue-500 rounded-lg p-2 text-sm text-white" @click="addReview()">Đánh giá</button>
 		</div>
+		<product-rating :rating="rating" :font="'text-lg'" class="mt-3 ml-3" @chooseStar="chooseStar"/>
 	</div>
 </template>
 <script>
+import ProductRating from './ProductRating.vue'
 export default {
+	components: {
+		ProductRating
+	},
 	props: {
 		listReview: {
 			type: Array,
@@ -70,6 +76,7 @@ export default {
 	data() {
 		return {
 			review: '',
+			rating:0,
 		}
 	},
 	mounted() {
@@ -77,19 +84,27 @@ export default {
 		console.log(this.$route)
 	},
 	methods: {
+		chooseStar(value) {
+			this.rating = value
+		},
 		async addReview() {
 			if (this.review == '') {
 				this.$toast.error('Vui lòng nhập đánh giá')
 				return
 			}
+			if (this.rating == 0) {
+				this.$toast.error('Vui lòng chọn đánh giá')
+				return
+			}
 			let data = {
 				comment: this.review,
-				rating: 5,
+				rating: this.rating,
 			}
 			console.log(this.listReview)
 			let res = await this.$axios.post(`/products/${this.listReview[0]?.product.id ? this.listReview[0]?.product.id : this.$route.params.id}/reviews`, data)
 				this.$emit('fetch-reviews')
-				this.review = ''
+				this.review = '';
+				this.rating = 0
 		}
 	}
 }
