@@ -311,7 +311,7 @@ export default {
 				})
 				await this.$api.products.uploadImage(formData).then(res => {
 					console.log(res);
-					listThumbnail = res.data.data;
+					listThumbnail = res.data.data.urls;
 					this.$toast.success("Tải ảnh thành công");
 				}).catch(err => {
 					console.log(err);
