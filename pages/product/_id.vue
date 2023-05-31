@@ -634,6 +634,8 @@ export default {
 .thumbnail-list-item-img {
 	width: 100px;
 	height: 100px;
+	min-width: 100px;
+	min-height: 100px;
 	object-fit: contain;
 }
 .active{
