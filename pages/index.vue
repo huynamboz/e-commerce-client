@@ -14,13 +14,13 @@
 				<p class=" font-medium mb-4 max-md:pl-5">Danh mục hot <i class="fi fi-ss-flame"></i></p>
 				<top-category class="max-md:pl-5"/>
 			</div>
-			<section class="product-container bg-white pt-2 pb-5">
+			<section class="product-container bg-white pt-2 pb-5 px-[25px] max-md:px-0">
 				<div class="product-header mb-2">
 					<!-- <div class="product-header-text">
 						<h2>Trải nghiệm mua sắm không giới hạn cùng PBL</h2>
 						<p>Have good day with my website :)</p>
 					</div> -->
-					<p class=" font-medium max-md:pl-5 pl-5 text-lg">Khám phá sản phẩm</p>
+					<p class=" font-medium max-md:pl-5 text-lg">Khám phá sản phẩm</p>
 				</div>
 				<list-product :listProduct="listProduct" />
 			</section>

@@ -8,55 +8,50 @@
 				<div class="main-right grid max-md:flex max-md:flex-col">
 						<div class="inp-container">
 							<label for="">Tên sản phẩm <span style="color:red">*</span></label>
-							<input :class="{'border-[1px] border-rose-500': ProductData.name.length == 50}" type="text" placeholder="Bàn ghế" maxlength="50" v-model="ProductData.name" @change="fetchCompare()">
+							<input :class="{'border-[1px] border-rose-500': ProductData.name.length == 50}" type="text" placeholder="Tên sản phẩm" maxlength="50" v-model="ProductData.name">
 							<p v-show="ProductData.name.length == 50" class="text-sm text-rose-500">Tên tối đa 50 ký tự</p>
 						</div>
 						<div class="inp-container">
 							<label for="">Giá <span style="color:red">*</span></label>
-							<input :class="{'border-[1px] border-rose-500': !validateCost(ProductData.price) && ProductData.price}" type="text" placeholder="100000" v-model="ProductData.price">
-							<p v-show="!validateCost(ProductData.price) && ProductData.price" class="text-sm text-rose-500">Vui lòng nhập giá hợp lệ</p>
+							<input :class="{'border-[1px] border-rose-500': isNaN(ProductData.price) || ProductData.price < 0 || ProductData.price > 1000000000}" type="text" placeholder="100000" v-model="ProductData.price">
+							<p v-show="isNaN(ProductData.price) || ProductData.price < 0 || ProductData.price > 1000000000" class="max-w-[350px] text-sm text-rose-500">Giá tiền phải nằm trong khoảng {{ $product.formatPrice(0) }} - {{ $product.formatPrice(1000000000) }}</p>
 						</div>
 						<div class="inp-container">
 							<label for="">Giảm giá(%) <span style="color:red">*</span></label>
-							<input :class="{'border-[1px] border-rose-500': !validateCost(ProductData.discount) && ProductData.discount}" type="text" placeholder="10" v-model="ProductData.discount">
-							<p v-show="!validateCost(ProductData.discount) && ProductData.discount" class="text-sm text-rose-500">Vui lòng nhập số nguyên</p>
+							<input :class="{'border-[1px] border-rose-500': isNaN(ProductData.discount) || ProductData.discount < 0 || ProductData.discount > 1000000000}" type="text" placeholder="10" v-model="ProductData.discount">
+							<p v-show="isNaN(ProductData.discount) || ProductData.discount < 0 || ProductData.discount > 1000000000" class="max-w-[350px] text-sm text-rose-500">Giảm giá phải nằm trong khoảng {{ $product.formatPrice(0) }} - {{ $product.formatPrice(1000000000) }}</p>
 						</div>
 						<div class="inp-container">
 							<label for="">Tình trạng <span style="color:red">*</span></label>
-							<vs-select class="ml-4 mt-2"
+							<select class="ml-4 mt-2 w-fit p-3 rounded-md bg-[#f1f3f5] cursor-pointer"
 							color="success"
 							placeholder="Chọn tình trạng"
 							v-model="ProductData.status"
 							>
-								<vs-option label="Mới" value="1">
+							<option value="">Chọn tình trạng</option>
+								<option label="Mới" value="1">
 								Mới
-								</vs-option>
-								<vs-option label="Như mới" value="2">
+								</option>
+								<option label="Như mới" value="2">
 								Như mới
-								</vs-option>
-								<vs-option label="Đã qua sử dụng" value="3">
+								</option>
+								<option label="Đã qua sử dụng" value="3">
 								Đã qua sử dụng
-								</vs-option>
-							</vs-select>
+								</option>
+							</select>
 						</div>
 						
 						<div class="inp-container">
 							<label for="">category <span style="color:red">*</span></label>
-							<vs-select class="ml-4 mt-2"
-							color="success"
+							<select class="ml-4 mt-2 w-fit p-3 rounded-md bg-[#f1f3f5] cursor-pointer"
 							placeholder="Chọn loại"
 							v-model="ProductData.category"
 							>
-								<vs-option label="Đồ điện tử" value="1">
-								Đồ điện tử
-								</vs-option>
-								<vs-option label="Điện thoại" value="2">
-								Điện thoại
-								</vs-option>
-								<vs-option label="Máy tính bảng" value="3">
-								Máy tính bảng
-								</vs-option>
-							</vs-select>
+									<option value="">Chọn loại</option>
+									<option v-for="item in listCategory" :value="item?.id">
+									{{ item?.name }}
+									</option>
+							</select>
 						</div>
 						<div class="inp-container">
 							<label for="">Mô tả <span style="color:red">*</span></label>
@@ -71,26 +66,9 @@
 						
 						<button @click="handleUploadProduct()" class="btn-submit ml-20 h-[fit-content]">Đăng</button>
 				</div>
-				<div class="main-left">
-					<div class=" relative h-[400px] w-full p-2 border-[1px] border-gray-400 rounded-lg">
-						<div class=" absolute top-0 left-0 h-full w-full">
-							<label class="choose-file" for="inp-file"><div class="choose-icon">
-							<div class=" shadow-lg h-10 w-10 border-[1px] border-gray-400 bg-white flex items-center justify-center pt-[3px] rounded-md text-black text-2xl">
-								<i class="fi fi-rr-pencil"></i>
-							</div>
-							</div></label>
-							<input type="file" ref="fileInput" accept="image/*" multiple name="" id="inp-file" @change="previewImage($event)">
-						</div>
-						<img :src="previewUrl[0]" alt="" class="w-full h-full rounded-lg object-cover" v-if="previewUrl[0]">
-						<img src="~/assets/img/upload-preview.jpg" alt="" class="w-full h-full object-cover" v-else>
-					</div>
-					<div class="list-img-preview">
-						<div  v-for="item in previewUrl" class="relative" v-if="item != previewUrl[0]">
-							<i class="fi fi-rr-cross-circle text-white absolute top-2 right-2 cursor-pointer" @click="removeIMG(item)"></i>
-							<img :src="item" alt="" class="item-img object-cover" v-if="item">
-						</div>
-					</div>
-				</div>
+				
+				<choose-file @updateFile="updateFile" :listIMG="ProductData.thumbnails"/>
+				<!-- choose file -->
 
 				<loading v-if="isLoading" />
 
@@ -139,12 +117,14 @@
 	</section>
 </template>
 <script>
-import loading from '~/components/loading/loading-style-1.vue'
+import loading from '~/components/loading/main.vue'
+import ChooseFile from '~/components/common/ChooseFile.vue';
 export default {
 	layout: 'default',
 	auth:false,
 	components: {
-		loading
+		loading,
+		ChooseFile
 	},
 	data() {
 		return {
@@ -152,7 +132,7 @@ export default {
 				name: "",
 				price: "",
 				description: "",
-				thumbnailsList: [],
+				thumbnails: [],
 				thumbnail: "",
 				category: "",
 				keyword: "",
@@ -166,49 +146,48 @@ export default {
 			fileInput: null,
 			isLoading: false,
 			dataProduct: null,
-			listCompare: null
+			listCompare: null,
+			listCategory: [{
+				id: 1,
+				name: "Đồ điện tử",
+			}],
 		}
 	},
 	mounted() {
-		// this.fetchAllProduct();
 		console.log(this.$auth.user)
 		console.log(this.$route.params.modify)
+		this.fetchCategory();
 		if(this.$route.params.modify){
 			this.fetchProduct()
 		}
 	},
 	methods: {
-		validateCost(val){
-			console.log(Number.isInteger(parseInt(val)))
-			if(Number.isInteger(parseInt(val))){
-				return true
-			}
-			return false
+		fetchCategory() {
+			this.$axios.$get('/products/categories')
+				.then(res => {
+					this.listCategory = res.data;
+					console.log('res', res.data);
+				})
 		},
-		async removeIMG(item){
-			console.log(this.listFile.length)
-			let index = this.previewUrl.findIndex(i=>i==item)
-			this.previewUrl = this.previewUrl.filter(i=>i!=item);
-			console.log("index",index)
-			if (index > -1) {
-				this.listFile.splice(index, 1);
-				this.ProductData.thumbnailsList.splice(index, 1);
+		validateCost(val, min, max, label){
+			console.log(isNaN(val))
+			if(!isNaN(val) && val >= min && val <= max){
+				return false
 			}
-			console.log(this.listFile.length)
+			return label + " phải là số và nằm trong khoảng từ " + min + " đến " + max
+		},
+		updateFile(listFile, listImgInit){
+			console.log("emit success",listFile)
+			this.listFile = listFile;
+			this.ProductData.thumbnails = listImgInit
 		},
 		async fetchProduct(){
 			await this.$api.products.getProductById(this.$route.params.modify)
 			.then(res=>{
 				console.log(res)
 				this.ProductData = res.data
-				// this.ProductData.description = JSON.parse(this.ProductData.description)
-				// this.ProductData.thumbnail = this.ProductData.thumbnail_url
-				this.ProductData.thumbnailsList = this.ProductData.thumbnails.map(item=>{
-					return item
-				})
 				this.ProductData.description = JSON.parse(this.ProductData.description)
-				this.previewUrl = this.ProductData.thumbnailsList
-				console.log(this.previewUrl)
+				this.previewUrl = this.ProductData.thumbnails
 			})
 		},
 		formatPrice(price) {
@@ -222,40 +201,12 @@ export default {
 		},
 		fetchAllProduct() {
 			this.$axios.get(`http://localhost:5000/api/product/user/${this.$auth.user.user_id}`).then(res => {
-				console.log(res);
 				this.dataProduct = res.data.data;
-				console.log("product", this.dataProduct);
-
 				this.dataProduct.forEach(item => {
 					item.description = JSON.parse(item.description);
 					item.thumbnail_url = "http://localhost:5000" + item.thumbnail_url;
-
 				})
 			})
-		},
-		fetchCompare(){
-			console.log(typeof this.ProductData.discount)
-		}
-		,
-		previewImage(event) {
-			try {
-				let tmp = [];
-				tmp = event.target.files;
-				for (let i = 0; i < tmp.length; i++) {
-					this.listFile.push(tmp[i]);
-				}
-				this.previewUrl = [];
-				this.listFile.forEach(item => {
-					const reader = new FileReader();
-					reader.readAsDataURL(item);
-					reader.onload = () => {
-						this.previewUrl.push(reader.result);
-					}
-					// console.log(this.previewUrl, item);
-				})
-			} catch (error) {
-				console.log(error);
-			}
 		},
 		async handleUploadProduct(){
 			if(this.$route.params.modify){
@@ -266,11 +217,42 @@ export default {
 		},
 		async updateData(){
 			try{
+				if(this.ProductData.name == "" || this.ProductData.price == "" || this.ProductData.description == ""|| this.ProductData.category == "" || this.ProductData.status == "") {
+					this.$toast.error("Vui lòng nhập đầy đủ thông tin",{ duration: 3000 });
+					return
+				};
+				this.isLoading = true;
+				let listThumbnail = [];
+				let isUploadSuccess = true;
+				if (this.listFile.length > 0){
+					let formData = new FormData();
+					this.listFile.forEach(item => {
+						formData.append('files', item);
+					});
+					await this.$api.products.uploadImage(formData).then(res => {
+					console.log(res);
+					listThumbnail = res.data.data.urls;
+					this.$toast.success("Tải ảnh thành công");
+					}).catch(err => {
+						console.log(err);
+						this.isLoading = false;
+						isUploadSuccess = false;
+						return;
+					})
+				}
+				if(!isUploadSuccess){
+					this.$toast.error("Tải ảnh thất bại Vui lòng chọn định dạng ảnh hợp lệ");
+					this.isLoading = false;
+					return;
+				}
+
+				this.ProductData.thumbnails = this.ProductData.thumbnails.filter(item => !item.startsWith("data:image/"));
+				this.ProductData.thumbnails = this.ProductData.thumbnails.concat(listThumbnail);
 				await this.$api.products.updateProduct({
 				name: this.ProductData.name,
 				price: this.ProductData.price,
 				description: JSON.stringify(this.ProductData.description),
-				thumbnailUrls: this.ProductData.thumbnailsList,
+				thumbnailUrls: this.ProductData.thumbnails,
 				category_id: 1,
 				status_id: 1,
 				discount: parseInt(this.ProductData.discount),
@@ -291,14 +273,16 @@ export default {
 		},
 		async postData() {
 			try {
+				if(this.ProductData.name == "" || this.ProductData.price == "" || this.ProductData.description == ""|| this.ProductData.category == "" || this.ProductData.status == "") {
+					this.$toast.error("Vui lòng nhập đầy đủ thông tin",{ duration: 3000 });
+					return
+				};
 				if(this.$auth.user.active_status == false){
-					// this.$toast.error("Bạn phải cập nhật đầy đủ thông tin tài khoản trước",{duration: 5000});
 					this.alertActive = true;
 					return;
 				}
 				this.isLoading = true;
 				let isUploadSuccess = true;
-				console.log(this.$auth.user);
 				if(this.listFile.length == 0){
 					this.$toast.error("Vui lòng chọn ảnh");
 					this.isLoading = false;
@@ -310,7 +294,6 @@ export default {
 					formData.append('files', item);
 				})
 				await this.$api.products.uploadImage(formData).then(res => {
-					console.log(res);
 					listThumbnail = res.data.data.urls;
 					this.$toast.success("Tải ảnh thành công");
 				}).catch(err => {
@@ -329,8 +312,8 @@ export default {
 					price: this.ProductData.price,
 					description: JSON.stringify(this.ProductData.description),
 					thumbnailUrls: listThumbnail,
-					category_id: 1,
-					status_id: 1,
+					category_id: this.ProductData.category,
+					status_id: this.ProductData.status,
 					discount: parseInt(this.ProductData.discount),
 				}).then(res => {
 					console.log(res);
@@ -342,31 +325,9 @@ export default {
 					this.$toast.error(err.response.data.message,{ duration: 3000 });
 					this.isLoading = false;
 				})
-				// let listFD = [];
-				// let formData = new FormData();
-				// this.listFile.forEach(item => {
-				// 	formData.append('files', item);
-				// })
-				// await this.$axios.post(process.env.BASE_URL_API +`/thumbnail/${this.dataProduct.id}/upload`, formData, {
-				// })
-				// 	.then(res => {
-				// 		console.log(res);
-				// 		this.thumbnail = res.data;
-				// 	})
-				// 	.catch(err => {
-				// 		console.log(err);
-				// 		this.isLoading = false;
-				// 	})
-				// await this.$axios.put(process.env.BASE_URL_API +`/product/${this.dataProduct.id}/thumbnail?imgPath=${this.thumbnail[0].filePath}`, {
-				// }).then(res => {
-				// 	console.log(res);
-				// 	this.isLoading = false;
-				// 	this.$router.push(`/product/${this.dataProduct.id}`);
-				// }).catch(err => {
-				// 	console.log(err);
-				// })
 			} catch (error) {
 				console.log(error);
+				this.isLoading = false;
 				this.$toast.error("Có lỗi xảy ra, vui lòng thử lại sau");
 			}
 		}

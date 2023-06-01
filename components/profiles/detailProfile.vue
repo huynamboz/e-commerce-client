@@ -5,7 +5,8 @@
 			<div class="profile-header">
 				<div class="relative">
 					<!-- <img src="~/assets/img/avatar-default.png" alt="" class="icon-avatar" v-if="user.avatar"> -->
-					<img :src="previewUrl[0]" alt="" class="icon-avatar" >
+					<img :src="previewUrl[0]" v-if="previewUrl[0] != 'null'" alt="" class="icon-avatar" >
+					<img src="~/assets/img/defaultavt.webp" v-else alt="" class="icon-avatar" >
 					<div>
 
 					</div>
@@ -210,14 +211,17 @@ methods: {
 				console.log("res:",res);
 				this.$toast.success("Thay đổi thông tin thành công");
 				this.isLoading = false;
-				this.user = res.data.data;
-				this.user.password = '';
+				// this.user = res.data.data;
 				console.log("user:",this.user);
 				this.$auth.fetchUser();
+				this.listFile = [];
+				// this.getDistrictID();
 			})
 			.catch(err => {
 				console.log(err);
 				this.isLoading = false;
+				this.listFile = [];
+				this.previewUrl = [];
 				this.$toast.error(this.$handleErrorApi(err));
 			})
 		},

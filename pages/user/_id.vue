@@ -28,12 +28,18 @@
 					</div>
 				</div>
 			</header>
-			<div class="main bg-[#ffffff] p-[20px] max-md:pl-0 max-md:pr-0 flex flex-col items-center max-md:w-full">
+			<div class="main bg-[#ffffff] p-[20px] pt-0 min-w-[300px] max-md:pl-0 max-md:pr-0 flex flex-col items-center max-md:w-full">
+				<p class="py-[20px] text-lg">Danh sách sản phẩm</p>
 				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5">
 					<div v-for="item in listProduct" :key="item.id" class="product-item">
-						<div class="relative">
+						<div class="relative group">
 							<productCard :product="item"/>
-							<img v-if="pageParams == $auth.user?.id" src="~/assets/icon/edit-2.png" class="absolute top-[50%] right-0 h-7 w-7 cursor-pointer" alt="Chỉnh sửa" @click="$router.push(`/product/modify/${item.id}`)">
+							<div v-if="pageParams == $auth.user?.id" 
+							class="absolute hidden transition-all duration-500 group-hover:block edit-prod top-[50%] left-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
+							alt="Chỉnh sửa" 
+							@click="$router.push(`/product/modify/${item.id}`)">
+							Chỉnh sửa <i class="fi fi-rr-pencil"></i>
+						</div>
 						</div>
 					</div>
 				</div>

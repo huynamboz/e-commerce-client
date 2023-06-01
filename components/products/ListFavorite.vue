@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<div class="overlay fixed top-0 left-0 h-[100vh] w-[100vw] z-10" @click="closeFavorite"></div>
+		<!-- <div class="overlay fixed top-0 left-0 h-[100vh] w-[100vw] z-10" @click="closeFavorite"></div> -->
 		<div class="p-3 text-sm font-medium border-b-[1px] border-slate-300">Đã yêu thích</div>
 		<div class="relative pb-9 pt-3 z-20">
 			<div v-if="listFavoriteProduct.length > 0" class="flex flex-col">
@@ -22,7 +22,7 @@
 				<img src="~/assets/icon/empty.png" alt="">
 				<p class=" text-base">Danh sách yêu thích trống</p>
 			</div>
-			<div class="absolute bottom-0 border-t-[1px] w-full flex justify-center text-xs py-2">Xem tất cả</div>
+			<!-- <div @click="unFavoriteAll()" class="absolute bottom-0 border-t-[1px] w-full flex justify-center text-xs py-2">Xóa tất cả</div> -->
 		</div>
 	</section>
 </template>
@@ -58,6 +58,20 @@ export default {
 		toProduct(id) {
 			this.$router.push(`/product/${id}`);
 			this.closeFavorite();
+		},
+		unFavoriteAll() {
+			try{
+				for (let i = 0; i < this.listFavoriteProduct.length; i++) {
+					this.$axios.delete(`/users/me/favorite-products/${this.listFavoriteProduct[i].id}`)
+					.then((response) => {
+						this.$store.dispatch('addFavoriteStore', response.data.data);
+						console.log(this.$store.getters['getListFavoriteProduct']);
+						this.fetchFavoriteProduct();
+					})
+				}
+			} catch(err){
+				console.log(err);
+			}
 		},
 		async fetchFavoriteProduct(){
 			console.log(this.$auth.user.id);

@@ -97,8 +97,7 @@ export default {
 	padding: 5px 5px;
 	color:#6f6f6f;
 }
-.tab-right{
-}
+
 .is-choosed{
 	border-right: 3px solid #ef0808;
 	font-weight: 500;

@@ -36,8 +36,8 @@
 				<div class="flex gap-5">
 					<div class="relative">
 						<img v-show="!item.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
-						<img v-show="item.user.avatar" :src="item.user.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
-						<div v-if="item.user.id == $auth.user?.id" class=" absolute px-1 rounded-md left-[5px] bottom-1 text-xs bg-blue-400 text-white">Bạn</div>
+						<img v-show="item.user.avatar" :src="item.user?.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+						<div v-if="item.user?.id == $auth.user?.id" class=" absolute px-1 rounded-md left-[5px] bottom-1 text-xs bg-blue-400 text-white">Bạn</div>
 					</div>
 					<div class="flex flex-col">
 						<div class="flex gap-3 items-center">
@@ -56,12 +56,12 @@
 			
 
 		</div>
-		<div class="flex items-center mt-5 p-3 pr-0 max-h-[50px] bg-slate-100 rounded-lg px-3 gap-4">
+		<div v-if="product?.user?.id != $auth.user?.id" class="flex items-center mt-5 p-3 pr-0 max-h-[50px] bg-slate-100 rounded-lg px-3 gap-4">
 			<img src="~/assets/img/defaultavt.webp" alt="" class="w-7 h-7 rounded-full border-[1px] border-[#06a8f5]">
 			<input @keyup.enter="addReview()" v-model="review" type="text" class="w-[calc(100%_-_102px)] bg-transparent" placeholder="Viết đánh giá">
 			<button class=" whitespace-nowrap bg-blue-400 mr-1 hover:bg-blue-500 rounded-lg p-2 text-sm text-white" @click="addReview()">Đánh giá</button>
 		</div>
-		<product-rating :rating="rating" :font="'text-lg'" class="mt-3 ml-3" @chooseStar="chooseStar"/>
+		<product-rating v-if="product.user?.id != $auth.user?.id" :rating="rating" :font="'text-lg'" class="mt-3 ml-3" @chooseStar="chooseStar"/>
 	</div>
 </template>
 <script>
@@ -74,12 +74,17 @@ export default {
 		listReview: {
 			type: Array,
 			default: () => []
+		},
+		product: {
+			type: Object,
+			default: () => {}
 		}
 	},
 	data() {
 		return {
 			review: '',
 			rating:0,
+			isCommented: false
 		}
 	},
 	mounted() {

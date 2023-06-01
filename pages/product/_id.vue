@@ -39,7 +39,7 @@
 							<div class="w-50">
 								<p class="text-gray-500">Loại </p>
 							</div>
-							<div>Điện tử</div>
+							<div>{{ products.category }}</div>
 							<div>
 								<p class="text-gray-500">Trạng thái </p>
 							</div>
@@ -215,7 +215,7 @@
 								</div>
 							</div>
 						</div>
-						<review-content id="review" :listReview="listReview" @fetch-reviews="fetchReviews"/>
+						<review-content :product="products" id="review" :listReview="listReview" @fetch-reviews="fetchReviews"/>
 					</div>
 
 					<div class="product-description-recommend">
@@ -305,6 +305,8 @@ export default {
 			isInFavorite:false,
 			contentReport:"",
 			listReview:[],
+			listCategory:[],
+			productStatus: '',
 		}
 	},
 	watch: {

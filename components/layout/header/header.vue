@@ -6,8 +6,8 @@
         </div>
         <search />
         <div class="list-action flex items-center max-md:hidden">
-			<div class="cart action-item relative flex items-center">
-					<div class="flex gap-3 items-center" @click="openFavorite" title="Sản phẩm yêu thích">
+			<div id="list-fav-ele" class="cart action-item relative flex items-center">
+					<div  class="flex gap-3 items-center" @click="openFavorite()" title="Sản phẩm yêu thích">
 						<div class="relative">
 						<div class="flex items-center justify-center h-5 w-5 rounded-full text-sm bg-rose-400 text-white absolute -left-2 -top-2" v-if="listFavoriteProduct.length > 0">
 							{{ listFavoriteProduct.length < 9 ? listFavoriteProduct.length : '9+' }}
@@ -29,12 +29,12 @@
 				<div class="mess action-item" @click="goToMessage()" title="Tin nhắn">
 					<i class="fi fi-rr-comment"></i>
 				</div> -->
-				<div class="profile action-item" @click="handleOpenPopup()">
+				<div class="profile action-item" id="popup-profile" @click="handleOpenPopup()">
 					<!-- <img src="~/assets/img/profile.png" alt="" class="icon-action"> -->
 					<i v-if="!$auth.loggedIn" class="fi fi-rr-user" title="Thông tin shop"></i>
 				<div v-else class="relative flex items-center gap-[10px]">
 					<div class=" border-[1px] border-gray-400 rounded-full">
-						<img v-if="!$auth.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-[30px] h-[30px] rounded-[50%]">
+						<img v-if="!$auth.user.avatar || $auth.user.avatar == 'null'" src="~/assets/img/defaultavt.webp" alt="" class="w-[30px] h-[30px] rounded-[50%]">
 						<img v-else :src="$auth.user.avatar"
 						alt="" class="w-[30px] h-[30px] rounded-[50%]">
 					</div>
@@ -119,6 +119,22 @@ export default {
 	},
 	mounted(){
 		this.fetchFavoriteProduct();
+		let listFavEle = document.getElementById("list-fav-ele");
+		let popupProfile = document.getElementById("popup-profile");
+		let that = this;
+		document.addEventListener("click", function (e) {
+			let targetElement = e.target; // clicked element
+			do {
+				if (targetElement == listFavEle || targetElement == popupProfile) {
+					console.log("This is a click inside element. Do nothing, just return.");
+					return;
+				}
+				targetElement = targetElement.parentNode;
+			} while (targetElement);
+			console.log("This is a click outside element.");
+			that.isOpenFavorite = false;
+			that.isShowPopupProfile = false;
+		});
 	},
     methods: {
 		toProduct(id){
@@ -336,7 +352,7 @@ button{
 	padding: 10px 20px;
 	cursor: pointer;
 	&:hover{
-		background-color: #3d8bfd;
+		background-color: #06a8f5;
 		color: #ffffff;
 	}
 	& > i{
@@ -351,7 +367,7 @@ button{
 	padding: 10px 20px;
 	gap: 10px;
 	&:hover{
-		background-color: #3d8bfd;
+		background-color: #06a8f5;
 		color: #ffffff;
 	}
 	& > i{
@@ -366,7 +382,7 @@ button{
 	padding: 10px 20px;
 	gap: 10px;
 	&:hover{
-		background-color: #3d8bfd;
+		background-color: #06a8f5;
 		color: #ffffff;
 	}
 	& > i{

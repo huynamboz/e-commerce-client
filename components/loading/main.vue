@@ -1,10 +1,10 @@
 <template>
-	<div class="container">
+	<div class="container-load">
 		<span class="loader"></span>
 	</div>
 </template>
 <style lang="scss" scoped>
-.container{
+.container-load{
 	position: fixed;
 	z-index: 99999;
 	top: 0;
