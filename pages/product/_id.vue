@@ -349,17 +349,15 @@ export default {
 				document.body.style.overflow = "auto";
 			}
 		},
-	},
-	computed: {
-		listFavoriteStore(){
-			return this.$store.getters['getListFavoriteProduct'];
-		}
-	},
-	watch: {
 		listFavoriteStore: function (val) {
 			console.log("favourite change",this.listFavoriteStore)
 			this.listFavorite = val;
 			this.checkIsInListFavorite();
+		}
+	},
+	computed: {
+		listFavoriteStore(){
+			return this.$store.getters['getListFavoriteProduct'];
 		}
 	},
 	async mounted() {
