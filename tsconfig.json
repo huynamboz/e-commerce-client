@@ -1,17 +1,25 @@
 {
 	"compilerOptions": {
-	  "allowJs": true,
-	  "baseUrl": ".",
 	  "target": "ES2018",
 	  "module": "ESNext",
+	  "moduleResolution": "Node",
+	  "lib": [
+		"ESNext",
+		"ESNext.AsyncIterable",
+		"DOM"
+	  ],
+	  "esModuleInterop": true,
+	  "sourceMap": true,
+	  "experimentalDecorators": true,
+	  "baseUrl": ".",
 	  "paths": {
 		"~/*": [
 		  "./*"
 		],
-		"@/*": [
-		  "./*"
-		]
-	  }
+	  },
+	  "types": [
+		"@nuxtjs/axios",
+	  ]
 	},
 	"exclude": [
 	  "node_modules",

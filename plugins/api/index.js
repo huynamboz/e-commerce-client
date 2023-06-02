@@ -31,21 +31,19 @@ export default (context, inject, store) => {
 		(response) => response,
 		async (error) => {
 			const statusCode = error.response.status;
-			console.log("call api author",error.response);
-			// Kiểm tra nếu mã lỗi là 401
+			console.log("call api authorize",error.response);
 			if (statusCode === 401) {
-				// Gọi hàm refresh token
 				try {
-					await store.$auth.refreshTokens();
+					await context.$auth.refreshTokens();
 					// Thực hiện lại yêu cầu API gốc sau khi refresh token thành công
 					return instance(error.config);
 				} catch (error) {
 					// Xử lý lỗi khi refresh token không thành công
-					// Ví dụ: đăng xuất người dùng, chuyển hướng đến trang đăng nhập, ...
-					// console.log('Refresh token failed:', error);
+					await context.$auth.logout();
+					context.$router.push('/');
+					console.log('Refresh token failed:', error);
 				}
 			}
-
 			// Nếu không phải mã lỗi 401, trả về lỗi gốc
 			return Promise.reject(error);
 		}

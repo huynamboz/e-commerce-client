@@ -54,7 +54,7 @@ export default {
 			page: 1,
 			listMiniCategory: [
 				{
-					name: 'Hàng của superBAD.store',
+					name: 'superBAD.store',
 					img: 'https://lighthouse.chotot.com/_next/image?url=https%3A%2F%2Fcdn.chotot.com%2Fadmincentre%2FlRml-H3PO0o270WLS26nv9eNs5TDVVfiuSVsHXENpIc%2Fpreset%3Araw%2Fplain%2F425fc9c8bdb4d028d8cc52628fbd047d-2804905330699599227.jpg&w=256&q=95'
 				},
 				{

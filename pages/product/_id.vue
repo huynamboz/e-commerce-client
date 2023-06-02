@@ -4,8 +4,29 @@
 			<section class="overview-product flex gap-11">
 				<div class="list-thumbnail">
 					<div class="main-thumbnail">
-						<img v-if="currentThumbnail" :src="currentThumbnail" alt="" class="product-thumbnail rounded-lg">
+						<img @click="isOpenZoom = true" v-if="currentThumbnail" :src="currentThumbnail" alt="" class="product-thumbnail cursor-zoom-in rounded-lg">
 						<img v-else src="~/assets/img/img-none.png" alt="" class="product-thumbnail">
+					</div>
+					<div v-show="isOpenZoom" class="fixed transition-opacity z-[99999] top-0 left-0 w-[100vw] h-[100vh]">
+						<div class="relative w-full h-full p-5 flex justify-center items-center">
+							<p @click="isOpenZoom = false" class="text-white absolute top-2 right-5 cursor-pointer z-20">Đóng x</p>
+							<!-- <div class="absolute top-[50%] left-5 z-20 text-white text-[30px]">
+								<i class="fi fi-rr-arrow-left"></i>
+							</div> -->
+							<div class="relative z-20 flex justify-center items-center flex-col h-fit w-fit">
+								<img :src="currentThumbnail" alt="" class="product-thumbnail cursor-zoom-in rounded-lg">
+								<div class="list-item-thumbnail">
+									<div v-if="products.thumbnails.length > 0" class="item-thumbnail" v-for="(item, index) in products?.thumbnails" :key="index">
+										<img :src="products.thumbnails[index]" alt="" class="thumbnail-list-item-img" @click="changeThumbnail(index,$event)">
+									</div>
+								</div>
+							</div>
+							<!-- <div class="absolute top-[50%] right-5 z-20 text-white text-[30px]">
+								<i class="fi fi-rr-arrow-right"></i>
+							</div> -->
+						<div @click="isOpenZoom = false" class="absolute top-0 left-0 z-10 bg-black opacity-85 w-full h-full"></div>
+						</div>
+
 					</div>
 					<div class="list-item-thumbnail">
 						<div v-if="products.thumbnails.length > 0" class="item-thumbnail" v-for="(item, index) in products?.thumbnails" :key="index">
@@ -307,6 +328,7 @@ export default {
 			listReview:[],
 			listCategory:[],
 			productStatus: '',
+			isOpenZoom: false,
 		}
 	},
 	watch: {

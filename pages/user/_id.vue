@@ -1,7 +1,7 @@
 <template>
 	<div class="root">
 		<div class="mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col">
-			<header class="flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center">
+			<header class=" rounded-lg flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center">
 				<div class="container flex max-md:justify-center">
 					<img :src="userData?.avatar" alt="" 
 				class="object-cover w-[257px] h-[200px] rounded-[10px]">
@@ -24,12 +24,27 @@
 							<div @click="$router.push('/user/settings')" v-if="pageParams == $auth.user?.id" class="transition-colors duration-300  hover:bg-[#06a8f5] p-2 px-12 rounded-lg bg-[#06a8f5] text-[#ffffff] text-[14px]
 							cursor-pointer
 							">Chỉnh sửa trang cá nhân</div>
+							<div>
+								<div class="flex gap-3">
+									<img src="~/assets/icon/fb.svg" alt="" class="h-8 w-8">
+									<div><img src="~/assets/icon/mess.svg" alt="" class="h-8 w-8"></div>
+									<div><img src="~/assets/icon/zalo.svg" alt="" class="h-8 w-8"></div>
+									<div><img src="~/assets/icon/ig.svg" alt="" class="h-8 w-8"></div>
+								</div>
+							</div>
+							<div v-if="userData?.id != $auth.user.id" class="mt-2 bg-[#06a8f5] p-2 w-full rounded-lg text-white">
+								Gọi cho shop <i class="fi fi-rr-angle-small-right"></i>
+							</div>
 						</div>
 					</div>
 				</div>
 			</header>
-			<div class="main bg-[#ffffff] p-[20px] pt-0 min-w-[300px] max-md:pl-0 max-md:pr-0 flex flex-col items-center max-md:w-full">
+			<div class="main bg-[#ffffff] p-[20px] min-w-[50%] pt-0 min-h-full max-md:pl-0 max-md:pr-0 flex flex-col items-center max-md:w-full">
 				<p class="py-[20px] text-lg">Danh sách sản phẩm</p>
+				<div v-if="listProduct.length ==0" class="flex flex-col items-center">
+					<img src="~/assets/icon/empty.png" alt="">
+					<p>Chưa có sản phẩm</p>
+				</div>
 				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5">
 					<div v-for="item in listProduct" :key="item.id" class="product-item">
 						<div class="relative group">

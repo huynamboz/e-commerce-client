@@ -14,7 +14,7 @@
 						</div>
 						<i class="text-white fi fi-rr-heart h-[32px] block"></i>
 					</div>
-					<div class="text-white text-base rounded-xl font-normal">Yêu thích</div>
+					<div class="text-white text-sm rounded-xl font-normal">Yêu thích</div>
 					</div>
 					<div class="bg-white absolute top-[calc(100%_+_10px)] -left-[100%] max-md:-left-10 w-[360px] shadow-2xl rounded-xl  open-popup-animate" v-if="isOpenFavorite">
 						
@@ -31,15 +31,19 @@
 				</div> -->
 				<div class="profile action-item" id="popup-profile" @click="handleOpenPopup()">
 					<!-- <img src="~/assets/img/profile.png" alt="" class="icon-action"> -->
-					<i v-if="!$auth.loggedIn" class="fi fi-rr-user" title="Thông tin shop"></i>
+					
+				<div v-if="!$auth.loggedIn" class="flex items-center gap-2 text-white">
+					<i class="fi fi-rr-user" title="Thông tin shop"></i>
+					<p class="text-sm">Đăng nhập</p>
+				</div>
 				<div v-else class="relative flex items-center gap-[10px]">
 					<div class=" border-[1px] border-gray-400 rounded-full">
 						<img v-if="!$auth.user.avatar || $auth.user.avatar == 'null'" src="~/assets/img/defaultavt.webp" alt="" class="w-[30px] h-[30px] rounded-[50%]">
 						<img v-else :src="$auth.user.avatar"
 						alt="" class="w-[30px] h-[30px] rounded-[50%]">
 					</div>
-					<div class="text-white text-base rounded-xl font-normal">{{ $auth.user.name }}</div>
-					<i class="fi fi-rr-caret-down h-[25px] mb-[4px]"></i>
+					<div class="text-white text-sm rounded-xl font-normal">{{ $auth.user.name }}</div>
+					<i class="fi fi-rr-caret-down h-[25px] mb-[4px] text-white"></i>
 				</div>
                 <!-- <p>Cá nhân</p> -->
                 <div class="popup-detail-user" v-if="isShowPopupProfile">

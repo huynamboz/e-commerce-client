@@ -1,6 +1,6 @@
 <template>
 	<div class="section max-md:w-full">
-	<div id="form-search" class=" relative search-container max-md:w-full w-[500px] flex bg-slate-100 py-2 px-3 items-center rounded-lg">
+	<div id="form-search" class=" relative search-container max-md:w-full w-[500px] max-[1130px]:w-[300px] flex bg-slate-100 py-2 px-3 items-center rounded-lg">
 		<input @focus="openRecent=true" @keyup.enter ="search()" type="text" v-model="keyword" placeholder="search" class="search-input bg-transparent w-full">
 		<div class="icon-search" @click="search()">
 			<div class="icon-search-img cursor-pointer">
@@ -61,13 +61,10 @@ export default {
 			do {
 				if (targetElement == inp) {
 					console.log("This is a click inside element. Do nothing, just return.");
-					// This is a click inside. Do nothing, just return.
 					return;
 				}
-				// Go up the DOM
 				targetElement = targetElement.parentNode;
 			} while (targetElement);
-			// This is a click outside.
 			that.openRecent = false;
 		});
 	},
