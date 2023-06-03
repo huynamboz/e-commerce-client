@@ -1,7 +1,7 @@
 <template>
 	<div class="root">
-		<div class="mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col">
-			<header class=" rounded-lg flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center">
+		<div class="mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col bg-white">
+			<header class=" rounded-lg shadow-lg flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center">
 				<div class="container flex max-md:justify-center">
 					<img :src="userData?.avatar" alt="" 
 				class="object-cover w-[257px] h-[200px] rounded-[10px]">
@@ -32,7 +32,7 @@
 									<div><img src="~/assets/icon/ig.svg" alt="" class="h-8 w-8"></div>
 								</div>
 							</div>
-							<div v-if="userData?.id != $auth.user.id" class="mt-2 bg-[#06a8f5] p-2 w-full rounded-lg text-white">
+							<div v-if="userData?.id != $auth.user?.id" class="mt-2 bg-[#06a8f5] p-2 w-full rounded-lg text-white">
 								Gọi cho shop <i class="fi fi-rr-angle-small-right"></i>
 							</div>
 						</div>
