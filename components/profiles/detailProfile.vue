@@ -353,8 +353,7 @@ methods: {
 		height: 0;
 	}
 }
-.profile-content-info{
-}
+
 .info-inp{
 	margin-bottom: 20px;
 	display: flex;

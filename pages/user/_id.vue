@@ -21,7 +21,7 @@
 								<i class="fi fi-rr-calendar-day"></i>
 								Ngày tham gia: <span class="text-[#3d8bfd]">{{ userData?.created_at?.split("T")[0] }}</span>
 							</div>
-							<div @click="$router.push('/user/settings')" v-if="pageParams == $auth.user?.id" class="transition-colors duration-300  hover:bg-[#06a8f5] p-2 px-12 rounded-lg bg-[#06a8f5] text-[#ffffff] text-[14px]
+							<div @click="$router.push('/user/settings')" v-if="pageParams == $auth.user?.id" class="transition-colors duration-300  hover:bg-[#06a8f5] p-2 w-full rounded-lg bg-[#06a8f5] text-[#ffffff] text-[14px]
 							cursor-pointer
 							">Chỉnh sửa trang cá nhân</div>
 							<div>
@@ -118,7 +118,7 @@ export default {
 			this.$api.users.getUserById(this.pageParams)
 				.then(res => {
 					console.log('res', res);
-					this.userData = res.data;
+					this.userData = res.data.data;
 				})
 		}
 	},
