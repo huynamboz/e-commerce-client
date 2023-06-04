@@ -35,8 +35,8 @@
 			<div class="flex flex-col gap-5 group" v-for="(item, index) in listReview" :key="index">
 				<div class="flex gap-5">
 					<div class="relative h-fit">
-						<img v-show="!item.user.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
-						<img v-show="item.user.avatar" :src="item.user?.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+						<img v-if="!item.user.avatar || item.user.avatar == 'null'" src="~/assets/img/defaultavt.webp" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
+						<img v-else="item.user.avatar" :src="item.user?.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
 						<div v-if="item.user?.id == $auth.user?.id" class=" absolute px-1 rounded-md left-[5px] -bottom-1 text-xs bg-blue-400 text-white">Bạn</div>
 					</div>
 					<div class="flex flex-col">
@@ -90,7 +90,7 @@
 
 		</div>
 		<div v-if="$auth.loggedIn && product?.user?.id != $auth.user?.id && !isCommented" class="flex items-center mt-5 p-3 pr-0 max-h-[50px] bg-slate-100 rounded-lg px-3 gap-4">
-			<img v-if="!$auth.user?.avatar" src="~/assets/img/defaultavt.webp" alt="" class="w-7 h-7 rounded-full border-[1px] border-[#06a8f5]">
+			<img v-if="!$auth.user?.avatar || $auth.user?.avatar == 'null'" src="~/assets/img/defaultavt.webp" alt="" class="w-7 h-7 rounded-full border-[1px] border-[#06a8f5]">
 			<img v-else :src="$auth.user?.avatar" alt="" class="w-7 h-7 rounded-full border-[1px] border-[#06a8f5]">
 			<input @keyup.enter="addReview()" v-model="review" type="text" class="w-[calc(100%_-_102px)] bg-transparent" placeholder="Viết Nhận xét">
 			<button class=" whitespace-nowrap bg-blue-400 mr-1 hover:bg-blue-500 rounded-lg p-2 text-sm text-white" @click="addReview()">Nhận xét</button>
