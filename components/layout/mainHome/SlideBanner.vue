@@ -1,6 +1,6 @@
 <template>
 	<!-- Make a div wrapped slider,set height and width -->
-	<div class="h-[250px] max-md:h-[200px] mb-4 flex gap-3" style="width:100%;">
+	<div class="h-[250px] max-md:h-[120px] mb-4 flex gap-3" style="width:100%;">
 		<div class="flex flex-col gap-2 max-md:hidden">
 
 			<div class="h-[50%] w-[350px] bg-[#f1f3f5]">

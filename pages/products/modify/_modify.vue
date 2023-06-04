@@ -14,6 +14,7 @@
 						<div class="inp-container">
 							<label for="">Giá <span style="color:red">*</span></label>
 							<input :class="{'border-[1px] border-rose-500': isNaN(ProductData.price) || ProductData.price < 0 || ProductData.price > 1000000000}" type="text" placeholder="100000" v-model="ProductData.price">
+							<p class="pl-5">{{ $product.formatPrice(ProductData.price) }}</p>
 							<p v-show="isNaN(ProductData.price) || ProductData.price < 0 || ProductData.price > 1000000000" class="max-w-[350px] text-sm text-rose-500">Giá tiền phải nằm trong khoảng {{ $product.formatPrice(0) }} - {{ $product.formatPrice(1000000000) }}</p>
 						</div>
 						<div class="inp-container">
@@ -121,7 +122,7 @@ import loading from '~/components/loading/main.vue'
 import ChooseFile from '~/components/common/ChooseFile.vue';
 export default {
 	layout: 'default',
-	auth:false,
+	auth: 'login',
 	components: {
 		loading,
 		ChooseFile

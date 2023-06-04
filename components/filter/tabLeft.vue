@@ -52,9 +52,16 @@ export default{
 			currentCity: 'ALL',
 		}
 	},
+	computed:{
+		pageParams(){
+			return this.$route.query;
+		}
+	},
 mounted(){
 	this.fetchFilter();
 	this.getListCity();
+	this.currentCate = this.pageParams.category || 'ALL';
+	this.currentCity = this.pageParams.city || 'ALL';
 },
 methods:{
 	chooseCate(){
@@ -68,6 +75,7 @@ methods:{
 		await this.$axios.get('/products/categories')
 		.then((response) => {
 			this.listCate = response.data.data;
+			this.$store.dispatch('addCategoryStore', this.listCate);
 		})
 		.catch((error) => {
 			console.log(error);

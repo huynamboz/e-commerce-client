@@ -1,4 +1,8 @@
 export default (context, inject, store) => {
+	const getNameCategory = (id) => {
+		let category = store.state.categories.find(category => category.id === id);
+		return category.name;
+	};
 	const formatPrice = (price) => {
 		let formatter = new Intl.NumberFormat('vi-VN', {
 			style: 'currency',
@@ -10,5 +14,8 @@ export default (context, inject, store) => {
 	}
 	inject("product",{
 		formatPrice: formatPrice
+	});
+	inject("category",{
+		getNameCategory: getNameCategory
 	});
 }

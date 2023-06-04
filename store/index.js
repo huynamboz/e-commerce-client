@@ -1,21 +1,32 @@
 export const state = () => ({
 	listFavoriteProduct: [],
-  })
-  
-  export const getters = {
+	listCategory: []
+})
+
+export const getters = {
 	getListFavoriteProduct(state) {
 		return state.listFavoriteProduct
 	},
-  }
-  
-  export const mutations = {
+	getListCategory(state) {
+		return state.listCategory
+	}
+}
+
+export const mutations = {
 	updateListFavorite(state, data) {
-	  state.listFavoriteProduct = data
+		state.listFavoriteProduct = data
 	},
-  }
-  
-  export const actions = {
-	addFavoriteStore(vuexContext,data) {
-		  vuexContext.commit('updateListFavorite', data)
+	updateListCategory(state, data) {
+		state.listCategory = data
+	}
+}
+
+export const actions = {
+	addFavoriteStore(vuexContext, data) {
+		vuexContext.commit('updateListFavorite', data)
 	},
-  }
+	addCategoryStore(vuexContext, data) {
+		vuexContext.commit('updateListCategory', data)
+	}
+
+}

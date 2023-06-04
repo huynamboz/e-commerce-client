@@ -295,6 +295,7 @@ import miniLoading from '~/components/loading/mini-loading.vue';
 import ReviewContent from '~/components/common/ReviewContent.vue';
 import { filterReviewByProductId } from '~/services/reviews';
 export default {
+	auth: 'login',
 	data() {
 		return {
 			// data

@@ -3,7 +3,10 @@
 		<div class="search-container p-5 max-md:p-2 max-md:flex-col w-full">
 			<tab-left @chooseCate="chooseCate" @chooseCity="chooseCity"/>
 			<div class="tab-right-container w-full">
-				<p>Tìm kiếm cho từ khóa: <span class=" text-[#ee2624]">{{ pageParams.keyword }}</span></p>
+				<div class="flex items-center gap-5">
+					<p>Tìm kiếm cho từ khóa: <span class=" text-[#ee2624]">{{ pageParams.keyword }}</span></p>
+					<p>Danh mục: <span class=" text-lg font-medium">{{ getNameCategory }}</span></p>
+				</div>
 				<div class="tab-right-header mt-2">
 					<div class="list-filter-header">
 						<p>Sắp xếp tin đăng</p>
@@ -11,10 +14,14 @@
 						<button class="fil-btn" :class="{'is-active': isSearchMore}"  @click="handleFilterBtn('isSearchMore')">Tìm kiếm nhiều</button>
 					</div>
 				</div>
-				<div class="tab-right-list-item gap-5 max-md:gap-2 flex-wrap mt-4">
+				<div v-if="listProduct.length" class="tab-right-list-item gap-5 max-md:gap-2 flex-wrap mt-4">
 					<div v-for="item in listProduct" :key="item.id">
 						<product-card :product="item"/>
 					</div>
+				</div>
+				<div v-else class="flex flex-col items-center">
+					<img src="~/assets/icon/empty.png" class="w-[200px]" alt="">
+					<p>Không có kết quả cho tìm kiếm này</p>
 				</div>
 				<div class="w-fit mt-5 mb-5">
 					<vs-pagination v-model="page" :length="meta.totalPage ? meta.totalPage : 1" />   
@@ -53,15 +60,28 @@ export default{
 	computed:{
 		pageParams(){
 			return this.$route.query
-		}
+		},
+		getNameCategory(){
+			if (this.category == 'ALL')
+				return 'Tất cả danh mục';
+			else {
+				let cate = this.$store.getters['getListCategory'].find(item => item.id == this.category);
+				return cate?.name;
+			}
+		},
 	},
 	watch:{
 		pageParams:function(){
+			this.keyword = this.pageParams.keyword;
 			this.fetchData();
+			console.log("watch", this.pageParams);
 		},
 		immediate: true
 	},
 	mounted(){
+		this.keyword = this.pageParams.keyword;
+		this.city = this.$route.query.city ? this.$route.query.city : 'ALL';
+		this.category = this.$route.query.category ? this.$route.query.category : 'ALL';
 		this.fetchData();
 	},
 	methods:{
@@ -120,19 +140,40 @@ export default{
 			event.target.src = this.fallbackImageUrl
 		},
 		async fetchData(){
-			this.isLoading = true;
-			console.log('fetch data', this.$route);
-			await this.$api.products.searchProduct(this.$route.query.keyword, this.page)
-			.then(resp => {
-				this.listProduct = resp["data"]["data"];
-				this.meta = resp["data"]["meta"];
-				console.log(resp.data);
-				this.isLoading = false;
-			})
-			.catch(err => {
-				this.isLoading = false;
-				console.log(err);
-			})
+			console.log('fetch data', this.keyword);
+			if (!this.keyword || this.keyword == ''){
+				if (this.category != 'ALL'){
+					await this.$axios.get(`products/categories/${this.category}/products?page=${this.page}`)
+					.then(resp => {
+						this.listProduct = resp["data"]["data"]["product"];
+						this.meta = resp["data"]["data"]["meta"];
+						console.log("resp.data", resp["data"]["data"],this.listProduct);
+						this.isLoading = false;
+					})
+					.catch(err => {
+						this.isLoading = false;
+						console.log(err);
+					})
+				}
+			} else {
+				this.isLoading = true;
+				console.log('fetch data', this.$route);
+				await this.$api.products.searchProduct(
+					this.$route.query.keyword,
+					this.city != 'ALL' ? this.city : 'ALL', 
+					this.category != 'ALL' ? this.category : 'ALL', 
+					this.page)
+				.then(resp => {
+					console.log(resp);
+					this.listProduct = resp["data"]["data"];
+					this.meta = resp["data"]["meta"];
+					this.isLoading = false;
+				})
+				.catch(err => {
+					this.isLoading = false;
+					console.log(err);
+				})
+			}
 		}
 	}
 }

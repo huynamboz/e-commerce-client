@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<div class="main-left max-w-[400px] w-[400px]">
+		<div class="main-left max-w-[400px] w-[400px] max-md:w-full">
 			<div class=" relative h-[400px] w-full p-2 border-[1px] border-gray-400 rounded-lg">
 				<div class=" absolute top-0 left-0 h-full w-full">
 					<label class="choose-file" for="inp-file">
