@@ -5,12 +5,12 @@
 
 			<div class="w-full bg-white px-5 pt-3 max-md:p-0 max-w-[1140px]">
 				<slide-banner />
-				<div class="w-full max-md:px-5 flex gap-8 mb-10 mt-10 flex-wrap justify-center">
+				<!-- <div class="w-full max-md:px-5 flex gap-8 mb-10 mt-10 flex-wrap justify-center">
 					<div class="flex flex-col items-center" v-for="(item, index) in listMiniCategory" :key="index">
 						<img :src="item.img" alt="" class="w-[50px] h-[50px] object-cover">
 						<p class=" max-md:hidden text-center block max-w-[101px] text-[14px] break-words">{{item.name}}</p>
 					</div>
-				</div>
+				</div> -->
 				<p class=" font-medium mb-4 max-md:pl-5">Danh mục hot <i class="fi fi-ss-flame"></i></p>
 				<top-category class="max-md:pl-5"/>
 			</div>
