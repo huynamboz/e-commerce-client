@@ -75,7 +75,7 @@
 
 								<template #footer>
 								<div class="con-footer flex">
-									<vs-button @click="active=false" transparent>
+									<vs-button @click="openDel=false" transparent>
 									HỦY
 									</vs-button>
 									<vs-button @click="deleteProduct(item.id)">
