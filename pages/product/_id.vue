@@ -753,6 +753,7 @@ export default {
 	border: 1px solid #e5e5e5;
 	padding: 20px;
 	background-color: #ffffff;
+	min-width: fit-content;
 }
 .product-description-content-text{
 	word-wrap: break-word;
