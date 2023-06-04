@@ -2,7 +2,7 @@
 	<div class="container-change flex flex-col gap-5 items-start p-5">
 		<div class="flex flex-col">
 			<p>Mật khẩu hiện tại</p>
-			<vs-input v-model="oldPassword" placeholder="Mật khẩu hiện tại">
+			<vs-input type="password" v-model="oldPassword" placeholder="Mật khẩu hiện tại">
 				<template v-if="validOldPassword" #message-success>
 					Hợp lệ
 				</template>
@@ -13,7 +13,7 @@
 		<div class="flex gap-5 max-md:flex-col">
 			<div class="flex flex-col">
 			<p>Mật khẩu mới</p>
-			<vs-input v-model="newPassword" placeholder="Mật khẩu mới">
+			<vs-input type="password" v-model="newPassword" placeholder="Mật khẩu mới">
 				<template v-if="validNewPassword" #message-success>
 					Hợp lệ
 				</template>
@@ -24,7 +24,7 @@
 			</div>
 			<div class="flex flex-col">
 			<p>Nhập lại mật khẩu mới</p>
-			<vs-input v-model="confirmNewPassword" placeholder="Xác nhận mật khẩu mới">
+			<vs-input type="password" v-model="confirmNewPassword" placeholder="Xác nhận mật khẩu mới">
 				<template v-if="validConfirmNewPassword" #message-success>
 					Hợp lệ
 				</template>

@@ -43,7 +43,7 @@
 						</div>
 						
 						<div class="inp-container">
-							<label for="">category <span style="color:red">*</span></label>
+							<label for="">Loại mặt hàng <span style="color:red">*</span></label>
 							<select class="ml-4 mt-2 w-fit p-3 rounded-md bg-[#f1f3f5] cursor-pointer"
 							placeholder="Chọn loại"
 							v-model="ProductData.category"
