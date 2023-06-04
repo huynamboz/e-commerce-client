@@ -1,7 +1,7 @@
 <template>
 	<div class="root">
-		<div class="mx-auto flex justify-center items-start mt-[20px] gap-[10px] max-md:flex-col bg-white">
-			<header class=" rounded-lg shadow-lg flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center">
+		<div class="mx-auto flex items-start mt-[20px] gap-[10px] max-md:flex-col bg-white w-[1140px]">
+			<header class=" rounded-lg shadow-lg flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center h-fit">
 				<div class="container flex max-md:justify-center">
 					<img :src="userData?.avatar" alt="" 
 				class="object-cover w-[257px] h-[200px] rounded-[10px]">

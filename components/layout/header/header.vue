@@ -63,7 +63,7 @@
 									<i class="fi fi-rr-settings-sliders"></i>
 									<p class="setting-title">Cài đặt tài khoản</p>
 								</div>
-								<div class="btn-add-post" @click="$router.push('/product/modify')">
+								<div class="btn-add-post" @click="$router.push('/products/modify')">
 									<i class="fi fi-rr-shopping-bag-add"></i>
 									<p class="add-post-title">Đăng sản phẩm mới</p>
 								</div>
@@ -142,7 +142,7 @@ export default {
 	},
     methods: {
 		toProduct(id){
-			this.$router.push(`/product/${id}`);
+			this.$router.push(`/products/${id}`);
 			this.isOpenFavorite = false;
 		},
 		openFavorite(){

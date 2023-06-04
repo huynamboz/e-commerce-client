@@ -173,8 +173,8 @@
 						<div>
 							<p>Sao chép liên kết</p>
 							<div class="flex items-center">
-								<input type="text" :value="`https://superbad.store/product/${products?.id}`" disabled class=" bg-slate-200 rounded-md p-1 w-full h-fit">
-								<vs-button margin="0" @click="saveToClipboard(`https://superbad.store/product/${products?.id}`)">
+								<input type="text" :value="`https://superbad.store/products/${products?.id}`" disabled class=" bg-slate-200 rounded-md p-1 w-full h-fit">
+								<vs-button margin="0" @click="saveToClipboard(`https://superbad.store/products/${products?.id}`)">
 									<i class="fi fi-rr-copy-alt"></i>
 								</vs-button>
 							</div>
@@ -182,7 +182,7 @@
 						</div>
 					</vs-dialog>
 					<div>
-						<a href="https://www.facebook.com/sharer/sharer.php?u=http://superbad.store/product/4" target="_blank">
+						<a href="https://www.facebook.com/sharer/sharer.php?u=http://superbad.store/products/4" target="_blank">
 							<img src="~/assets/icon/fb.svg" alt="" class="h-8 w-8">
 						</a></div>
 					<div><img src="~/assets/icon/mess.svg" alt="" class="h-8 w-8"></div>
@@ -395,7 +395,7 @@ export default {
 			{ hid: 'og:title', property: 'og:title', content: this.products?.name },
 			{ hid: 'og:description', property: 'og:description', content: 'Nơi giao lưu mua bán sản phẩm không giới hạn' },
 			{ hid: 'og:image', property: 'og:image', content: this.products.thumbnails[0] },
-			{ hid: 'og:url', property: 'og:url', content: `https://superbad.store/product/${this.products.id}` },
+			{ hid: 'og:url', property: 'og:url', content: `https://superbad.store/products/${this.products.id}` },
 			{ hid: 'og:site_name', property: 'og:site_name', content: 'Chợ siêu tốt' },
 			{ hid: 'og:type', property: 'og:type', content: 'Loại nội dung Open Graph' }
 		],

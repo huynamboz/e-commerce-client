@@ -9,7 +9,7 @@
 				<i class="fi fi-sr-blog-text"></i>
 				<p class="text-xs">Quản lý bài</p>
 			</div>
-			<div v-if="$auth.loggedIn" class="flex flex-col items-center" :class="{'text-bottom': pageParams == 'product-modify-modify'}" @click="$router.push(`/product/modify`)">
+			<div v-if="$auth.loggedIn" class="flex flex-col items-center" :class="{'text-bottom': pageParams == 'product-modify-modify'}" @click="$router.push(`/products/modify`)">
 				<i class="fi fi-sr-edit"></i>
 				<p class="text-xs">Đăng bài</p>
 			</div>

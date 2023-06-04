@@ -56,7 +56,7 @@ export default {
 	},
 	methods: {
 		toProduct(id) {
-			this.$router.push(`/product/${id}`);
+			this.$router.push(`/products/${id}`);
 			this.closeFavorite();
 		},
 		unFavoriteAll() {
