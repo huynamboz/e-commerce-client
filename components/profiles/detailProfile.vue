@@ -36,7 +36,7 @@
 						<label for="female">Nữ</label>
 						<input type="radio" name="gender" id="female" :value="false" v-model="user.gender" @change="chooseFemale()">
 					</div>
-					<p class="text-rose-400 text-xs">* Chưa chọn giới tính</p>
+					<p v-if="!user.gender" class="text-rose-400 text-xs">* Chưa chọn giới tính</p>
 					</div>
 				</div>
 				<div class="info-inp">
