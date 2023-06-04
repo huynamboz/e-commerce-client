@@ -50,14 +50,44 @@
 						<div class="relative group">
 							<productCard :product="item"/>
 							<div v-if="pageParams == $auth.user?.id" 
-							class="absolute hidden transition-all duration-500 group-hover:block edit-prod top-[50%] left-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
+							class="absolute hidden transition-all duration-500 group-hover:block edit-prod  shadow-md top-[50%] left-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
 							alt="Chỉnh sửa" 
 							@click="$router.push(`/products/modify/${item.id}`)">
 							Chỉnh sửa <i class="fi fi-rr-pencil"></i>
 						</div>
+						<div @click="openDel = true" v-if="pageParams == $auth.user?.id"
+						class="absolute hidden transition-all duration-500 group-hover:block edit-prod top-[50%] shadow-md right-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
+						alt="xóa">
+						Xóa <i class="fi fi-rr-trash"></i>
+						</div>
+						<vs-dialog :loading="deleting" not-close not-center v-model="openDel">
+								<template #header>
+								<h4 class="not-margin text-center text-xl">
+									<b>XÁC NHẬN</b>
+								</h4>
+								</template>
+
+
+								<div class="con-content">
+								<p class="text-center">
+									Bạn chắc chắn muốn xóa sản phẩm này ?</p>
+								</div>
+
+								<template #footer>
+								<div class="con-footer flex">
+									<vs-button @click="active=false" transparent>
+									HỦY
+									</vs-button>
+									<vs-button @click="deleteProduct(item.id)">
+									ĐỒNG Ý
+									</vs-button>
+								</div>
+								</template>
+							</vs-dialog>
 						</div>
 					</div>
 				</div>
+				
 				<div class="w-fit">
 					<vs-pagination v-model="page" :length="meta.totalPages ? meta.totalPages : 2"/>
 				</div>
@@ -78,7 +108,9 @@ export default {
 			page: 1,
 			listProduct: [],
 			userData: {},
-			meta: {}
+			meta: {},
+			openDel: false,
+			deleting: false
 		}
 	},
 	computed: {
@@ -99,6 +131,23 @@ export default {
 		this.fetchUserData();
 	},
 	methods: {
+		deleteProduct(id) {
+			this.deleting = true;
+			this.$api.products.deleteProduct(id)
+				.then(res => {
+					console.log('res', res);
+					this.deleting = false;
+					this.$toast.success('Xóa sản phẩm thành công');
+					this.openDel = false;
+					this.fetchProduct();
+				})
+				.catch(err => {
+					this.deleting = false;
+					this.openDel = false;
+					console.log('err', err);
+					this.$toast.error('Xóa sản phẩm thất bại');
+				})
+		},
 		fetchProduct() {
 			if(this.$auth.loggedIn){
 				console.log('fetchProduct', this.pageParams);

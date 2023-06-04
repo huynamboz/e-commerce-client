@@ -11,6 +11,9 @@ export default (api) => ({
 	updateProduct: async(product,id)=>{
 		return await api.put(`/users/me/products/${id}`, product);
 	},
+	deleteProduct: async(id)=>{
+		return await api.delete(`/users/me/products/${id}`);
+	},
 	getListProductOfUser: async(userID)=>{
 		return await api.get(`/users/${userID}/products`);
 	},
