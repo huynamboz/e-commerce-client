@@ -17,7 +17,7 @@
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
                         <span>Mật khẩu</span>
-                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Mật khẩu" class="input-email">
+                        <input @keyup.enter="signin()" :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Mật khẩu" class="input-email">
                     </div>
                 </div>
 				<!-- <div class="mb-4">

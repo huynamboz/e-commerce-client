@@ -1,11 +1,11 @@
 <template>
 	<div class="section max-md:w-full">
-	<div id="form-search" class=" relative search-container max-md:w-full w-[670px] max-[1130px]:w-[300px] flex bg-slate-100 py-2 px-3 items-center rounded-md">
-		<input @focus="openRecent=true" @keyup.enter ="search()" type="text" v-model="keyword" placeholder="search" class="search-input bg-transparent w-full">
+	<div id="form-search" class=" relative search-container max-md:w-full w-[670px] max-[1130px]:w-[300px] flex bg-slate-100 py-1 px-3 pr-1 items-center rounded-md">
+		<i class="fi fi-rr-cross-small h-[22px] mr-2 cursor-pointer text-[20px]" @click="keyword = ''"></i><input @focus="openRecent=true" @keyup.enter ="search()" type="text" v-model="keyword" placeholder="Search" class="search-input font-normal bg-transparent w-full">
 		<div class="icon-search" @click="search()">
 			<div class="icon-search-img cursor-pointer">
-				<div class="h-[25px] w-[25px] flex items-center justify-center bg-[#06a8f5] text-white rounded-full">
-					<i class="fi fi-rr-search"></i>
+				<div class="h-[30px] w-[40px] flex rounded-md items-center justify-center bg-[#06a8f5] text-white">
+					<i class="fi h-[18px] fi-rr-search"></i>
 				</div>
 			</div>
 		</div>
@@ -18,10 +18,15 @@
 					</div>
 					<p class="text-sm cursor-pointer" @click="clearRecent()">Xóa tất cả</p>
 				</div>
-				<div class="flex flex-col">
-					<div v-for="(item,index) in keywordRecent" :key="index" class="flex gap-2 items-center p-1 hover:bg-slate-100 cursor-pointer" @click="searchFromRecent(item)">
-						<i class="fi fi-rr-time-forward"></i>
-						<p class="text-sm font-normal">{{item}}</p>
+				<div class="flex flex-col overflow-y-scroll max-h-[166px]">
+					<div v-for="(item,index) in keywordRecent" :key="index" class="flex justify-between gap-2 items-center p-1 hover:bg-slate-100 cursor-pointer">
+						<div class="flex items-center gap-3 w-full" @click="searchFromRecent(item)">
+							<i class="fi fi-rr-time-forward"></i>
+							<p class="text-sm font-normal">{{item}}</p>
+						</div>
+						<div id="del-recent-key" class="w-[30px]" @click="deleteRecentKeyword(item); openRecent = true">
+							<i class="fi fi-rr-cross-small"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -55,11 +60,12 @@ export default {
 	mounted() {
 		this.fetchKeywordRecent();
 		let inp = document.getElementById("form-search");
+		let x = document.getElementById("del-recent-key");
 		let that = this;
 		document.addEventListener("click", function (e) {
 			let targetElement = e.target; // clicked element
 			do {
-				if (targetElement == inp) {
+				if (targetElement == inp || targetElement == x) {
 					console.log("This is a click inside element. Do nothing, just return.");
 					return;
 				}
@@ -69,6 +75,11 @@ export default {
 		});
 	},
 	methods: {
+		deleteRecentKeyword(item){
+			this.keywordRecent.splice(this.keywordRecent.indexOf(item), 1);
+			localStorage.setItem("keywordRecent", JSON.stringify(this.keywordRecent));
+			this.openRecent = true;
+		},
 		clearRecent() {
 			this.keywordRecent = [];
 			localStorage.setItem("keywordRecent", JSON.stringify(this.keywordRecent));

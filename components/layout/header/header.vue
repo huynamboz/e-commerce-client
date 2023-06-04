@@ -17,18 +17,18 @@
 				</div>
 				<div class="flex gap-3">
 
-					<button @click="$router.push('/products/modify')" class=" text-gray-950 gap-2 rounded-md text-sm flex items-center py-2 px-3 bg-white">
+					<button v-if="$auth.loggedIn" @click="$router.push('/products/modify')" class=" text-gray-950 gap-2 rounded-md text-sm flex items-center py-2 px-3 bg-white">
 						<i class="fi fi-rr-edit"></i> Đăng tin
 					</button>
 
-					<div class="profile action-item" id="popup-profile" @click="handleOpenPopup()">
+					<div class="profile action-item" id="popup-profile" >
 						<!-- <img src="~/assets/img/profile.png" alt="" class="icon-action"> -->
 
-						<div v-if="!$auth.loggedIn" class="flex items-center gap-2 text-white">
+						<div v-if="!$auth.loggedIn" @click="$router.push('/login')" class="flex items-center gap-2 text-white">
 							<i class="fi fi-rr-user" title="Thông tin shop"></i>
 							<p class="text-sm">Đăng nhập</p>
 						</div>
-						<div v-else class="relative flex items-center gap-[10px]">
+						<div @click="handleOpenPopup()" v-else class="relative flex items-center gap-[10px]">
 							<div class=" border-[1px] border-gray-400 rounded-full">
 								<img v-if="!$auth.user.avatar || $auth.user.avatar == 'null'"
 									src="~/assets/img/defaultavt.webp" alt="" class="w-[30px] h-[30px] rounded-[50%]">

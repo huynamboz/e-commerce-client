@@ -7,8 +7,8 @@
 					<!-- <img src="~/assets/img/avatar-default.png" alt="" class="icon-avatar" v-if="user.avatar"> -->
 					<img :src="previewUrl[0]" v-if="previewUrl[0] != 'null'" alt="" class="icon-avatar" >
 					<img src="~/assets/img/defaultavt.webp" v-else alt="" class="icon-avatar" >
-					<div>
-
+					<div v-if="!$auth.user?.avatar || $auth.user?.avatar == 'null'" class="mt-5 max-w-[80px]">
+						<p class="text-rose-400 text-xs">* Chưa cập nhật avatar</p>
 					</div>
 					<label for="inp-file" class="absolute -right-2 -top-2 cursor-pointer w-[25px] h-[25px] flex items-center justify-center bg-blue-400 text-white rounded-lg">
 						<i class="fi fi-rr-edit"></i>
@@ -30,28 +30,38 @@
 					<label for="name">Tên</label>
 					<input type="text" placeholder="Nguyễn Văn A" class="inp" id="name" v-model="user.name">
 					<div>
+						<div>
 						<label for="male">Nam</label>
 						<input type="radio" name="gender" id="male" :value="true" v-model="user.gender" @change="chooseMale()">
 						<label for="female">Nữ</label>
 						<input type="radio" name="gender" id="female" :value="false" v-model="user.gender" @change="chooseFemale()">
+					</div>
+					<p class="text-rose-400 text-xs">* Chưa chọn giới tính</p>
 					</div>
 				</div>
 				<div class="info-inp">
 					<label for="name">Email</label>
 					<input type="text" class="inp" placeholder="email@gmail.com" id="name" v-model="user.email">
 				</div>
-				<div class="info-inp">
+				<div class="mb-5">
+					<div class="flex flex-col">
 					<label for="name">Số điện thoại</label>
-					<input type="text" class="inp" placeholder="09876xx" id="name" v-model="user.phone_number">
+					<input :class="{'error-border': !user.phone_number}" class="inp" type="text" placeholder="09876xx" id="name" v-model="user.phone_number">
+					</div>
+					<p v-if="!user.phone_number" class="text-xs text-rose-400">* Chưa cập nhật số điện thoại</p>
 				</div>
 				<div class="info-inp">
-					<label class="flex gap-3" for="bday">Ngày sinh: {{ $auth.user.birthday?.split("T")[0] }} <p class="text-rose-500 cursor-pointer" @click="isOpenEditBirthday = !isOpenEditBirthday"><i class="fi fi-rr-edit"></i></p></label>
+					<label class="flex gap-3 items-center" for="bday">Ngày sinh: {{ $auth.user?.birthday?.split("T")[0] }} <p class="text-rose-500 cursor-pointer" @click="isOpenEditBirthday = !isOpenEditBirthday"><i class="fi fi-rr-edit"></i>
+						<p v-if="!this.$auth.user?.birthday" class="text-rose-400 text-xs">* Chưa cập nhật ngày sinh</p>
+					</p></label>
 					<input v-if="isOpenEditBirthday" type="date" class="inp w-fit cursor-pointer" placeholder="09876xx" id="name" v-model="user.birthday">
 				</div>
-				<div class="flex gap-5 flex-row mb-[20px]">
+				<div class="gap-5 flex-row mb-[20px] flex items-center ">
 					<label>Địa chỉ hiện tại :</label>
 					<label>{{ this.$auth.user.location }}</label>
-					<p class="text-rose-500 cursor-pointer" @click="openEditLocation()"><i class="fi fi-rr-edit"></i></p>
+					<p class="text-rose-500 cursor-pointer" @click="openEditLocation()"><i class="fi fi-rr-edit"></i>
+						<p v-if="!this.$auth.user?.location" class="text-rose-400 text-xs">* Chưa cập nhật địa chỉ hiện tại</p>
+					</p>
 				</div>
 					<div class="address-inp flex gap-5" v-if="isOpenEditLocation">
 						<div class="address">
@@ -73,16 +83,19 @@
 							</div>
 						</div>
 				</div>
-				<div class="info-inp mt-5">
-					<label for="bday">Địa chỉ cụ thể</label>
-					<input type="text" class="inp" placeholder="Nhà số xx, đường ..." id="name" v-model="user.address">
+				<div>
+					<div class="flex flex-col gap-2 mt-5">
+					<label for="bday">Địa chỉ cụ thể: </label>
+					<input :class="{'error-border': !user.address}" type="text" class="inp" placeholder="Nhà số xx, đường ..." id="name" v-model="user.address">
+					<p v-if="!user.address" class="text-xs text-rose-400">* Chưa cập nhật địa chỉ</p>
+					</div>
 				</div>
 			</div>
 			<!-- <div class="flex flex-col mt-5">
 				<label for="address">Nhập mật khẩu xác nhận</label>
 				<input type="password" name="" id="" class="inp" v-model="user.password">
 			</div> -->
-			<vs-button class="cursor-pointer" @click="PushDataUser()">Thay đổi</vs-button>
+			<vs-button class="cursor-pointer" @click="PushDataUser()">Cập nhật</vs-button>
 		</div>
 
 	</div>
@@ -384,5 +397,8 @@ methods: {
 		background-color: #d11909;
 		transition: .2s ease-in-out;
 	}
+}
+.error-border{
+	border: 1px solid red;
 }
 </style>
