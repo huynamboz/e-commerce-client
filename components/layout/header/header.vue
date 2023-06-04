@@ -175,6 +175,7 @@ export default {
 		},
 		logout() {
 			this.$auth.logout();
+			this.$store.dispatch('addFavoriteStore', []);
 			this.$router.push('/');
 		},
 		handleOpenPopup(){
