@@ -186,7 +186,7 @@ export default {
 			await this.$api.products.getProductById(this.$route.params.modify)
 			.then(res=>{
 				console.log(res)
-				this.ProductData = res.data
+				this.ProductData = res.data.data
 				this.ProductData.description = JSON.parse(this.ProductData.description)
 				this.previewUrl = this.ProductData.thumbnails
 			})
@@ -231,8 +231,8 @@ export default {
 						formData.append('files', item);
 					});
 					await this.$api.products.uploadImage(formData).then(res => {
-					console.log(res);
-					listThumbnail = res.data.data.urls;
+					listThumbnail = res.data.data;
+					console.log(listThumbnail);
 					this.$toast.success("Tải ảnh thành công");
 					}).catch(err => {
 						console.log(err);
@@ -295,7 +295,7 @@ export default {
 					formData.append('files', item);
 				})
 				await this.$api.products.uploadImage(formData).then(res => {
-					listThumbnail = res.data.data.urls;
+					listThumbnail = res.data.data;
 					this.$toast.success("Tải ảnh thành công");
 				}).catch(err => {
 					console.log(err);

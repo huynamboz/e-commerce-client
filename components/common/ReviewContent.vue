@@ -34,14 +34,14 @@
 		<div class="flex flex-col gap-5 mt-5">
 			<div class="flex flex-col gap-5 group" v-for="(item, index) in listReview" :key="index">
 				<div class="flex gap-5">
-					<div class="relative h-fit">
+					<div class="relative h-fit cursor-pointer" @click="$router.push(`/user/${item.user.id}`)">
 						<img v-if="!item.user.avatar || item.user.avatar == 'null'" src="~/assets/img/defaultavt.webp" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
 						<img v-else="item.user.avatar" :src="item.user?.avatar" alt="" class="w-10 h-10 rounded-full border-[1px] border-[#06a8f5]">
 						<div v-if="item.user?.id == $auth.user?.id" class=" absolute px-1 rounded-md left-[5px] -bottom-1 text-xs bg-blue-400 text-white">Bạn</div>
 					</div>
 					<div class="flex flex-col">
 						<div class="flex gap-3 items-center">
-							<p class="font-semibold">{{ item.user.name }}</p>
+							<p class="font-semibold" @click="$router.push(`/user/${item.user.id}`)">{{ item.user.name }}</p>
 							<p class="text-[12px] text-gray-400">{{ new Date(item.create_at).toLocaleDateString() }}</p>
 							<div v-if="item?.user.id == $auth.user?.id" class=" cursor-pointer hidden group-hover:block" @click="isCommented = !isCommented" title="Chỉnh sửa nhận xét">
 								<i class="fi fi-rr-edit"></i>

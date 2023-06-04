@@ -52,7 +52,7 @@
 							<div v-if="pageParams == $auth.user?.id" 
 							class="absolute hidden transition-all duration-500 group-hover:block edit-prod top-[50%] left-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
 							alt="Chỉnh sửa" 
-							@click="$router.push(`/product/modify/${item.id}`)">
+							@click="$router.push(`/products/modify/${item.id}`)">
 							Chỉnh sửa <i class="fi fi-rr-pencil"></i>
 						</div>
 						</div>
