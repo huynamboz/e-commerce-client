@@ -1,3 +1,5 @@
+import { data } from 'autoprefixer';
+
 export default {
     ssr: false,
     router:{
@@ -53,22 +55,22 @@ export default {
 			local: {
 				scheme: 'refresh',
 				user: {
-					property: false,
+					property: 'data',
 					},
 				token: {
-					property: 'accessToken',
+					property: 'data.accessToken',
 					maxAge: 1800
 				},
 				refreshToken: {
-					property: 'refreshToken',
+					property: 'data.refreshToken',
 					data: 'refresh_token',
 					maxAge: 60 * 60 * 24
 				},
 				endpoints: {
-					login: { url: '/auth/login', method: 'post', propertyName: 'accessToken' },
-					user: {url: '/users/me', method: 'get', propertyName: false},
+					login: { url: '/auth/login', method: 'post', propertyName: 'data.accessToken' },
+					user: {url: '/users/me', method: 'get', propertyName: 'data.data'},
 					refresh: { url: '/auth/refresh-token', method: 'post' ,
-					propertyName: 'refreshToken',
+					propertyName: 'data.refreshToken',
 					},
 					logout :false
 				},
