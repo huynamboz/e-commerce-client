@@ -189,7 +189,7 @@ methods: {
 				})
 				await this.$api.products.uploadImage(formData).then(res => {
 					console.log(res);
-					listThumbnail = res.data.data.urls;
+					listThumbnail = res.data.data;
 					this.user.avatar = listThumbnail[0];
 					this.$toast.success("Tải ảnh thành công");
 				}).catch(err => {
