@@ -563,7 +563,7 @@ export default {
 			)
 			.then(res=>{
 				//search items same name in array
-				this.listCompare = res["data"];
+				this.listCompare = res["data"]['data'];
 				console.log(this.listCompare);
 				this.isCrawling = false;
 			})
@@ -604,7 +604,7 @@ export default {
 		async fetchData() {
 			await this.$api.products.getProductById(this.$route.params.id)
 			.then((response) => {
-					this.products = response['data']
+					this.products = response['data']['data']
 					console.log("ré",this.products.thumbnails[0])
 					this.currentThumbnail = this.products.thumbnails[0]
 					this.products.description = JSON.parse(this.products.description)

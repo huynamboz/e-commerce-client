@@ -145,8 +145,8 @@ export default{
 				if (this.category != 'ALL'){
 					await this.$axios.get(`products/categories/${this.category}/products?page=${this.page}`)
 					.then(resp => {
-						this.listProduct = resp["data"]["data"]["product"];
-						this.meta = resp["data"]["data"]["meta"];
+						this.listProduct = resp["data"]["data"];
+						this.meta = resp["data"]["meta"];
 						console.log("resp.data", resp["data"]["data"],this.listProduct);
 						this.isLoading = false;
 					})
