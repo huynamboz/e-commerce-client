@@ -3,12 +3,12 @@
         <div class="login-content-main">
             <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
             <div class="login-fiels">
-                <h1 class="login-title">Create Your Account hi :)</h1>
+                <h1 class="login-title">Tạo tài khoản</h1>
                 <p class="login-subtitle">Welcome to our website, </p>
                 <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Email address</span>
+                        <span>Email</span>
                         <input :class="[{'gray-bg' : email.length > 0}]" type="email" v-model="email" placeholder="Email" class="input-email">
                     </div>
                 </div>
@@ -16,16 +16,16 @@
                     <div class="login-input-name" :class="[{'gray-bg' : name.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Name</span>
-                        <input :class="[{'gray-bg' : name.length > 0}]" type="text" v-model="name" placeholder="First name" class="input-email">
+                        <span>Tên</span>
+                        <input :class="[{'gray-bg' : name.length > 0}]" type="text" v-model="name" placeholder="Tên" class="input-email">
                     </div>
                 </div>
                 </div>
                 <div class="login-input-pass" :class="[{'gray-bg' : password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Password</span>
-                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
+                        <span>Mật khẩu</span>
+                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Mật khẩu" class="input-email">
                     </div>
                 </div>
 				<div class="mb-4">
@@ -34,8 +34,8 @@
 				<div class="login-input-pass" :class="[{'gray-bg' : confirm_password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Confirm password</span>
-                        <input :class="[{'gray-bg' : confirm_password.length > 0}]" type="password" v-model="confirm_password" placeholder="Password" class="input-email">
+                        <span>Xác nhận mật khẩu</span>
+                        <input :class="[{'gray-bg' : confirm_password.length > 0}]" type="password" v-model="confirm_password" placeholder="Xác nhận mật khẩu" class="input-email">
                     </div>
                 </div>
 				<div class="mb-4">
@@ -43,8 +43,8 @@
 				</div>
                 <!-- <span class="forgot">Forgot password?</span> -->
                 <div class="login-list-btn">
-                    <button class="login-btn" @click="signup()">SIGN UP</button>
-                    <button class="create-btn" @click="$router.push('/login')">BACK TO LOGIN</button>
+                    <button class="login-btn" @click="signup()">Đăng ký</button>
+                    <button class="create-btn" @click="$router.push('/login')">Quay lại đăng nhập</button>
 				</div>
             </div>
         </div>

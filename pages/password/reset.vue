@@ -3,8 +3,8 @@
         <loading v-if="isLoading"/>
         <div class="login-content-main">
             <div class="login-fiels">
-                <h1 class="login-title">Hi Everyone :)</h1>
-                <p class="login-subtitle">Welcome to our website, </p>
+                <h1 class=" text-xl mb-5 font-medium">Khôi phục mật khẩu <i class="fi fi-rr-time-past"></i></h1>
+                <!-- <p class="login-subtitle">Welcome to our website, </p> -->
                 <!-- <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
@@ -15,23 +15,29 @@
                 <div class="login-input-pass" :class="[{'gray-bg' : password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Password</span>
-                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
+                        <span>Mật khẩu mới</span>
+                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Mật khẩu mới" class="input-email">
                     </div>
+                </div>
+				<div class="mb-4">
+				<div v-show="$validate.validatePassword(password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validatePassword(password) }}</div>
                 </div>
 				<div class="login-input-pass mt-2" :class="[{'gray-bg' : password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Confirm Password</span>
-                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="confirm_password" placeholder="Password" class="input-email">
+                        <span>Xác nhận mật khẩu mới</span>
+                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="confirm_password" placeholder="Xác nhận mật khẩu mới" class="input-email">
                     </div>
                 </div>
-				<div>
-					<span class="forgot cursor-pointer" @click="$router.push('/forgot')">Forgot password?</span>
+				<div class="mb-4">
+					<div v-show="$validate.validateConfirmPassword(password, confirm_password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validateConfirmPassword(password, confirm_password) }}</div>
 				</div>
+				<!-- <div>
+					<span class="forgot cursor-pointer" @click="$router.push('/forgot')">Forgot password?</span>
+				</div> -->
                 <div class="login-list-btn">
-                    <button class="login-btn" @click="changePassword()">CHANGE PASSWORD</button>
-                    <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button>
+                    <button class="login-btn" @click="changePassword()">Xác nhận</button>
+                    <!-- <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button> -->
                 </div>
             </div>
         </div>
@@ -64,18 +70,24 @@ export default {
 			this.authError = false;
 		},
 		async changePassword(){
+			if (this.password.length < 6) {
+				return;
+			}
+			if (this.password != this.confirm_password) {
+				return;
+			}
 			this.isLoading = true;
-			this.$axios.post('/auth/update-password',{
+			this.$axios.post('/auth/reset-password',{
 				password: this.password,
 				confirm_password: this.confirm_password,
 				reset_token: this.$route.query.token
 			}).then(res => {
 				this.isLoading = false;
-				this.$toast.success('Change password success');
+				this.$toast.success('Đổi mật khẩu thành công');
 				this.$router.push('/login');
 			}).catch(err => {
 				this.isLoading = false;
-				this.$toast.error('Change password fail');
+				this.$toast.error(this.$handleErrorApi(err));
 			})
 		},
 		async fetchUserData(){
@@ -245,15 +257,15 @@ span,p{
 }
 .login-content-main{
     display: flex;
-    width: 95%;
-    height: 95%;
+    width: fit-content;
+    height: fit-content;
+	padding: 60px 60px;
     align-items: center;
     justify-content: center;
     gap: 60px;
     background-color: 
 #f9fafc;
     border-radius: 20px;
-    padding: 20px 50px;
     // make box shadow
     box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
 }

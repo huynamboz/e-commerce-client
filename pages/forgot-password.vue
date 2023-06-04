@@ -4,23 +4,54 @@
         <div class="login-content-main">
             <!-- <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner"> -->
             <div class="login-fiels">
-                <h1 class="login-title">Forgot password :)</h1>
-                <p class="login-subtitle">Enter your email to reset password </p>
+                <h1 class="login-title font-medium">Quên mật khẩu</h1>
+                <p class="login-subtitle">Nhập địa chỉ email của bạn để khôi phục mật khẩu</p>
                 <div class="login-input-email mb-5" :class="[{'gray-bg' : email.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Email address</span>
+                        <span>Email</span>
                         <input :class="[{'gray-bg' : email.length > 0}]" type="email" v-model="email" placeholder="Email" class="input-email">
                     </div>
                 </div>
-				<span class="forgot cursor-pointer" @click="$router.push('/login')">Back to login</span>
+				<span class="forgot cursor-pointer" @click="$router.push('/login')">Quay lại đăng nhập</span>
 				
                 <div class="login-list-btn">
-                    <button class="login-btn w-full" @click="sendEmail()">SEND EMAIL</button>
+                    <button v-if="!isWaiting" class="login-btn w-full" @click="sendEmail()">GỬI</button>
+                    <button v-else class="login-btn w-full">{{ timeWaiting }}</button>
                 </div>
             </div>
         </div>
-    </div>
+
+				<vs-dialog not-close prevent-close not-center v-model="active">
+				<template #header>
+				<h4 class=" text-center text-2xl font-medium">
+					Thông báo 
+				</h4>
+				</template>
+
+
+				<div class="con-content">
+				<p class="text-center">
+					Đã gửi email khôi phục mật khẩu tới địa chỉ <b>{{ email }}</b>. <br>
+					Vui lòng kiểm tra email của bạn để lấy lại mật khẩu
+				</p>
+				</div>
+
+				<template #footer>
+				<div class="con-footer flex">
+					<vs-button @click="active = false; $router.push('/login')" transparent>
+					Đóng
+					</vs-button>
+					<vs-button v-if="isWaiting">
+					{{ timeWaiting }}
+					</vs-button>
+					<vs-button v-else @click="countdown()">
+					Gửi lại email
+					</vs-button>
+				</div>
+				</template>
+			</vs-dialog>
+			</div>
 </template>
 <script>
 import loading from '~/components/loading/main.vue'
@@ -37,18 +68,45 @@ export default {
             email: '',
             password: '',
 			userID: '',
-			authError: false
+			authError: false,
+			active: false,
+			isWaiting: false,
+			timeWaiting: '00:60'
         }
     },
 	mounted() {
 	},
     methods: {
+		countdown() {
+			var count = 60;
+			this.isWaiting = true;
+			let self = this;
+			this.sendEmail();
+			var timer = setInterval(function() {
+				count--;
+				var minutes = Math.floor(count / 60);
+				var seconds = count % 60;
+				seconds = seconds < 10 ? "0" + seconds : seconds;
+				self.timeWaiting = "0" + minutes + ":" + seconds;
+				console.log(this.timeWaiting);
+				if (count <= 0) {
+					self.isWaiting = false;
+				clearInterval(timer);
+				}
+			}, 1000);
+		},
 		closePopup(){
 			this.authError = false;
 		},
 		sendEmail(){
 			if( this.email == '' ){
-				this.$toast.error('Please enter your email');
+				this.$toast.error('Vui lòng nhập email');
+				return;
+			}
+			// regex check email
+			var re = /\S+@\S+\.\S+/;
+			if(!re.test(this.email)){
+				this.$toast.error('Email không hợp lệ');
 				return;
 			}
 			this.isLoading = true;
@@ -57,10 +115,13 @@ export default {
 			}).then(res => {
 				this.isLoading = false;
 				this.$toast.success('Send email success');
-				this.$router.push('/login');
+				this.active = true;
 			}).catch(err => {
-				this.isLoading = false;
-				this.$toast.error('Send email fail, please check your email again');
+				if (err.response.status == 400) {
+					this.$toast.error('Email không tồn tại');
+					this.isLoading = false;
+				}
+				// this.$toast.error('Send email fail, please check your email again');
 			})
 		}
     }
@@ -179,8 +240,8 @@ span,p{
 }
 .login-content-main{
     display: flex;
-    width: 95%;
-    height: 95%;
+    width: fit-content;
+    height: fit-content;
     align-items: center;
     justify-content: center;
     gap: 60px;

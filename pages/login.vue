@@ -4,31 +4,31 @@
         <div class="login-content-main">
             <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
             <div class="login-fiels w-[330px]">
-                <h1 class="login-title">Hi Everyone :)</h1>
-                <p class="login-subtitle">Welcome to our website, </p>
+                <h1 class=" text-[30px] font-medium">Đăng nhập</h1>
+                <p class=" text-sm">Đăng nhập để kết nối với tất cả mọi người ở khắp mọi nơi </p>
                 <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Email address</span>
+                        <span>Email</span>
                         <input :class="[{'gray-bg' : email.length > 0}]" type="email" v-model="email" placeholder="Email" class="input-email">
                     </div>
                 </div>
                 <div class="login-input-pass" :class="[{'gray-bg' : password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
-                        <span>Password</span>
-                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Password" class="input-email">
+                        <span>Mật khẩu</span>
+                        <input :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Mật khẩu" class="input-email">
                     </div>
                 </div>
 				<!-- <div class="mb-4">
 				<div v-show="$validate.validatePassword(password).length  > 0" class="text-sm text-red-500 w-full break-words whitespace-pre-wrap max-w-[300px] mb-4">{{ $validate.validatePassword(password) }}</div>
                 </div> -->
 				<div>
-					<span class="forgot cursor-pointer" @click="$router.push('/forgot')">Forgot password?</span>
+					<span class="forgot cursor-pointer" @click="$router.push('/forgot-password')">Quên mật khẩu ?</span>
 				</div>
                 <div class="login-list-btn">
-                    <button class="login-btn" @click="signin()">LOGIN</button>
-                    <button class="create-btn" @click="$router.push('/register')">CREATE ACCOUNT</button>
+                    <button class="login-btn" @click="signin()">Đăng nhập</button>
+                    <button class="create-btn" @click="$router.push('/register')">Tạo tài khoản</button>
                 </div>
             </div>
         </div>
@@ -227,8 +227,8 @@ span,p{
 }
 .login-content-main{
     display: flex;
-    width: 95%;
-    height: 95%;
+    width: fit-content;
+    height: fit-content;
     align-items: center;
     justify-content: center;
     gap: 60px;
