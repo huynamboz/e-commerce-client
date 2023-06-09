@@ -117,5 +117,7 @@ a{
 }
 html{
 	scroll-behavior: smooth;
+}
+body{
 	overflow-y: scroll;
 }

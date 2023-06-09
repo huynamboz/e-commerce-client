@@ -1,7 +1,7 @@
 <template>
-    <div class="login-container">
+    <div class="login-container max-md:p-5">
         <loading v-if="isLoading"/>
-        <div class="login-content-main">
+        <div class="login-content-main p-5 w-fit max-md:w-full max-md:p-5">
             <!-- <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner"> -->
             <div class="login-fiels">
                 <h1 class="login-title font-medium">Quên mật khẩu</h1>
@@ -240,7 +240,6 @@ span,p{
 }
 .login-content-main{
     display: flex;
-    width: fit-content;
     height: fit-content;
     align-items: center;
     justify-content: center;
@@ -248,7 +247,6 @@ span,p{
     background-color: 
 #f9fafc;
     border-radius: 20px;
-    padding: 20px 50px;
     // make box shadow
     box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
 }
@@ -273,7 +271,6 @@ span,p{
 input{
     border: none;
     outline: none;
-    width: 250px;
 }
 .fiels-input{
     & > span{

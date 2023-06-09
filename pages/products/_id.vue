@@ -1,5 +1,28 @@
 <template>
 	<section class="product-container">
+
+		<vs-dialog width="" not-center overflow-hidden not-close prevent-close blur v-model="isGetDetailError">
+					<template #header>
+					<h4 class="text-center text-rose-700 text-2xl">
+						<b>Có lỗi !</b>
+					</h4>
+					</template>
+
+
+					<div class="con-content">
+					<p class="text-center">
+						Sản phẩm bạn đang xem không tồn tại hoặc đã bị xóa !
+					</p>
+					</div>
+
+					<template #footer>
+					<div class="con-footer flex justify-center">
+						<vs-button @click="$router.push('/')" transparent>
+						Quay về trang chủ
+						</vs-button>
+					</div>
+					</template>
+				</vs-dialog>
 		<div class="page-product">
 			<section class="overview-product flex gap-11">
 				<div class="list-thumbnail">
@@ -286,6 +309,7 @@
 					</div>
 					</div>
 				</div>
+				
 				<!-- <div class="w-full h-full bg-slate-50 absolute top-0 left-0 z-0 opacity-80"></div> -->
 			</div>
 		<!-- <textarea type="text" name="" v-model="t" id=""> </textarea><button @click="test()">acscascascas</button> -->
@@ -306,6 +330,7 @@ export default {
 			currentDistrict:'',
 			isOpenReport:false,
 			popupShare: false,
+			isGetDetailError: false,
 			t: "test",
 			products: {
 				thumbnails: [],
@@ -341,6 +366,7 @@ export default {
 					console.log(this.products.description)
 				})
         } catch (error) {
+			console.log(error);
             // Redirect to error page or 404 depending on server response
         }
     },
@@ -613,12 +639,17 @@ export default {
 				})
 				.catch((error) => {
 					console.log(error)
+					this.isGetDetailError = true;
 				})
 		}
 	}
 }
 </script>
 <style lang="scss" scoped>
+.blur {
+    --tw-blur: unset;
+    filter: unset;
+}
 .product-container {
 	margin-top: 20px;
 	display: flex;

@@ -246,7 +246,10 @@ export default {
 					this.isLoading = false;
 					return;
 				}
-
+				if(this.ProductData.name == "" || this.ProductData.price == "" || this.ProductData.description == ""|| this.ProductData.category == "" || this.ProductData.status == "") {
+					this.$toast.error("Vui lòng nhập đầy đủ thông tin",{ duration: 3000 });
+					return
+				};
 				this.ProductData.thumbnails = this.ProductData.thumbnails.filter(item => !item.startsWith("data:image/"));
 				this.ProductData.thumbnails = this.ProductData.thumbnails.concat(listThumbnail);
 				await this.$api.products.updateProduct({
@@ -254,8 +257,8 @@ export default {
 				price: this.ProductData.price,
 				description: JSON.stringify(this.ProductData.description),
 				thumbnailUrls: this.ProductData.thumbnails,
-				category_id: 1,
-				status_id: 1,
+				category_id: this.ProductData.category,
+				status_id: this.ProductData.status,
 				discount: parseInt(this.ProductData.discount),
 				},this.$route.params.modify).then(res => {
 					console.log(res);

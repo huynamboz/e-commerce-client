@@ -1,23 +1,23 @@
 <template>
-    <div class="login-container">
+    <div class="login-container px-5">
         <loading v-if="isLoading"/>
-        <div class="login-content-main">
+        <div class="login-content-main p-5 w-fit max-md:w-full max-md:p-3">
             <img src="~/assets/img/bg-login.png" alt="" class="login-img-banner">
             <div class="login-fiels w-[330px]">
                 <h1 class=" text-[30px] font-medium">Đăng nhập</h1>
                 <p class=" text-sm">Đăng nhập để kết nối với tất cả mọi người ở khắp mọi nơi </p>
-                <div class="login-input-email" :class="[{'gray-bg' : email.length > 0}]">
+                <div class="login-input-email max-md:mb-3" :class="[{'gray-bg' : email.length > 0}]">
                     <img src="~/assets/img/mail.png" alt="" class="input-email-img">
                     <div class="fiels-input">
                         <span>Email</span>
-                        <input :class="[{'gray-bg' : email.length > 0}]" type="email" v-model="email" placeholder="Email" class="input-email">
+                        <input :class="[{'gray-bg' : email.length > 0}]" type="email" v-model="email" placeholder="Email" class="input-email w-[250px] max-md:w-full">
                     </div>
                 </div>
                 <div class="login-input-pass" :class="[{'gray-bg' : password.length > 0}]">
                     <img src="~/assets/img/lock.png" alt="" class="input-email-img">
                     <div class="fiels-input">
                         <span>Mật khẩu</span>
-                        <input @keyup.enter="signin()" :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Mật khẩu" class="input-email">
+                        <input @keyup.enter="signin()" :class="[{'gray-bg' : password.length > 0}]" type="password" v-model="password" placeholder="Mật khẩu" class="input-email w-[250px] max-md:w-full">
                     </div>
                 </div>
 				<!-- <div class="mb-4">
@@ -227,7 +227,6 @@ span,p{
 }
 .login-content-main{
     display: flex;
-    width: fit-content;
     height: fit-content;
     align-items: center;
     justify-content: center;
@@ -235,7 +234,6 @@ span,p{
     background-color: 
 #f9fafc;
     border-radius: 20px;
-    padding: 20px 50px;
     // make box shadow
     box-shadow: 0 0 20px 10px rgba(179, 179, 179, 0.2);
 }
@@ -260,7 +258,6 @@ span,p{
 input{
     border: none;
     outline: none;
-    width: 250px;
 }
 .fiels-input{
     & > span{
