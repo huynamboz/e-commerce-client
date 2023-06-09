@@ -197,7 +197,7 @@ export default {
 			} catch (error) {
 				if(this.$auth.loggedIn){
 				console.log('fetchProduct', this.pageParams);
-				this.$api.products.getListProductOfUser(this.$route.params.modify)
+				this.$api.products.getListProductOfUser(this.$auth.user.id, '1')
 					.then(res =>{
 						console.log('res', res);
 						this.listProduct = res.data.data;
