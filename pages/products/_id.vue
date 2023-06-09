@@ -1,7 +1,7 @@
 <template>
 	<section class="product-container">
 
-		<vs-dialog width="" not-center overflow-hidden not-close prevent-close blur v-model="isGetDetailError">
+		<vs-dialog @close="handleCloseNotFoundPopup()" not-center overflow-hidden not-close prevent-close blur v-model="isGetDetailError">
 					<template #header>
 					<h4 class="text-center text-rose-700 text-2xl">
 						<b>Có lỗi !</b>
@@ -17,7 +17,7 @@
 
 					<template #footer>
 					<div class="con-footer flex justify-center">
-						<vs-button @click="$router.push('/')" transparent>
+						<vs-button @click="isGetDetailError = false" transparent>
 						Quay về trang chủ
 						</vs-button>
 					</div>
@@ -378,6 +378,11 @@ export default {
 	layout: 'default',
 	
 	watch: {
+		isGetDetailError: function (val) {
+			if (!val) {
+				this.$router.push('/');
+			}
+		},
 		currentDistrict: function (val) {
 			this.getShipping();
 		},
