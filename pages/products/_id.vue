@@ -1,7 +1,7 @@
 <template>
 	<section class="product-container">
 
-		<vs-dialog @close="handleCloseNotFoundPopup()" not-center overflow-hidden not-close prevent-close blur v-model="isGetDetailError">
+		<vs-dialog not-center not-close prevent-close blur v-model="isGetDetailError">
 					<template #header>
 					<h4 class="text-center text-rose-700 text-2xl">
 						<b>Có lỗi !</b>
