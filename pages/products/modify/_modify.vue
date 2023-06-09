@@ -183,13 +183,40 @@ export default {
 			this.ProductData.thumbnails = listImgInit
 		},
 		async fetchProduct(){
-			await this.$api.products.getProductById(this.$route.params.modify)
-			.then(res=>{
-				console.log(res)
-				this.ProductData = res.data.data
-				this.ProductData.description = JSON.parse(this.ProductData.description)
-				this.previewUrl = this.ProductData.thumbnails
-			})
+			try {
+				await this.$api.products.getProductById(this.$route.params.modify)
+				.then(res=>{
+					console.log(res)
+					this.ProductData = res.data.data
+					this.ProductData.category = this.ProductData.category_id;
+					this.ProductData.status = this.ProductData.status_id;
+					console.log("data",this.ProductData)
+					this.ProductData.description = JSON.parse(this.ProductData.description)
+					this.previewUrl = this.ProductData.thumbnails;
+				})
+			} catch (error) {
+				if(this.$auth.loggedIn){
+				console.log('fetchProduct', this.pageParams);
+				this.$api.products.getListProductOfUser(this.$route.params.modify)
+					.then(res =>{
+						console.log('res', res);
+						this.listProduct = res.data.data;
+						this.listProduct.forEach(item => {
+							if(item.id == this.$route.params.modify){
+								this.ProductData = item;
+								this.ProductData.category = this.ProductData.category_id;
+								this.ProductData.status = this.ProductData.status_id;
+								console.log("data",this.ProductData)
+								this.ProductData.description = JSON.parse(this.ProductData.description)
+								this.previewUrl = this.ProductData.thumbnails;
+							}
+						})
+					})
+					.catch(err => {
+						console.log('err', err);
+					})
+			}
+			}
 		},
 		formatPrice(price) {
 			let formatter = new Intl.NumberFormat('vi-VN', {
