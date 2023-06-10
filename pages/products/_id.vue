@@ -263,7 +263,7 @@
 						<review-content :product="products" id="review" :listReview="listReview" @fetch-reviews="fetchReviews"/>
 					</div>
 
-					<div class="product-description-recommend">
+					<!-- <div class="product-description-recommend">
 						<div class="product-description-header-recommend">
 							<h2 class="product-description-header-text header-recommend-text">Sản phẩm liên quan</h2>
 						</div>
@@ -284,7 +284,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 			</section>
 		</div>
 		<div :class="{'close-popup': !isOpenPopupShip,'show-popup': isOpenPopupShip}" class=" z-[99999]  py-6 w-[100vw] h-[100vh] flex items-center justify-center fixed top-0 left-0 max-md:p-5">
