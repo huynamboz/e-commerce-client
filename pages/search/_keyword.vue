@@ -1,8 +1,8 @@
 <template>
 	<div class="container-top">
-		<div class="search-container p-5 max-md:p-2 max-md:flex-col w-full">
+		<div class="search-container p-5 max-md:p-2 gap-6 max-md:flex-col w-full">
 			<tab-left @chooseCate="chooseCate" @chooseCity="chooseCity"/>
-			<div class="tab-right-container w-full">
+			<div class="tab-right-container w-full bg-white p-4 rounded-lg max-md:px-0">
 				<div class="flex items-center gap-5">
 					<p>Tìm kiếm cho từ khóa: <span class=" text-[#ee2624]">{{ pageParams.keyword }}</span></p>
 					<p>Danh mục: <span class=" text-lg font-medium">{{ getNameCategory }}</span></p>

@@ -1,7 +1,7 @@
 <template>
 	<div class="container-filter min-w-[230px]">
-		<div class="tabLeft-main">
-			<h1 class="filter-title">
+		<div class="tabLeft-main bg-white rounded-lg pt-3">
+			<h1 class="filter-title pt-3">
 				<i class="fi fi-rr-filter"></i> Bộ lọc tìm kiếm
 			</h1>
 			<div class="filter-category">
