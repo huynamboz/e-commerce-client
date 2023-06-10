@@ -127,7 +127,7 @@
 					<div class="supplier-header flex justify-between">
 						<div class="supplier-header-left flex items-center gap-5">
 							<div class="supplier-avatar">
-								<img v-if="!products?.user?.avatar || product?.user?.avatar == 'null'" src="https://st.chotot.com/storage/images/tips/1_mobile.png" alt="" class="avatar-img">
+								<img v-if="!products?.user?.avatar || products?.user?.avatar == 'null'" src="https://st.chotot.com/storage/images/tips/1_mobile.png" alt="" class="avatar-img">
 								<img v-else :src="products?.user?.avatar" alt="" class="avatar-img">
 							</div>
 							<div class="supplier-name">

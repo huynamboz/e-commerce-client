@@ -1,6 +1,6 @@
 <template>
 	<div class="root">
-		<div class="mx-auto flex items-start mt-[20px] gap-[10px] max-md:flex-col bg-white w-[1140px]">
+		<div class="mx-auto flex items-start mt-[20px] gap-[10px] max-md:flex-col bg-white w-[1140px] max-md:w-full">
 			<header class=" rounded-lg shadow-lg flex gap-[20px] items-center flex-col p-[20px] bg-[#ffffff] max-md:w-full max-md:items-center h-fit">
 				<div class="container flex max-md:justify-center">
 					<img :src="userData?.avatar" alt="" 
@@ -40,13 +40,54 @@
 				</div>
 			</header>
 			<div class="main bg-[#ffffff] p-[20px] min-w-[50%] pt-0 min-h-full max-md:pl-0 max-md:pr-0 flex flex-col items-center max-md:w-full">
-				<p class="py-[20px] text-lg">Danh sách sản phẩm</p>
+				<div class="flex gap-5 py-[20px]">
+					<p class=" text-lg cursor-pointer" :class="{'border-b-[2px] border-rose-500' : type == 'LIST'}" @click="type = 'LIST'">Danh sách sản phẩm</p>
+					<p v-if="$auth.user?.id == pageParams" class=" text-lg cursor-pointer" :class="{'border-b-[2px] border-rose-500' : type == 'PENDING'}" @click="type = 'PENDING'">Sản phẩm chờ duyệt</p>
+				</div>
 				<div v-if="listProduct.length ==0" class="flex flex-col items-center">
 					<img src="~/assets/icon/empty.png" alt="">
 					<p>Chưa có sản phẩm</p>
 				</div>
-				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5">
-					<div v-for="item in listProduct" :key="item.id" class="product-item">
+				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5" v-if="$auth.user?.id == pageParams && type == 'LIST'">
+					<div v-for="item in listProduct" :key="item.id" class="product-item" v-if="item.active_status">
+						<div class="relative group">
+							<productCard :product="item"/>
+							<div v-if="pageParams == $auth.user?.id" 
+							class="absolute hidden transition-all duration-500 group-hover:block edit-prod  shadow-md top-[50%] left-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
+							alt="Chỉnh sửa" 
+							@click="$router.push(`/products/modify/${item.id}`)">
+							Chỉnh sửa <i class="fi fi-rr-pencil"></i>
+						</div>
+						<div @click="openDel = true; idProdDelete = item?.id" v-if="pageParams == $auth.user?.id"
+						class="absolute hidden transition-all duration-500 group-hover:block edit-prod top-[50%] shadow-md right-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
+						alt="xóa">
+						Xóa <i class="fi fi-rr-trash"></i>
+						</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5" v-if="$auth.user?.id == pageParams && type == 'PENDING'">
+					<div v-for="item in listProduct" :key="item.id" class="product-item" v-if="!item.active_status">
+						<div class="relative group">
+							<productCard :product="item"/>
+							<div v-if="pageParams == $auth.user?.id" 
+							class="absolute hidden transition-all duration-500 group-hover:block edit-prod  shadow-md top-[50%] left-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
+							alt="Chỉnh sửa" 
+							@click="$router.push(`/products/modify/${item.id}`)">
+							Chỉnh sửa <i class="fi fi-rr-pencil"></i>
+						</div>
+						<div @click="openDel = true; idProdDelete = item?.id" v-if="pageParams == $auth.user?.id"
+						class="absolute hidden transition-all duration-500 group-hover:block edit-prod top-[50%] shadow-md right-3 bg-white rounded-xl text-xs py-1 px-2 cursor-pointer" 
+						alt="xóa">
+						Xóa <i class="fi fi-rr-trash"></i>
+						</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="flex justify-center max-w-[800px] flex-wrap gap-[20px] max-md:gap-3 mb-5" v-if="$auth.user?.id != pageParams">
+					<div v-for="item in listProduct" :key="item.id" class="product-item" v-if="item.active_status">
 						<div class="relative group">
 							<productCard :product="item"/>
 							<div v-if="pageParams == $auth.user?.id" 
@@ -111,7 +152,8 @@ export default {
 			meta: {},
 			openDel: false,
 			deleting: false,
-			idProdDelete: null
+			idProdDelete: null,
+			type: 'LIST'
 		}
 	},
 	computed: {
