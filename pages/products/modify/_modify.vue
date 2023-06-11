@@ -19,8 +19,8 @@
 						</div>
 						<div class="inp-container">
 							<label for="">Giảm giá(%) <span style="color:red">*</span></label>
-							<input :class="{'border-[1px] border-rose-500': isNaN(ProductData.discount) || ProductData.discount < 0 || ProductData.discount > 1000000000}" type="text" placeholder="10" v-model="ProductData.discount">
-							<p v-show="isNaN(ProductData.discount) || ProductData.discount < 0 || ProductData.discount > 1000000000" class="max-w-[350px] text-sm text-rose-500">Giảm giá phải nằm trong khoảng {{ $product.formatPrice(0) }} - {{ $product.formatPrice(1000000000) }}</p>
+							<input :class="{'border-[1px] border-rose-500': isNaN(ProductData.discount) || ProductData.discount < 0 || ProductData.discount > 100}" type="text" placeholder="10" v-model="ProductData.discount">
+							<p v-show="isNaN(ProductData.discount) || ProductData.discount < 0 || ProductData.discount > 100" class="max-w-[350px] text-sm text-rose-500">Giảm giá phải nằm trong khoảng {{ $product.formatPrice(0) }} - {{ $product.formatPrice(1000000000) }}</p>
 						</div>
 						<div class="inp-container">
 							<label for="">Tình trạng <span style="color:red">*</span></label>

@@ -43,7 +43,7 @@
 						<div class="flex gap-3 items-center">
 							<p class="font-semibold cursor-pointer" @click="$router.push(`/user/${item.user.id}`)">{{ item.user.name }}</p>
 							<p class="text-[12px] text-gray-400">{{ new Date(item.create_at).toLocaleDateString() }}</p>
-							<div v-if="item?.user.id == $auth.user?.id" class=" cursor-pointer hidden group-hover:block" @click="isCommented = !isCommented" title="Chỉnh sửa nhận xét">
+							<div v-if="item?.user.id == $auth.user?.id" class=" cursor-pointer hidden group-hover:block" @click="isCommented = !isCommented; review = item.comment" title="Chỉnh sửa nhận xét">
 								<i class="fi fi-rr-edit"></i>
 							</div>
 							<div v-if="item?.user.id == $auth.user?.id" class=" cursor-pointer hidden group-hover:block" @click="confirmDelCmt = true" title="Xóa nhận xét">
